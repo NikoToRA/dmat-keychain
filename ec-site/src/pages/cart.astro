@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="カート - DMAT STORE">
+  <div class="max-w-4xl mx-auto px-6 py-8">
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-400 mb-6">
+      <a href="/" class="hover:text-dmat-navy transition-colors">トップ</a>
+      <span class="mx-1">/</span>
+      <span class="text-gray-600">カート</span>
+    </nav>
+
+    <h1 class="text-2xl font-bold text-dmat-navy mb-8">カート</h1>
+
+    <div id="cart-content"></div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+(function () {
+  'use strict';
+
+  var BASE_PRODUCT = { id: 'dmat-keychain', name: 'DMAT キーホルダー', basePrice: 680, image: '/images/keychain-standard.webp' };
+  var COLOR_VARIANTS = [
+    { id: 'standard-red', name: 'スタンダードレッド', priceDiff: 0, image: '/images/keychain-standard.webp' },
+    { id: 'premium-red', name: 'プレミアレッド', priceDiff: 100, image: '/images/keychain-premium.webp' }
+  ];
+  var ACCESSORIES = [
+    { id: 'ball-chain', name: 'ボールチェーン', price: 0, isDefault: true, image: '/images/ball-chain.webp' },
+    { id: 'carabiner', name: 'カラビナ', price: 300, isDefault: false, image: '/images/carabiner.webp' },
+    { id: 'glow-band', name: '蓄光バンド', price: 400, isDefault: false, image: '/images/glow-band.webp' }
+  ];
+
+  function calculateShipping(qty) {
+    if (qty <= 0) return { method: null, price: 0 };
+    if (qty >= 5) return { method: 'レターパックライト', price: 370 };
+    return { method: 'クリックポスト', price: 185 };
+  }
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem('dmat_cart') || '[]'); } catch (e) { return []; }
+  }
+  function saveCart(cart) {
+    localStorage.setItem('dmat_cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cart-updated'));
+  }
+
+  function getColorImage(colorId) {
+    var c = COLOR_VARIANTS.find(function (v) { return v.id === colorId; });
+    return c ? c.image : BASE_PRODUCT.image;
+  }
+
+  function render() {
+    var container = document.getElementById('cart-content');
+    if (!container) return;
+    var cart = getCart();
+
+    if (cart.length === 0) {
+      container.innerHTML =
+        '<div class="text-center py-20">' +
+          '<div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">' +
+              '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />' +
+            '</svg>' +
+          '</div>' +
+          '<p class="text-gray-500 text-sm mb-6">カートに商品がありません</p>' +
+          '<a href="/" class="btn-primary">商品を見る</a>' +
+        '</div>';
+      return;
+    }
+
+    var totalQty = cart.reduce(function (sum, item) { return sum + item.quantity; }, 0);
+    var subtotal = cart.reduce(function (sum, item) { return sum + (item.unitPrice * item.quantity); }, 0);
+    var shipping = calculateShipping(totalQty);
+    var total = subtotal + shipping.price;
+
+    var itemsHtml = cart.map(function (item, index) {
+      var lineTotal = item.unitPrice * item.quantity;
+      return '<div class="flex gap-4 py-5 border-b border-gray-100" data-index="' + index + '">' +
+        '<div class="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">' +
+          '<img src="' + getColorImage(item.colorId) + '" alt="" class="w-full h-full object-contain p-2" onerror="this.style.display=\'none\'" />' +
+        '</div>' +
+        '<div class="flex-1 min-w-0">' +
+          '<h3 class="text-sm font-bold text-dmat-navy truncate">' + (item.description || BASE_PRODUCT.name) + '</h3>' +
+          '<p class="text-xs text-gray-400 mt-0.5">&yen;' + item.unitPrice.toLocaleString() + ' / 個</p>' +
+          '<div class="flex items-center justify-between mt-3">' +
+            '<div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">' +
+              '<button class="cart-qty-minus w-8 h-8 flex items-center justify-center text-gray-400 hover:bg-gray-50 text-sm">-</button>' +
+              '<span class="w-8 h-8 flex items-center justify-center text-sm font-medium">' + item.quantity + '</span>' +
+              '<button class="cart-qty-plus w-8 h-8 flex items-center justify-center text-gray-400 hover:bg-gray-50 text-sm">+</button>' +
+            '</div>' +
+            '<div class="flex items-center gap-3">' +
+              '<span class="text-sm font-bold text-dmat-navy">&yen;' + lineTotal.toLocaleString() + '</span>' +
+              '<button class="cart-remove text-gray-300 hover:text-red-500 transition-colors">' +
+                '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    container.innerHTML =
+      '<div>' + itemsHtml + '</div>' +
+      '<div class="mt-6 bg-gray-50 rounded-xl p-6">' +
+        '<div class="space-y-3">' +
+          '<div class="flex justify-between text-sm">' +
+            '<span class="text-gray-500">小計</span>' +
+            '<span class="font-medium text-dmat-navy">&yen;' + subtotal.toLocaleString() + '</span>' +
+          '</div>' +
+          '<div class="flex justify-between text-sm">' +
+            '<span class="text-gray-500">送料' + (shipping.method ? ' (' + shipping.method + ')' : '') + '</span>' +
+            '<span class="font-medium text-dmat-navy">&yen;' + shipping.price.toLocaleString() + '</span>' +
+          '</div>' +
+          '<div class="border-t border-gray-200 pt-3 flex justify-between">' +
+            '<span class="font-bold text-dmat-navy">合計 (税込)</span>' +
+            '<span class="text-xl font-bold text-dmat-navy">&yen;' + total.toLocaleString() + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="mt-6 flex flex-col sm:flex-row gap-3">' +
+        '<a href="/" class="btn-secondary flex-1 text-center">買い物を続ける</a>' +
+        '<a href="/confirm" class="btn-primary flex-1 text-center">まとめて購入する</a>' +
+      '</div>';
+
+    // Event delegation for cart actions
+    container.addEventListener('click', function handler(e) {
+      var cart = getCart();
+      var row = e.target.closest('[data-index]');
+      if (!row) return;
+      var idx = parseInt(row.getAttribute('data-index'));
+      if (isNaN(idx) || idx < 0 || idx >= cart.length) return;
+
+      if (e.target.closest('.cart-qty-minus')) {
+        if (cart[idx].quantity > 1) {
+          cart[idx].quantity -= 1;
+          saveCart(cart);
+          container.removeEventListener('click', handler);
+          render();
+        }
+      } else if (e.target.closest('.cart-qty-plus')) {
+        if (cart[idx].quantity < 99) {
+          cart[idx].quantity += 1;
+          saveCart(cart);
+          container.removeEventListener('click', handler);
+          render();
+        }
+      } else if (e.target.closest('.cart-remove')) {
+        cart.splice(idx, 1);
+        saveCart(cart);
+        container.removeEventListener('click', handler);
+        render();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+})();
+</script>

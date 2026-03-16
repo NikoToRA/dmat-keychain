@@ -1,0 +1,445 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="商品詳細 - DMAT STORE">
+  <div class="max-w-6xl mx-auto px-6 py-8">
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-400 mb-6">
+      <a href="/" class="hover:text-dmat-navy transition-colors">トップ</a>
+      <span class="mx-1">/</span>
+      <span id="breadcrumb-current" class="text-gray-600">商品詳細</span>
+    </nav>
+
+    <!-- Product content rendered by JS -->
+    <div id="product-content"></div>
+
+    <!-- Accordion: 商品情報 -->
+    <div class="mt-12 border-t border-gray-100">
+      <div class="accordion-item border-b border-gray-100">
+        <button class="accordion-toggle w-full flex items-center justify-between py-4 text-left" data-target="acc-desc">
+          <span class="text-sm font-bold text-dmat-navy">商品説明</span>
+          <svg class="w-4 h-4 text-gray-400 accordion-icon transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        </button>
+        <div id="acc-desc" class="accordion-body hidden pb-4">
+          <p class="text-sm text-gray-600 leading-relaxed">DMATのカラーを使用した3Dプリント製キーホルダーです。NFC内蔵で、お好みの情報を書き込むことができます。受注生産のため、ご注文後10日以内に発送いたします。</p>
+        </div>
+      </div>
+      <div class="accordion-item border-b border-gray-100">
+        <button class="accordion-toggle w-full flex items-center justify-between py-4 text-left" data-target="acc-scene">
+          <span class="text-sm font-bold text-dmat-navy">利用シーン</span>
+          <svg class="w-4 h-4 text-gray-400 accordion-icon transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        </button>
+        <div id="acc-scene" class="accordion-body hidden pb-4">
+          <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+            <li>DMAT活動時の身分証・IDカードと一緒に</li>
+            <li>病院の鍵や入館カードと一緒に</li>
+            <li>チームの記念品やギフトに</li>
+          </ul>
+        </div>
+      </div>
+      <div class="accordion-item border-b border-gray-100">
+        <button class="accordion-toggle w-full flex items-center justify-between py-4 text-left" data-target="acc-spec">
+          <span class="text-sm font-bold text-dmat-navy">サイズ・素材</span>
+          <svg class="w-4 h-4 text-gray-400 accordion-icon transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        </button>
+        <div id="acc-spec" class="accordion-body hidden pb-4">
+          <div class="text-sm text-gray-600 space-y-1">
+            <p>サイズ: 約45mm x 25mm x 7mm</p>
+            <p>素材: PLA樹脂（3Dプリント）</p>
+            <p>NFC: NTAG215内蔵</p>
+            <p>重量: 約15g</p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border-b border-gray-100">
+        <button class="accordion-toggle w-full flex items-center justify-between py-4 text-left" data-target="acc-shipping">
+          <span class="text-sm font-bold text-dmat-navy">配送・返品</span>
+          <svg class="w-4 h-4 text-gray-400 accordion-icon transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        </button>
+        <div id="acc-shipping" class="accordion-body hidden pb-4">
+          <div class="text-sm text-gray-600 space-y-1">
+            <p>配送: クリックポスト（185円）/ レターパックライト（370円・5個以上）</p>
+            <p>発送: 受注後10日以内</p>
+            <p>返品: 受注生産品のため、不良品以外の返品はお受けできません</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related sets -->
+    <div class="mt-12">
+      <h2 class="text-lg font-bold text-dmat-navy mb-6">関連セット</h2>
+      <div id="related-sets" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+(function () {
+  'use strict';
+
+  var BASE_PRODUCT = { id: 'dmat-keychain', name: 'DMAT キーホルダー', description: '3Dプリント製、NFC内蔵。DMATカラーのキーホルダー。', basePrice: 680, image: '/images/keychain-standard.webp' };
+  var COLOR_VARIANTS = [
+    { id: 'standard-red', name: 'スタンダードレッド', priceDiff: 0, image: '/images/keychain-standard.webp' },
+    { id: 'premium-red', name: 'プレミアレッド', priceDiff: 100, image: '/images/keychain-premium.webp' }
+  ];
+  var ACCESSORIES = [
+    { id: 'ball-chain', name: 'ボールチェーン', price: 0, isDefault: true, image: '/images/ball-chain.webp' },
+    { id: 'carabiner', name: 'カラビナ', price: 300, isDefault: false, image: '/images/carabiner.webp' },
+    { id: 'glow-band', name: '蓄光バンド', price: 400, isDefault: false, image: '/images/glow-band.webp' }
+  ];
+  var RECOMMENDED_SETS = [
+    { id: 'basic', name: 'ベーシックセット', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
+    { id: 'premium', name: 'プレミアムセット', description: 'プレミアレッド + カラビナ + 蓄光バンド', color: 'premium-red', accessories: ['ball-chain', 'carabiner', 'glow-band'], badge: 'フルセット', category: 'dmat-member' },
+    { id: 'hospital-basic', name: '病院用ベーシック', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '施設向け', category: 'hospital' },
+    { id: 'hospital-glow', name: '病院用 夜勤対応', description: 'スタンダードレッド + 蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '夜勤に', category: 'hospital' }
+  ];
+
+  function calculateShipping(qty) {
+    if (qty <= 0) return { method: null, price: 0 };
+    if (qty >= 5) return { method: 'レターパックライト', price: 370 };
+    return { method: 'クリックポスト', price: 185 };
+  }
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem('dmat_cart') || '[]'); } catch (e) { return []; }
+  }
+  function saveCart(cart) {
+    localStorage.setItem('dmat_cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cart-updated'));
+  }
+
+  function calcSetPrice(set) {
+    var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
+    var price = BASE_PRODUCT.basePrice + (colorVar ? colorVar.priceDiff : 0);
+    set.accessories.forEach(function (accId) {
+      var acc = ACCESSORIES.find(function (a) { return a.id === accId; });
+      if (acc) price += acc.price;
+    });
+    return price;
+  }
+
+  function calcCustomPrice(colorId, accessoryIds) {
+    var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === colorId; });
+    var price = BASE_PRODUCT.basePrice + (colorVar ? colorVar.priceDiff : 0);
+    accessoryIds.forEach(function (accId) {
+      var acc = ACCESSORIES.find(function (a) { return a.id === accId; });
+      if (acc) price += acc.price;
+    });
+    return price;
+  }
+
+  function showToast(message, type) {
+    var container = document.getElementById('toast-container');
+    if (!container) return;
+    var toast = document.createElement('div');
+    toast.className = 'toast ' + (type === 'error' ? 'toast-error' : 'toast-success');
+    toast.textContent = message;
+    container.appendChild(toast);
+    requestAnimationFrame(function () { toast.classList.add('toast-visible'); });
+    setTimeout(function () {
+      toast.classList.remove('toast-visible');
+      setTimeout(function () { toast.remove(); }, 300);
+    }, 2500);
+  }
+
+  function addToCart(colorId, accessoryIds, qty, description) {
+    var cart = getCart();
+    var price = calcCustomPrice(colorId, accessoryIds);
+    var sortedAcc = accessoryIds.slice().sort();
+    var existing = cart.find(function (item) {
+      return item.colorId === colorId && JSON.stringify(item.accessoryIds.slice().sort()) === JSON.stringify(sortedAcc);
+    });
+    if (existing) {
+      existing.quantity += qty;
+    } else {
+      cart.push({
+        id: BASE_PRODUCT.id + '-' + Date.now(),
+        colorId: colorId,
+        accessoryIds: accessoryIds.slice(),
+        quantity: qty,
+        unitPrice: price,
+        description: description || BASE_PRODUCT.name
+      });
+    }
+    saveCart(cart);
+    showToast('カートに追加しました');
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  var setId = params.get('set');
+  var isCustom = params.has('custom') || !setId;
+
+  var content = document.getElementById('product-content');
+  if (!content) return;
+
+  if (setId) {
+    renderSetMode(setId);
+  } else {
+    renderCustomMode();
+  }
+
+  function renderSetMode(setId) {
+    var set = RECOMMENDED_SETS.find(function (s) { return s.id === setId; });
+    if (!set) { renderCustomMode(); return; }
+    var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
+    var price = calcSetPrice(set);
+    var accNames = set.accessories.map(function (accId) {
+      var a = ACCESSORIES.find(function (x) { return x.id === accId; });
+      return a ? a.name + (a.price > 0 ? ' (+\u00a5' + a.price.toLocaleString() + ')' : ' (付属)') : '';
+    }).filter(Boolean);
+
+    document.getElementById('breadcrumb-current').textContent = set.name;
+
+    content.innerHTML =
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-8">' +
+        '<div class="bg-gray-50 rounded-xl flex items-center justify-center p-8" style="aspect-ratio: 1/1;">' +
+          '<img src="' + (colorVar ? colorVar.image : BASE_PRODUCT.image) + '" alt="' + set.name + '" class="max-w-full max-h-full object-contain" onerror="this.style.display=\'none\'" />' +
+        '</div>' +
+        '<div>' +
+          '<span class="badge-pill badge-pill-red">' + set.badge + '</span>' +
+          '<h1 class="text-2xl font-bold text-dmat-navy mt-3">' + set.name + '</h1>' +
+          '<p class="text-sm text-gray-500 mt-2">' + set.description + '</p>' +
+          '<div class="mt-6 space-y-2">' +
+            '<h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider">セット内容</h3>' +
+            '<div class="space-y-1">' +
+              '<p class="text-sm text-gray-700">カラー: ' + (colorVar ? colorVar.name : '') + '</p>' +
+              accNames.map(function (n) { return '<p class="text-sm text-gray-700">' + n + '</p>'; }).join('') +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-6">' +
+            '<span class="text-3xl font-bold text-dmat-navy">&yen;' + price.toLocaleString() + '</span>' +
+            '<span class="text-xs text-gray-400 ml-1">(税込)</span>' +
+          '</div>' +
+          '<div class="mt-6 flex items-center gap-3">' +
+            '<label class="text-sm text-gray-500">数量</label>' +
+            '<div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">' +
+              '<button id="qty-minus" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors">-</button>' +
+              '<input type="number" id="qty-input" value="1" min="1" max="99" class="w-12 h-10 text-center text-sm font-medium border-x border-gray-200 bg-white" />' +
+              '<button id="qty-plus" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors">+</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-6 flex flex-col sm:flex-row gap-3">' +
+            '<button id="add-to-cart-btn" class="btn-secondary flex-1 text-center">カートに入れる</button>' +
+            '<button id="buy-now-btn" class="btn-primary flex-1 text-center">今すぐ購入</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    var qtyInput = document.getElementById('qty-input');
+    document.getElementById('qty-minus').addEventListener('click', function () {
+      var v = parseInt(qtyInput.value) || 1;
+      if (v > 1) qtyInput.value = v - 1;
+    });
+    document.getElementById('qty-plus').addEventListener('click', function () {
+      var v = parseInt(qtyInput.value) || 1;
+      if (v < 99) qtyInput.value = v + 1;
+    });
+    document.getElementById('add-to-cart-btn').addEventListener('click', function () {
+      var qty = parseInt(qtyInput.value) || 1;
+      addToCart(set.color, set.accessories, qty, set.name);
+    });
+    document.getElementById('buy-now-btn').addEventListener('click', function () {
+      var qty = parseInt(qtyInput.value) || 1;
+      addToCart(set.color, set.accessories, qty, set.name);
+      window.location.href = '/cart';
+    });
+  }
+
+  function renderCustomMode() {
+    document.getElementById('breadcrumb-current').textContent = 'カスタムオーダー';
+    var selectedColor = COLOR_VARIANTS[0].id;
+    var selectedAccessories = ACCESSORIES.filter(function (a) { return a.isDefault; }).map(function (a) { return a.id; });
+
+    content.innerHTML =
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-8">' +
+        '<div>' +
+          '<div id="main-image" class="bg-gray-50 rounded-xl flex items-center justify-center p-8" style="aspect-ratio: 1/1;">' +
+            '<img src="' + COLOR_VARIANTS[0].image + '" alt="' + BASE_PRODUCT.name + '" class="max-w-full max-h-full object-contain" onerror="this.style.display=\'none\'" />' +
+          '</div>' +
+        '</div>' +
+        '<div>' +
+          '<h1 class="text-2xl font-bold text-dmat-navy">' + BASE_PRODUCT.name + '</h1>' +
+          '<p class="text-sm text-gray-500 mt-2">' + BASE_PRODUCT.description + '</p>' +
+          '<div class="mt-6">' +
+            '<h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">カラーを選ぶ</h3>' +
+            '<div id="color-options" class="grid grid-cols-2 gap-3">' +
+              COLOR_VARIANTS.map(function (c) {
+                return '<div class="builder-option' + (c.id === selectedColor ? ' selected' : '') + '" data-color="' + c.id + '">' +
+                  '<div class="flex items-center gap-3">' +
+                    '<div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">' +
+                      '<img src="' + c.image + '" alt="' + c.name + '" class="w-full h-full object-contain" onerror="this.style.display=\'none\'" />' +
+                    '</div>' +
+                    '<div>' +
+                      '<p class="text-sm font-medium text-dmat-navy">' + c.name + '</p>' +
+                      '<p class="text-xs text-gray-400">' + (c.priceDiff > 0 ? '+\u00a5' + c.priceDiff.toLocaleString() : '基本価格') + '</p>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>';
+              }).join('') +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-6">' +
+            '<h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">アクセサリを選ぶ</h3>' +
+            '<div id="accessory-options" class="space-y-3">' +
+              ACCESSORIES.map(function (a) {
+                var checked = selectedAccessories.indexOf(a.id) >= 0;
+                return '<label class="builder-option flex items-center gap-3 cursor-pointer' + (checked ? ' selected' : '') + '" data-accessory="' + a.id + '">' +
+                  '<input type="checkbox" class="acc-checkbox sr-only" value="' + a.id + '"' + (checked ? ' checked' : '') + ' />' +
+                  '<div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">' +
+                    '<img src="' + a.image + '" alt="' + a.name + '" class="w-full h-full object-contain" onerror="this.style.display=\'none\'" />' +
+                  '</div>' +
+                  '<div class="flex-1">' +
+                    '<p class="text-sm font-medium text-dmat-navy">' + a.name + '</p>' +
+                    '<p class="text-xs text-gray-400">' + (a.price > 0 ? '+\u00a5' + a.price.toLocaleString() : '付属') + '</p>' +
+                  '</div>' +
+                  '<div class="w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 ' + (checked ? 'border-dmat-navy bg-dmat-navy' : 'border-gray-300') + '">' +
+                    (checked ? '<svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>' : '') +
+                  '</div>' +
+                '</label>';
+              }).join('') +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-6 p-4 bg-gray-50 rounded-xl">' +
+            '<div class="flex items-center justify-between">' +
+              '<span class="text-sm text-gray-500">合計</span>' +
+              '<span id="custom-price" class="text-3xl font-bold text-dmat-navy">&yen;' + calcCustomPrice(selectedColor, selectedAccessories).toLocaleString() + '</span>' +
+            '</div>' +
+            '<p class="text-xs text-gray-400 text-right">(税込)</p>' +
+          '</div>' +
+          '<div class="mt-4 flex items-center gap-3">' +
+            '<label class="text-sm text-gray-500">数量</label>' +
+            '<div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">' +
+              '<button id="qty-minus" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors">-</button>' +
+              '<input type="number" id="qty-input" value="1" min="1" max="99" class="w-12 h-10 text-center text-sm font-medium border-x border-gray-200 bg-white" />' +
+              '<button id="qty-plus" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors">+</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-4 flex flex-col sm:flex-row gap-3">' +
+            '<button id="add-to-cart-btn" class="btn-secondary flex-1 text-center">カートに入れる</button>' +
+            '<button id="buy-now-btn" class="btn-primary flex-1 text-center">今すぐ購入</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    // Color selection
+    document.getElementById('color-options').addEventListener('click', function (e) {
+      var opt = e.target.closest('.builder-option');
+      if (!opt) return;
+      selectedColor = opt.getAttribute('data-color');
+      document.querySelectorAll('#color-options .builder-option').forEach(function (el) { el.classList.remove('selected'); });
+      opt.classList.add('selected');
+      var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === selectedColor; });
+      if (colorVar) {
+        var img = document.querySelector('#main-image img');
+        if (img) img.src = colorVar.image;
+      }
+      updatePrice();
+    });
+
+    // Accessory selection
+    document.getElementById('accessory-options').addEventListener('click', function (e) {
+      var label = e.target.closest('.builder-option');
+      if (!label) return;
+      var accId = label.getAttribute('data-accessory');
+      var idx = selectedAccessories.indexOf(accId);
+      if (idx >= 0) {
+        selectedAccessories.splice(idx, 1);
+        label.classList.remove('selected');
+      } else {
+        selectedAccessories.push(accId);
+        label.classList.add('selected');
+      }
+      // Update checkbox visual
+      var checkBox = label.querySelector('.w-5.h-5');
+      if (checkBox) {
+        if (selectedAccessories.indexOf(accId) >= 0) {
+          checkBox.className = 'w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 border-dmat-navy bg-dmat-navy';
+          checkBox.innerHTML = '<svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>';
+        } else {
+          checkBox.className = 'w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 border-gray-300';
+          checkBox.innerHTML = '';
+        }
+      }
+      updatePrice();
+    });
+
+    function updatePrice() {
+      var priceEl = document.getElementById('custom-price');
+      if (priceEl) {
+        priceEl.innerHTML = '&yen;' + calcCustomPrice(selectedColor, selectedAccessories).toLocaleString();
+      }
+    }
+
+    // Quantity
+    var qtyInput = document.getElementById('qty-input');
+    document.getElementById('qty-minus').addEventListener('click', function () {
+      var v = parseInt(qtyInput.value) || 1;
+      if (v > 1) qtyInput.value = v - 1;
+    });
+    document.getElementById('qty-plus').addEventListener('click', function () {
+      var v = parseInt(qtyInput.value) || 1;
+      if (v < 99) qtyInput.value = v + 1;
+    });
+
+    // Cart actions
+    function getDescription() {
+      var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === selectedColor; });
+      var accNames = selectedAccessories.map(function (accId) {
+        var a = ACCESSORIES.find(function (x) { return x.id === accId; });
+        return a ? a.name : '';
+      }).filter(Boolean);
+      return (colorVar ? colorVar.name : '') + (accNames.length ? ' + ' + accNames.join(', ') : '');
+    }
+
+    document.getElementById('add-to-cart-btn').addEventListener('click', function () {
+      var qty = parseInt(qtyInput.value) || 1;
+      addToCart(selectedColor, selectedAccessories, qty, getDescription());
+    });
+    document.getElementById('buy-now-btn').addEventListener('click', function () {
+      var qty = parseInt(qtyInput.value) || 1;
+      addToCart(selectedColor, selectedAccessories, qty, getDescription());
+      window.location.href = '/cart';
+    });
+  }
+
+  // Related sets
+  function renderRelated() {
+    var container = document.getElementById('related-sets');
+    if (!container) return;
+    var currentSetId = setId || '';
+    var related = RECOMMENDED_SETS.filter(function (s) { return s.id !== currentSetId; }).slice(0, 4);
+    container.innerHTML = related.map(function (set) {
+      var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
+      var price = calcSetPrice(set);
+      return '<a href="/product?set=' + set.id + '" class="product-card block">' +
+        '<div class="product-image-wrapper bg-gray-50" style="aspect-ratio: 1/1;">' +
+          '<img src="' + (colorVar ? colorVar.image : BASE_PRODUCT.image) + '" alt="' + set.name + '" class="w-full h-full object-contain p-3" onerror="this.style.display=\'none\'" />' +
+        '</div>' +
+        '<div class="p-3">' +
+          '<span class="badge-pill badge-pill-gray text-xs">' + set.badge + '</span>' +
+          '<h3 class="text-xs font-bold text-dmat-navy mt-1">' + set.name + '</h3>' +
+          '<p class="text-sm font-bold text-dmat-navy mt-1">&yen;' + price.toLocaleString() + '</p>' +
+        '</div>' +
+      '</a>';
+    }).join('');
+  }
+  renderRelated();
+
+  // Accordion
+  document.querySelectorAll('.accordion-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var targetId = btn.getAttribute('data-target');
+      var body = document.getElementById(targetId);
+      var icon = btn.querySelector('.accordion-icon');
+      if (!body) return;
+      var isOpen = !body.classList.contains('hidden');
+      body.classList.toggle('hidden');
+      if (icon) {
+        icon.style.transform = isOpen ? '' : 'rotate(180deg)';
+      }
+    });
+  });
+})();
+</script>

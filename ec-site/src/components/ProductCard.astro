@@ -1,0 +1,190 @@
+---
+interface Props {
+  set: {
+    id: string;
+    name: string;
+    description: string;
+    color: string;
+    accessories: string[];
+    badge?: string;
+    category?: string;
+  };
+}
+
+const { set } = Astro.props;
+---
+
+<a
+  href={`/product?set=${set.id}`}
+  class="product-card block animate-on-scroll"
+  data-set-id={set.id}
+  data-color={set.color}
+  data-accessories={JSON.stringify(set.accessories)}
+>
+  <!-- Image -->
+  <div class="product-image-wrapper aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative">
+    <div class="product-image-placeholder w-full h-full flex items-center justify-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-16 h-16 text-gray-300"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="0.8"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
+        />
+      </svg>
+    </div>
+
+    {set.badge && (
+      <span class="badge-pill badge-pill-red absolute top-3 left-3">
+        {set.badge}
+      </span>
+    )}
+  </div>
+
+  <!-- Info -->
+  <div class="p-4">
+    <h3 class="text-sm font-medium text-dmat-navy mb-1 tracking-tight">
+      {set.name}
+    </h3>
+    <p class="text-xs text-gray-400 line-clamp-2 mb-3 font-light leading-relaxed">
+      {set.description}
+    </p>
+    <div class="flex items-center justify-between">
+      <div class="flex items-baseline gap-1">
+        <span class="text-lg font-bold text-dmat-navy product-price" data-set-id={set.id}>---</span>
+        <span class="text-[10px] text-gray-400 font-light">円（tax in）</span>
+      </div>
+    </div>
+    <button
+      class="btn-primary w-full mt-3 text-center text-xs py-2.5"
+      data-add-to-cart={set.id}
+      onclick="event.preventDefault(); event.stopPropagation();"
+    >
+      カートに入れる
+    </button>
+  </div>
+</a>
+
+<script is:inline>
+  (function () {
+    // Product data (matches products.js)
+    var BASE_PRICE = 680;
+    var COLOR_PRICES = { 'standard-red': 0, 'premium-red': 100 };
+    var ACCESSORY_PRICES = { 'ball-chain': 0, 'carabiner': 300, 'glow-band': 400 };
+
+    function calcPrice(colorId, accessoryIds) {
+      var colorDiff = COLOR_PRICES[colorId] || 0;
+      var accTotal = 0;
+      for (var i = 0; i < accessoryIds.length; i++) {
+        accTotal += ACCESSORY_PRICES[accessoryIds[i]] || 0;
+      }
+      return BASE_PRICE + colorDiff + accTotal;
+    }
+
+    // Update all prices
+    function updatePrices() {
+      document.querySelectorAll('.product-price').forEach(function (el) {
+        var card = el.closest('.product-card');
+        if (!card) return;
+        var colorId = card.getAttribute('data-color');
+        var accessories = [];
+        try {
+          accessories = JSON.parse(card.getAttribute('data-accessories') || '[]');
+        } catch (e) {}
+        var price = calcPrice(colorId, accessories);
+        el.textContent = price.toLocaleString();
+      });
+    }
+
+    // Add to cart handlers
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-add-to-cart]');
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      var card = btn.closest('.product-card');
+      if (!card) return;
+
+      var setId = card.getAttribute('data-set-id');
+      var colorId = card.getAttribute('data-color');
+      var accessories = [];
+      try {
+        accessories = JSON.parse(card.getAttribute('data-accessories') || '[]');
+      } catch (e) {}
+
+      var price = calcPrice(colorId, accessories);
+
+      // Add to cart in localStorage
+      var cart = [];
+      try {
+        cart = JSON.parse(localStorage.getItem('dmat-cart') || '[]');
+      } catch (e) {
+        cart = [];
+      }
+
+      // Check if same item exists
+      var existingIndex = cart.findIndex(function (item) {
+        return item.setId === setId && item.color === colorId;
+      });
+
+      if (existingIndex >= 0) {
+        cart[existingIndex].quantity = (cart[existingIndex].quantity || 1) + 1;
+      } else {
+        cart.push({
+          setId: setId,
+          color: colorId,
+          accessories: accessories,
+          quantity: 1,
+          price: price,
+        });
+      }
+
+      localStorage.setItem('dmat-cart', JSON.stringify(cart));
+      window.dispatchEvent(new Event('cart-updated'));
+
+      // Track event
+      if (window.trackEvent) {
+        window.trackEvent('add_to_cart', {
+          currency: 'JPY',
+          value: price,
+          items: [{ item_id: setId, item_variant: colorId, quantity: 1 }],
+        });
+      }
+
+      // Show toast
+      showToast('カートに追加しました');
+    });
+
+    function showToast(message) {
+      var container = document.getElementById('toast-container');
+      if (!container) return;
+      var toast = document.createElement('div');
+      toast.className = 'toast toast-success';
+      toast.textContent = message;
+      container.appendChild(toast);
+      requestAnimationFrame(function () {
+        toast.classList.add('toast-visible');
+      });
+      setTimeout(function () {
+        toast.classList.remove('toast-visible');
+        setTimeout(function () {
+          toast.remove();
+        }, 300);
+      }, 2000);
+    }
+
+    // Init prices
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', updatePrices);
+    } else {
+      updatePrices();
+    }
+  })();
+</script>

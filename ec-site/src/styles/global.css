@@ -1,0 +1,393 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================
+   CSS Custom Properties
+   ======================== */
+:root {
+  --dmat-navy: #1B2838;
+  --dmat-red: #C41E3A;
+  --dmat-red-dark: #A01830;
+  --bg-light: #FAFBFC;
+  --section-alt: #f5f7fb;
+  --section-padding: clamp(3rem, 6vw, 5rem);
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================
+   Base
+   ======================== */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: #333;
+  background-color: var(--bg-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.8;
+}
+
+/* ========================
+   Scroll Animations
+   ======================== */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children */
+.stagger-children > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children > *:nth-child(2) { transition-delay: 80ms; }
+.stagger-children > *:nth-child(3) { transition-delay: 160ms; }
+.stagger-children > *:nth-child(4) { transition-delay: 240ms; }
+
+/* ========================
+   Section Styles
+   ======================== */
+.section-white {
+  background-color: #ffffff;
+}
+
+.section-alt {
+  background-color: var(--section-alt);
+}
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e2e8f0 30%, #e2e8f0 70%, transparent);
+}
+
+/* ========================
+   Hero Gradient
+   ======================== */
+.hero-gradient {
+  background: linear-gradient(135deg, #0f1923 0%, #1B2838 40%, #243447 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-gradient::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 20%, rgba(196, 30, 58, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ========================
+   Product Card
+   ======================== */
+.product-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.product-card:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.product-card .product-image-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.product-card .product-image-wrapper img,
+.product-card .product-image-wrapper .product-image-placeholder {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.product-card:hover .product-image-wrapper img,
+.product-card:hover .product-image-wrapper .product-image-placeholder {
+  transform: scale(1.05);
+}
+
+/* ========================
+   Category Card
+   ======================== */
+.category-card {
+  min-height: 200px;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.category-card-gradient {
+  background: linear-gradient(135deg, var(--dmat-navy) 0%, #2a4060 100%);
+}
+
+/* ========================
+   Trust Card
+   ======================== */
+.trust-card {
+  background: rgba(245, 247, 251, 0.8);
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.trust-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.trust-card .trust-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ========================
+   Builder Option
+   ======================== */
+.builder-option {
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.builder-option:hover {
+  border-color: #cbd5e1;
+}
+
+.builder-option.selected {
+  border-color: var(--dmat-navy);
+  box-shadow: 0 0 0 1px var(--dmat-navy);
+}
+
+/* ========================
+   Number Input (hide spinner)
+   ======================== */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* ========================
+   Badge Pill
+   ======================== */
+.badge-pill {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+.badge-pill-red {
+  background-color: var(--dmat-red);
+  color: #ffffff;
+}
+
+.badge-pill-navy {
+  background-color: var(--dmat-navy);
+  color: #ffffff;
+}
+
+.badge-pill-gray {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+/* ========================
+   Header Scrolled
+   ======================== */
+.header-scrolled {
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* ========================
+   Buttons
+   ======================== */
+.btn-primary {
+  display: inline-block;
+  background-color: var(--dmat-red);
+  color: #ffffff;
+  padding: 0.875rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.03em;
+  transition: background-color 0.2s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--dmat-red-dark);
+  box-shadow: 0 4px 16px rgba(196, 30, 58, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  display: inline-block;
+  background-color: var(--dmat-navy);
+  color: #ffffff;
+  padding: 0.875rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.03em;
+  transition: background-color 0.2s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #2a4060;
+  box-shadow: 0 4px 16px rgba(27, 40, 56, 0.25);
+  transform: translateY(-1px);
+}
+
+/* ========================
+   Step Indicator
+   ======================== */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--dmat-navy);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.step-indicator.completed {
+  background-color: #10b981;
+}
+
+.step-indicator.inactive {
+  background-color: #d1d5db;
+}
+
+/* ========================
+   Line Clamp
+   ======================== */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ========================
+   Toast Notification
+   ======================== */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  background-color: var(--dmat-navy);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 400;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  max-width: 360px;
+}
+
+.toast.toast-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.toast-success {
+  background-color: #10b981;
+}
+
+.toast-error {
+  background-color: #ef4444;
+}
+
+/* ========================
+   Responsive
+   ======================== */
+@media (max-width: 640px) {
+  .hero-gradient {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .trust-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .category-card {
+    min-height: 160px;
+  }
+
+  .toast {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-card .product-image-wrapper {
+    aspect-ratio: 1 / 1;
+  }
+}

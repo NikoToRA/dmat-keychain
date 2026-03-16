@@ -1,28 +1,17 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>特定商取引法に基づく表記 - DMAT STORE</title>
-  <meta property="og:title" content="DMAT STORE - DMAT隊員・病院向けグッズ" />
-  <meta property="og:description" content="DMATロゴ入りキーホルダー。3Dプリント製、NFC内蔵。" />
-  <meta property="og:image" content="../images/og-image.webp" />
-  <meta property="og:type" content="website" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="../css/style.css">
-  <script src="../js/analytics-config.js"></script>
-  <script src="../js/analytics.js" defer></script>
-</head>
-<body class="bg-gray-50">
-  <header id="site-header" class="bg-white shadow-sm sticky top-0 z-40"></header>
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
 
-  <main class="max-w-4xl mx-auto px-4 py-8">
+<BaseLayout title="特定商取引法に基づく表記 - DMAT STORE">
+  <div class="max-w-4xl mx-auto px-4 py-8">
     <nav class="text-sm text-gray-500 mb-6">
-      <a href="../index.html" class="hover:text-dmat-navy transition-colors">トップ</a>
+      <a href="/" class="hover:text-[#1B2838] transition-colors">トップ</a>
       <span class="mx-2">&gt;</span>
       <span>特定商取引法に基づく表記</span>
     </nav>
-    <h1 class="text-2xl font-bold text-dmat-navy mb-6">特定商取引法に基づく表記</h1>
+
+    <h1 class="text-2xl font-bold text-[#1B2838] mb-6">特定商取引法に基づく表記</h1>
+
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <table class="w-full text-sm">
         <tbody>
@@ -31,7 +20,7 @@
             <td class="py-4 px-6 text-gray-800">Wonder Drill株式会社</td>
           </tr>
           <tr class="border-b border-gray-100">
-            <th class="py-4 px-6 text-left text-gray-500 font-medium bg-gray-50 align-top">代表責任者</th>
+            <th class="py-4 px-6 text-left text-gray-500 font-medium align-top">代表責任者</th>
             <td class="py-4 px-6 text-gray-800">平山 傑</td>
           </tr>
           <tr class="border-b border-gray-100">
@@ -39,18 +28,20 @@
             <td class="py-4 px-6 text-gray-800">〒064-0805 北海道札幌市中央区南5条西15丁目2-3 リズム医大前 503号室</td>
           </tr>
           <tr class="border-b border-gray-100">
-            <th class="py-4 px-6 text-left text-gray-500 font-medium bg-gray-50 align-top">連絡先</th>
-            <td class="py-4 px-6 text-gray-800"><a href="mailto:support@wonder-drill.com" class="text-dmat-navy hover:underline">support@wonder-drill.com</a></td>
+            <th class="py-4 px-6 text-left text-gray-500 font-medium align-top">連絡先</th>
+            <td class="py-4 px-6 text-gray-800">
+              <a href="mailto:support@wonder-drill.com" class="text-[#1B2838] hover:underline">support@wonder-drill.com</a>
+            </td>
           </tr>
           <tr class="border-b border-gray-100">
             <th class="py-4 px-6 text-left text-gray-500 font-medium bg-gray-50 align-top">販売価格</th>
             <td class="py-4 px-6 text-gray-800">各商品ページに表示（税込価格）</td>
           </tr>
           <tr class="border-b border-gray-100">
-            <th class="py-4 px-6 text-left text-gray-500 font-medium bg-gray-50 align-top">送料</th>
+            <th class="py-4 px-6 text-left text-gray-500 font-medium align-top">送料</th>
             <td class="py-4 px-6 text-gray-800">
-              1~4個: &#165;185（クリックポスト）<br>
-              5個以上: &#165;370（レターパックライト）
+              1~4個: &yen;185（クリックポスト）<br />
+              5個以上: &yen;370（レターパックライト）
             </td>
           </tr>
           <tr class="border-b border-gray-100">
@@ -58,7 +49,7 @@
             <td class="py-4 px-6 text-gray-800">クレジットカード決済（Stripe: Visa / Mastercard / JCB / Amex）</td>
           </tr>
           <tr class="border-b border-gray-100">
-            <th class="py-4 px-6 text-left text-gray-500 font-medium bg-gray-50 align-top">支払時期</th>
+            <th class="py-4 px-6 text-left text-gray-500 font-medium align-top">支払時期</th>
             <td class="py-4 px-6 text-gray-800">注文確定時に即時決済</td>
           </tr>
           <tr class="border-b border-gray-100">
@@ -66,23 +57,15 @@
             <td class="py-4 px-6 text-gray-800">受注生産、注文確定後10日以内に発送</td>
           </tr>
           <tr class="border-b border-gray-100">
-            <th class="py-4 px-6 text-left text-gray-500 font-medium bg-gray-50 align-top">返品・交換</th>
+            <th class="py-4 px-6 text-left text-gray-500 font-medium align-top">返品・交換</th>
             <td class="py-4 px-6 text-gray-800">受注生産品のためお客様都合による返品・交換は不可。不良品・破損品は到着後7日以内にご連絡いただければ交換対応いたします。</td>
           </tr>
           <tr>
-            <th class="py-4 px-6 text-left text-gray-500 font-medium bg-gray-50 align-top">適格請求書発行事業者<br>登録番号</th>
+            <th class="py-4 px-6 text-left text-gray-500 font-medium bg-gray-50 align-top">適格請求書発行事業者<br />登録番号</th>
             <td class="py-4 px-6 text-gray-800">T4430001092106</td>
           </tr>
         </tbody>
       </table>
     </div>
-  </main>
-
-  <footer id="site-footer" class="bg-gray-900 text-gray-300"></footer>
-
-  <script src="../js/products.js"></script>
-  <script src="../js/shipping.js"></script>
-  <script src="../js/cart.js"></script>
-  <script src="../js/ui.js"></script>
-</body>
-</html>
+  </div>
+</BaseLayout>

@@ -66,8 +66,8 @@ module.exports = async function (context, req) {
       phone_number_collection: {
         enabled: true,
       },
-      success_url: `${process.env.PUBLIC_BASE_URL}/thanks.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.PUBLIC_BASE_URL}/cancel.html`,
+      success_url: `${process.env.PUBLIC_BASE_URL}/thanks?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.PUBLIC_BASE_URL}/cancel`,
       locale: 'ja',
       metadata: {
         total_quantity: String(totalQuantity),

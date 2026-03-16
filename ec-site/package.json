@@ -1,12 +1,20 @@
 {
   "name": "dmat-keychain-ec",
-  "version": "1.0.0",
-  "description": "DMAT キーホルダー EC サイト",
+  "version": "2.0.0",
+  "description": "DMAT キーホルダー EC サイト (Astro)",
+  "type": "module",
   "scripts": {
-    "dev": "npx @azure/static-web-apps-cli start src --api-location api",
-    "start": "npx @azure/static-web-apps-cli start src --api-location api"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "npx @azure/static-web-apps-cli start dist --api-location api"
+  },
+  "dependencies": {
+    "astro": "^5.7.0",
+    "@astrojs/tailwind": "^6.0.2"
   },
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^2.0.0"
+    "@azure/static-web-apps-cli": "^2.0.0",
+    "tailwindcss": "^3.4.0"
   }
 }

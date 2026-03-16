@@ -1,30 +1,69 @@
-// 商品マスタデータ
-const BASE_PRODUCT = {
+// 商品マスタデータ (TypeScript)
+
+export interface BaseProduct {
+  id: string;
+  name: string;
+  description: string;
+  basePrice: number;
+  image: string;
+}
+
+export interface ColorVariant {
+  id: string;
+  name: string;
+  priceDiff: number;
+  image: string;
+}
+
+export interface Accessory {
+  id: string;
+  name: string;
+  price: number;
+  isDefault: boolean;
+  image: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface RecommendedSet {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  accessories: string[];
+  badge: string;
+  category: string;
+}
+
+export const BASE_PRODUCT: BaseProduct = {
   id: 'dmat-keychain',
   name: 'DMAT キーホルダー',
-  description: '3Dプリント製、NFC内蔵。DMAT公式カラーのキーホルダー。',
+  description: '3Dプリント製、NFC内蔵。DMATカラーのキーホルダー。',
   basePrice: 680,
   image: 'images/keychain-standard.webp',
 };
 
-const COLOR_VARIANTS = [
+export const COLOR_VARIANTS: ColorVariant[] = [
   { id: 'standard-red', name: 'スタンダードレッド', priceDiff: 0, image: 'images/keychain-standard.webp' },
   { id: 'premium-red', name: 'プレミアレッド', priceDiff: 100, image: 'images/keychain-premium.webp' },
 ];
 
-const ACCESSORIES = [
+export const ACCESSORIES: Accessory[] = [
   { id: 'ball-chain', name: 'ボールチェーン', price: 0, isDefault: true, image: 'images/ball-chain.webp' },
   { id: 'carabiner', name: 'カラビナ', price: 300, isDefault: false, image: 'images/carabiner.webp' },
   { id: 'glow-band', name: '蓄光バンド', price: 400, isDefault: false, image: 'images/glow-band.webp' },
 ];
 
-const CATEGORIES = [
+export const CATEGORIES: Category[] = [
   { id: 'dmat-member', name: 'DMAT隊員用グッズ', description: '現場スタッフ向け' },
   { id: 'hospital', name: '病院用グッズ', description: '病院・施設導入向け' },
 ];
 
-// おすすめセット（事前定義の組み合わせ）
-const RECOMMENDED_SETS = [
+export const RECOMMENDED_SETS: RecommendedSet[] = [
   {
     id: 'basic',
     name: 'ベーシックセット',
@@ -63,26 +102,25 @@ const RECOMMENDED_SETS = [
   },
 ];
 
-// 価格計算
-function calculateItemPrice(colorId, accessoryIds) {
-  const color = COLOR_VARIANTS.find(c => c.id === colorId);
+export function calculateItemPrice(colorId: string, accessoryIds: string[]): number {
+  const color = COLOR_VARIANTS.find((c) => c.id === colorId);
   const colorDiff = color ? color.priceDiff : 0;
   const accessoryTotal = accessoryIds.reduce((sum, accId) => {
-    const acc = ACCESSORIES.find(a => a.id === accId);
+    const acc = ACCESSORIES.find((a) => a.id === accId);
     return sum + (acc ? acc.price : 0);
   }, 0);
   return BASE_PRODUCT.basePrice + colorDiff + accessoryTotal;
 }
 
-function calculateSetPrice(set) {
+export function calculateSetPrice(set: { color: string; accessories: string[] }): number {
   return calculateItemPrice(set.color, set.accessories);
 }
 
-function getItemDescription(colorId, accessoryIds) {
-  const color = COLOR_VARIANTS.find(c => c.id === colorId);
+export function getItemDescription(colorId: string, accessoryIds: string[]): string {
+  const color = COLOR_VARIANTS.find((c) => c.id === colorId);
   const accNames = accessoryIds
-    .map(id => ACCESSORIES.find(a => a.id === id))
+    .map((id) => ACCESSORIES.find((a) => a.id === id))
     .filter(Boolean)
-    .map(a => a.name);
+    .map((a) => a!.name);
   return `${BASE_PRODUCT.name}（${color ? color.name : ''}）${accNames.length > 0 ? ' + ' + accNames.join(' + ') : ''}`;
 }

@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="DMAT STORE - DMAT隊員・病院向けグッズ通販"
+  description="DMATロゴ入りキーホルダー。3Dプリント製、NFC内蔵。受注生産。DMAT隊員・病院スタッフ向けグッズ。"
+>
+  <!-- Hero -->
+  <section class="w-full">
+    <div class="w-full bg-gray-200" style="aspect-ratio: 21/9;">
+      <img
+        src="/images/hero.webp"
+        alt="DMAT STORE ヒーロー画像"
+        class="w-full h-full object-cover"
+        onerror="this.style.display='none';this.parentElement.classList.add('flex','items-center','justify-center');var s=document.createElement('span');s.textContent='ヒーロー画像をここに配置';s.className='text-gray-400 text-lg';this.parentElement.appendChild(s);"
+      />
+    </div>
+  </section>
+
+  <!-- おすすめ商品 -->
+  <section id="recommended" class="section-white" style="padding: var(--section-padding) 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-10 animate-on-scroll">
+        <span class="text-xs font-medium tracking-widest text-gray-400 uppercase">Recommended</span>
+        <h2 class="text-2xl font-bold text-dmat-navy mt-1">おすすめ商品</h2>
+        <p class="text-sm text-gray-500 mt-2">人気の組み合わせセット</p>
+      </div>
+      <div id="recommended-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children"></div>
+      <div class="text-center mt-10 animate-on-scroll">
+        <a href="/product?custom=true" class="btn-secondary">自分だけの組み合わせを作る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- カテゴリー別 -->
+  <section class="section-alt" style="padding: var(--section-padding) 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-10 animate-on-scroll">
+        <span class="text-xs font-medium tracking-widest text-gray-400 uppercase">Categories</span>
+        <h2 class="text-2xl font-bold text-dmat-navy mt-1">カテゴリーから探す</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 stagger-children">
+        <!-- DMAT隊員用 -->
+        <a href="/category?cat=dmat-member" class="category-card animate-on-scroll" style="background: linear-gradient(135deg, #1B2838 0%, #2a4060 100%);">
+          <div class="absolute top-6 right-6 opacity-20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+              <path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+            </svg>
+          </div>
+          <div class="relative z-10">
+            <h3 class="text-white font-bold text-lg">DMAT隊員用グッズ</h3>
+            <p class="text-white/70 text-sm mt-1">現場スタッフ向け</p>
+          </div>
+        </a>
+        <!-- 病院用 -->
+        <a href="/category?cat=hospital" class="category-card animate-on-scroll" style="background: linear-gradient(135deg, #C41E3A 0%, #e0475e 100%);">
+          <div class="absolute top-6 right-6 opacity-20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+            </svg>
+          </div>
+          <div class="relative z-10">
+            <h3 class="text-white font-bold text-lg">病院用グッズ</h3>
+            <p class="text-white/70 text-sm mt-1">病院・施設導入向け</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 自分で作る -->
+  <section class="section-white" style="padding: var(--section-padding) 0;">
+    <div class="max-w-6xl mx-auto px-6 text-center animate-on-scroll">
+      <span class="text-xs font-medium tracking-widest text-gray-400 uppercase">Custom Order</span>
+      <h2 class="text-2xl font-bold text-dmat-navy mt-1">自分だけの組み合わせを作る</h2>
+      <p class="text-sm text-gray-500 mt-3 max-w-md mx-auto">カラー・アクセサリを自由に選んで、あなただけのDMATキーホルダーをカスタマイズできます。</p>
+      <div class="mt-8">
+        <a href="/product?custom=true" class="btn-primary">カスタマイズする</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 安心情報 -->
+  <section class="section-alt" style="padding: var(--section-padding) 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
+        <div class="trust-card animate-on-scroll">
+          <div class="trust-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-dmat-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+            </svg>
+          </div>
+          <h3 class="text-sm font-bold text-dmat-navy">全国配送</h3>
+          <p class="text-xs text-gray-500 mt-1">日本全国どこでもお届け</p>
+        </div>
+        <div class="trust-card animate-on-scroll">
+          <div class="trust-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-dmat-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </div>
+          <h3 class="text-sm font-bold text-dmat-navy">10日以内発送</h3>
+          <p class="text-xs text-gray-500 mt-1">受注後10日以内に発送</p>
+        </div>
+        <div class="trust-card animate-on-scroll">
+          <div class="trust-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-dmat-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+            </svg>
+          </div>
+          <h3 class="text-sm font-bold text-dmat-navy">品質保証</h3>
+          <p class="text-xs text-gray-500 mt-1">3Dプリント品質を保証</p>
+        </div>
+        <div class="trust-card animate-on-scroll">
+          <div class="trust-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-dmat-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <h3 class="text-sm font-bold text-dmat-navy">メールサポート</h3>
+          <p class="text-xs text-gray-500 mt-1">お気軽にお問い合わせ</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+(function () {
+  'use strict';
+
+  var BASE_PRODUCT = { id: 'dmat-keychain', name: 'DMAT キーホルダー', description: '3Dプリント製、NFC内蔵。DMATカラーのキーホルダー。', basePrice: 680, image: '/images/keychain-standard.webp' };
+  var COLOR_VARIANTS = [
+    { id: 'standard-red', name: 'スタンダードレッド', priceDiff: 0, image: '/images/keychain-standard.webp' },
+    { id: 'premium-red', name: 'プレミアレッド', priceDiff: 100, image: '/images/keychain-premium.webp' }
+  ];
+  var ACCESSORIES = [
+    { id: 'ball-chain', name: 'ボールチェーン', price: 0, isDefault: true, image: '/images/ball-chain.webp' },
+    { id: 'carabiner', name: 'カラビナ', price: 300, isDefault: false, image: '/images/carabiner.webp' },
+    { id: 'glow-band', name: '蓄光バンド', price: 400, isDefault: false, image: '/images/glow-band.webp' }
+  ];
+  var RECOMMENDED_SETS = [
+    { id: 'basic', name: 'ベーシックセット', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
+    { id: 'premium', name: 'プレミアムセット', description: 'プレミアレッド + カラビナ + 蓄光バンド', color: 'premium-red', accessories: ['ball-chain', 'carabiner', 'glow-band'], badge: 'フルセット', category: 'dmat-member' },
+    { id: 'hospital-basic', name: '病院用ベーシック', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '施設向け', category: 'hospital' },
+    { id: 'hospital-glow', name: '病院用 夜勤対応', description: 'スタンダードレッド + 蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '夜勤に', category: 'hospital' }
+  ];
+
+  function calcSetPrice(set) {
+    var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
+    var price = BASE_PRODUCT.basePrice + (colorVar ? colorVar.priceDiff : 0);
+    set.accessories.forEach(function (accId) {
+      var acc = ACCESSORIES.find(function (a) { return a.id === accId; });
+      if (acc) price += acc.price;
+    });
+    return price;
+  }
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem('dmat_cart') || '[]'); } catch (e) { return []; }
+  }
+
+  function saveCart(cart) {
+    localStorage.setItem('dmat_cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cart-updated'));
+  }
+
+  function addSetToCart(set) {
+    var cart = getCart();
+    var price = calcSetPrice(set);
+    var existing = cart.find(function (item) {
+      return item.colorId === set.color && JSON.stringify(item.accessoryIds.sort()) === JSON.stringify(set.accessories.slice().sort());
+    });
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        id: BASE_PRODUCT.id + '-' + Date.now(),
+        colorId: set.color,
+        accessoryIds: set.accessories.slice(),
+        quantity: 1,
+        unitPrice: price,
+        description: set.name
+      });
+    }
+    saveCart(cart);
+    showToast(set.name + ' をカートに追加しました');
+  }
+
+  function showToast(message) {
+    var container = document.getElementById('toast-container');
+    if (!container) return;
+    var toast = document.createElement('div');
+    toast.className = 'toast toast-success';
+    toast.textContent = message;
+    container.appendChild(toast);
+    requestAnimationFrame(function () {
+      toast.classList.add('toast-visible');
+    });
+    setTimeout(function () {
+      toast.classList.remove('toast-visible');
+      setTimeout(function () { toast.remove(); }, 300);
+    }, 2500);
+  }
+
+  function renderRecommended() {
+    var grid = document.getElementById('recommended-grid');
+    if (!grid) return;
+    grid.innerHTML = RECOMMENDED_SETS.map(function (set) {
+      var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
+      var price = calcSetPrice(set);
+      var accNames = set.accessories.map(function (accId) {
+        var a = ACCESSORIES.find(function (x) { return x.id === accId; });
+        return a ? a.name : '';
+      }).filter(Boolean).join('、');
+      return '<div class="product-card animate-on-scroll" data-set-id="' + set.id + '">' +
+        '<a href="/product?set=' + set.id + '" class="block">' +
+          '<div class="product-image-wrapper" style="aspect-ratio: 1/1; background: #f5f7fb;">' +
+            '<img src="' + (colorVar ? colorVar.image : BASE_PRODUCT.image) + '" alt="' + set.name + '" class="w-full h-full object-contain p-4" onerror="this.style.display=\'none\'" />' +
+          '</div>' +
+        '</a>' +
+        '<div class="p-4">' +
+          '<div class="mb-2"><span class="badge-pill badge-pill-red">' + set.badge + '</span></div>' +
+          '<a href="/product?set=' + set.id + '" class="block">' +
+            '<h3 class="text-sm font-bold text-dmat-navy">' + set.name + '</h3>' +
+            '<p class="text-xs text-gray-500 mt-1 line-clamp-2">' + accNames + '</p>' +
+          '</a>' +
+          '<div class="flex items-center justify-between mt-3">' +
+            '<span class="text-base font-bold text-dmat-navy">&yen;' + price.toLocaleString() + '</span>' +
+            '<button class="add-set-btn text-xs text-white bg-dmat-navy rounded-md px-3 py-1.5 hover:bg-dmat-navy-light transition-colors" data-set-id="' + set.id + '">カートに入れる</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    grid.addEventListener('click', function (e) {
+      var btn = e.target.closest('.add-set-btn');
+      if (!btn) return;
+      e.preventDefault();
+      var setId = btn.getAttribute('data-set-id');
+      var set = RECOMMENDED_SETS.find(function (s) { return s.id === setId; });
+      if (set) addSetToCart(set);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderRecommended);
+  } else {
+    renderRecommended();
+  }
+})();
+</script>

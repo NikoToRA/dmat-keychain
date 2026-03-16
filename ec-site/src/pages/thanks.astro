@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="ご注文完了 - DMAT STORE">
+  <div class="max-w-2xl mx-auto px-6 py-16 text-center">
+    <!-- Green check icon -->
+    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    </div>
+
+    <h1 class="text-2xl font-bold text-dmat-navy">ご注文ありがとうございます</h1>
+    <p class="text-sm text-gray-500 mt-3">ご注文確認メールをお送りしました。</p>
+
+    <!-- Next steps -->
+    <div class="mt-10 text-left bg-gray-50 rounded-xl p-6">
+      <h2 class="text-sm font-bold text-dmat-navy mb-4">今後の流れ</h2>
+      <div class="space-y-4">
+        <div class="flex gap-3">
+          <div class="step-indicator flex-shrink-0" style="width: 2rem; height: 2rem; font-size: 0.75rem;">1</div>
+          <div>
+            <h3 class="text-sm font-medium text-dmat-navy">メール確認</h3>
+            <p class="text-xs text-gray-500 mt-0.5">ご登録メールアドレスに注文確認メールが届きます。</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <div class="step-indicator flex-shrink-0" style="width: 2rem; height: 2rem; font-size: 0.75rem;">2</div>
+          <div>
+            <h3 class="text-sm font-medium text-dmat-navy">製作・梱包</h3>
+            <p class="text-xs text-gray-500 mt-0.5">3Dプリントで丁寧に製作し、梱包いたします（10日以内）。</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <div class="step-indicator flex-shrink-0" style="width: 2rem; height: 2rem; font-size: 0.75rem;">3</div>
+          <div>
+            <h3 class="text-sm font-medium text-dmat-navy">発送・追跡番号</h3>
+            <p class="text-xs text-gray-500 mt-0.5">発送時に追跡番号をメールでお知らせします。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="mt-6 text-sm text-gray-500">
+      <p>ご不明な点がございましたら、メールにてお問い合わせください。</p>
+    </div>
+
+    <div class="mt-8">
+      <a href="/" class="btn-primary">トップに戻る</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+(function () {
+  'use strict';
+
+  // Clear cart on thanks page
+  function clearCart() {
+    try {
+      localStorage.removeItem('dmat_cart');
+      window.dispatchEvent(new Event('cart-updated'));
+    } catch (e) { /* ignore */ }
+  }
+
+  clearCart();
+
+  // Track purchase event
+  if (typeof window.trackEvent === 'function') {
+    var params = new URLSearchParams(window.location.search);
+    window.trackEvent('purchase', {
+      transaction_id: params.get('session_id') || '',
+      currency: 'JPY'
+    });
+  }
+})();
+</script>

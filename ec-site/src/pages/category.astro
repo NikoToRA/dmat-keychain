@@ -1,0 +1,223 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="カテゴリ - DMAT STORE">
+  <!-- Dark hero -->
+  <section id="category-hero" class="hero-gradient py-12">
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      <h1 id="category-title" class="text-2xl font-bold text-white">カテゴリ</h1>
+      <p id="category-description" class="text-sm text-white/70 mt-2"></p>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6 py-8">
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-400 mb-6">
+      <a href="/" class="hover:text-dmat-navy transition-colors">トップ</a>
+      <span class="mx-1">/</span>
+      <span id="breadcrumb-cat" class="text-gray-600">カテゴリ</span>
+    </nav>
+
+    <!-- Sort bar -->
+    <div class="flex items-center justify-between mb-6">
+      <p id="result-count" class="text-xs text-gray-400"></p>
+      <div class="flex items-center gap-2">
+        <label class="text-xs text-gray-400">並び替え:</label>
+        <select id="sort-select" class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-1 focus:ring-dmat-navy">
+          <option value="recommended">おすすめ順</option>
+          <option value="price-asc">価格安い順</option>
+          <option value="price-desc">価格高い順</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Product grid -->
+    <div id="category-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <!-- Custom builder CTA -->
+    <div class="mt-16 text-center bg-gray-50 rounded-xl p-10">
+      <h2 class="text-lg font-bold text-dmat-navy">お探しの組み合わせが見つかりませんか？</h2>
+      <p class="text-sm text-gray-500 mt-2">カラーやアクセサリを自由に選んで、オリジナルのキーホルダーを作れます。</p>
+      <div class="mt-6">
+        <a href="/product?custom=true" class="btn-primary">自分で組み合わせを作る</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+(function () {
+  'use strict';
+
+  var BASE_PRODUCT = { id: 'dmat-keychain', name: 'DMAT キーホルダー', basePrice: 680, image: '/images/keychain-standard.webp' };
+  var COLOR_VARIANTS = [
+    { id: 'standard-red', name: 'スタンダードレッド', priceDiff: 0, image: '/images/keychain-standard.webp' },
+    { id: 'premium-red', name: 'プレミアレッド', priceDiff: 100, image: '/images/keychain-premium.webp' }
+  ];
+  var ACCESSORIES = [
+    { id: 'ball-chain', name: 'ボールチェーン', price: 0, isDefault: true, image: '/images/ball-chain.webp' },
+    { id: 'carabiner', name: 'カラビナ', price: 300, isDefault: false, image: '/images/carabiner.webp' },
+    { id: 'glow-band', name: '蓄光バンド', price: 400, isDefault: false, image: '/images/glow-band.webp' }
+  ];
+  var CATEGORIES = [
+    { id: 'dmat-member', name: 'DMAT隊員用グッズ', description: '現場スタッフ向け' },
+    { id: 'hospital', name: '病院用グッズ', description: '病院・施設導入向け' }
+  ];
+  var RECOMMENDED_SETS = [
+    { id: 'basic', name: 'ベーシックセット', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
+    { id: 'premium', name: 'プレミアムセット', description: 'プレミアレッド + カラビナ + 蓄光バンド', color: 'premium-red', accessories: ['ball-chain', 'carabiner', 'glow-band'], badge: 'フルセット', category: 'dmat-member' },
+    { id: 'hospital-basic', name: '病院用ベーシック', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '施設向け', category: 'hospital' },
+    { id: 'hospital-glow', name: '病院用 夜勤対応', description: 'スタンダードレッド + 蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '夜勤に', category: 'hospital' }
+  ];
+
+  function calcSetPrice(set) {
+    var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
+    var price = BASE_PRODUCT.basePrice + (colorVar ? colorVar.priceDiff : 0);
+    set.accessories.forEach(function (accId) {
+      var acc = ACCESSORIES.find(function (a) { return a.id === accId; });
+      if (acc) price += acc.price;
+    });
+    return price;
+  }
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem('dmat_cart') || '[]'); } catch (e) { return []; }
+  }
+  function saveCart(cart) {
+    localStorage.setItem('dmat_cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cart-updated'));
+  }
+
+  function showToast(message) {
+    var container = document.getElementById('toast-container');
+    if (!container) return;
+    var toast = document.createElement('div');
+    toast.className = 'toast toast-success';
+    toast.textContent = message;
+    container.appendChild(toast);
+    requestAnimationFrame(function () { toast.classList.add('toast-visible'); });
+    setTimeout(function () {
+      toast.classList.remove('toast-visible');
+      setTimeout(function () { toast.remove(); }, 300);
+    }, 2500);
+  }
+
+  function addSetToCart(set) {
+    var cart = getCart();
+    var price = calcSetPrice(set);
+    var existing = cart.find(function (item) {
+      return item.colorId === set.color && JSON.stringify(item.accessoryIds.sort()) === JSON.stringify(set.accessories.slice().sort());
+    });
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        id: BASE_PRODUCT.id + '-' + Date.now(),
+        colorId: set.color,
+        accessoryIds: set.accessories.slice(),
+        quantity: 1,
+        unitPrice: price,
+        description: set.name
+      });
+    }
+    saveCart(cart);
+    showToast(set.name + ' をカートに追加しました');
+  }
+
+  // Get category from URL
+  var params = new URLSearchParams(window.location.search);
+  var catId = params.get('cat') || 'dmat-member';
+  var category = CATEGORIES.find(function (c) { return c.id === catId; }) || CATEGORIES[0];
+
+  // Set hero content
+  document.getElementById('category-title').textContent = category.name;
+  document.getElementById('category-description').textContent = category.description;
+  document.getElementById('breadcrumb-cat').textContent = category.name;
+
+  // Filter sets
+  var filteredSets = RECOMMENDED_SETS.filter(function (s) { return s.category === category.id; });
+
+  // Add prices for sorting
+  filteredSets.forEach(function (s) { s._price = calcSetPrice(s); });
+
+  var currentSort = 'recommended';
+
+  function sortSets(sets, sortBy) {
+    var sorted = sets.slice();
+    if (sortBy === 'price-asc') {
+      sorted.sort(function (a, b) { return a._price - b._price; });
+    } else if (sortBy === 'price-desc') {
+      sorted.sort(function (a, b) { return b._price - a._price; });
+    }
+    return sorted;
+  }
+
+  function renderGrid() {
+    var grid = document.getElementById('category-grid');
+    if (!grid) return;
+    var sorted = sortSets(filteredSets, currentSort);
+
+    document.getElementById('result-count').textContent = sorted.length + '件の商品';
+
+    grid.innerHTML = sorted.map(function (set) {
+      var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
+      var price = set._price;
+      var accNames = set.accessories.map(function (accId) {
+        var a = ACCESSORIES.find(function (x) { return x.id === accId; });
+        return a ? a.name : '';
+      }).filter(Boolean).join('、');
+
+      return '<div class="product-card animate-on-scroll">' +
+        '<a href="/product?set=' + set.id + '" class="block">' +
+          '<div class="product-image-wrapper bg-gray-50" style="aspect-ratio: 4/3;">' +
+            '<img src="' + (colorVar ? colorVar.image : BASE_PRODUCT.image) + '" alt="' + set.name + '" class="w-full h-full object-contain p-6" onerror="this.style.display=\'none\'" />' +
+          '</div>' +
+        '</a>' +
+        '<div class="p-5">' +
+          '<div class="mb-2"><span class="badge-pill badge-pill-red">' + set.badge + '</span></div>' +
+          '<a href="/product?set=' + set.id + '" class="block">' +
+            '<h3 class="text-sm font-bold text-dmat-navy">' + set.name + '</h3>' +
+            '<p class="text-xs text-gray-500 mt-1">' + accNames + '</p>' +
+          '</a>' +
+          '<div class="flex items-center justify-between mt-4">' +
+            '<span class="text-lg font-bold text-dmat-navy">&yen;' + price.toLocaleString() + '</span>' +
+            '<button class="add-set-btn text-xs text-white bg-dmat-navy rounded-md px-3 py-1.5 hover:bg-dmat-navy-light transition-colors" data-set-id="' + set.id + '">カートに入れる</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // Re-observe for scroll animation
+    if (typeof IntersectionObserver !== 'undefined') {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      grid.querySelectorAll('.animate-on-scroll').forEach(function (el) { observer.observe(el); });
+    }
+  }
+
+  renderGrid();
+
+  // Sort handler
+  document.getElementById('sort-select').addEventListener('change', function () {
+    currentSort = this.value;
+    renderGrid();
+  });
+
+  // Add to cart handler (delegation)
+  document.getElementById('category-grid').addEventListener('click', function (e) {
+    var btn = e.target.closest('.add-set-btn');
+    if (!btn) return;
+    e.preventDefault();
+    var setId = btn.getAttribute('data-set-id');
+    var set = RECOMMENDED_SETS.find(function (s) { return s.id === setId; });
+    if (set) addSetToCart(set);
+  });
+})();
+</script>
