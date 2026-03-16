@@ -109,46 +109,41 @@ const { title, description = 'DMATロゴ入りキーホルダー。3Dプリン�
   <!-- Scroll Animation Observer -->
   <script is:inline>
     (function () {
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, {
-        threshold: 0.05,
-        rootMargin: '0px 0px -20px 0px'
-      });
+      function initAnimations() {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.01, rootMargin: '50px' });
 
-      window.observeNewElements = function () {
-        document.querySelectorAll('.animate-on-scroll:not(.is-visible)').forEach(function (el) {
-          observer.observe(el);
-        });
-      };
+        function observe() {
+          document.querySelectorAll('.animate-on-scroll:not(.is-visible)').forEach(function (el) {
+            observer.observe(el);
+          });
+        }
 
-      function observeElements() {
-        document.querySelectorAll('.animate-on-scroll').forEach(function (el) {
-          observer.observe(el);
-        });
+        observe();
+
+        // Re-observe when DOM changes (dynamic content)
+        new MutationObserver(observe).observe(document.body, { childList: true, subtree: true });
       }
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () {
-          observeElements();
-          // Re-observe after dynamic content is rendered (slight delay)
-          setTimeout(window.observeNewElements, 200);
-        });
+      // Run after everything is loaded
+      if (document.readyState === 'complete') {
+        initAnimations();
       } else {
-        observeElements();
-        setTimeout(window.observeNewElements, 200);
+        window.addEventListener('load', initAnimations);
       }
 
-      // MutationObserver for dynamically added elements
-      var mo = new MutationObserver(function () {
-        window.observeNewElements();
-      });
-      mo.observe(document.documentElement, { childList: true, subtree: true });
+      // Safety: show all content after 1s regardless
+      setTimeout(function () {
+        document.querySelectorAll('.animate-on-scroll:not(.is-visible)').forEach(function (el) {
+          el.classList.add('is-visible');
+        });
+      }, 1000);
     })();
   </script>
 
