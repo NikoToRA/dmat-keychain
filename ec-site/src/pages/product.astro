@@ -277,15 +277,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 '<input type="radio" name="category" value="dmat-member" checked class="hidden" />' +
                 '<div class="text-center py-3">' +
                   '<span class="block font-bold text-sm text-dmat-navy">DMAT隊員向け</span>' +
-                  '<span class="block text-xs text-gray-400 mt-1">基本価格</span>' +
                 '</div>' +
               '</label>' +
               '<label class="builder-option" data-category="hospital">' +
                 '<input type="radio" name="category" value="hospital" class="hidden" />' +
                 '<div class="text-center py-3">' +
                   '<span class="block font-bold text-sm text-dmat-navy">病院向け</span>' +
-                  '<span class="block text-xs text-gray-400 mt-1">基本価格 +&yen;300</span>' +
-                  '<span class="block text-[10px] text-dmat-red mt-0.5">特設サイト構築費込み</span>' +
                 '</div>' +
               '</label>' +
             '</div>' +
@@ -301,7 +298,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     '</div>' +
                     '<div>' +
                       '<p class="text-sm font-medium text-dmat-navy">' + c.name + '</p>' +
-                      '<p class="text-xs text-gray-400">' + (c.priceDiff > 0 ? '+\u00a5' + c.priceDiff.toLocaleString() : '基本価格') + '</p>' +
+                      '<p class="text-xs text-gray-400">' + (c.priceDiff > 0 ? '+\u00a5' + c.priceDiff.toLocaleString() : '') + '</p>' +
                     '</div>' +
                   '</div>' +
                 '</div>';
@@ -322,7 +319,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     '<p class="text-sm font-medium text-dmat-navy">' + a.name + '</p>' +
                     '<p class="text-xs text-gray-400">' + (a.price > 0 ? '+\u00a5' + a.price.toLocaleString() : '付属') + '</p>' +
                   '</div>' +
-                  '<div class="w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 ' + (checked ? 'border-dmat-navy bg-dmat-navy' : 'border-gray-300') + '">' +
+                  '<div class="acc-check w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 ' + (checked ? 'border-dmat-navy bg-dmat-navy' : 'border-gray-300') + '">' +
                     (checked ? '<svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>' : '') +
                   '</div>' +
                 '</label>';
@@ -381,7 +378,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     // Accessory selection
     document.getElementById('accessory-options').addEventListener('click', function (e) {
-      var label = e.target.closest('.builder-option');
+      e.preventDefault();
+      var label = e.target.closest('[data-accessory]');
       if (!label) return;
       var accId = label.getAttribute('data-accessory');
       var idx = selectedAccessories.indexOf(accId);
@@ -393,16 +391,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         label.classList.add('selected');
       }
       // Update checkbox visual
-      var checkBox = label.querySelector('.w-5.h-5');
-      if (checkBox) {
-        if (selectedAccessories.indexOf(accId) >= 0) {
-          checkBox.className = 'w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 border-dmat-navy bg-dmat-navy';
+      var boxes = label.querySelectorAll('.acc-check');
+      boxes.forEach(function (checkBox) {
+        var isChecked = selectedAccessories.indexOf(accId) >= 0;
+        if (isChecked) {
+          checkBox.className = 'acc-check w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 border-dmat-navy bg-dmat-navy';
           checkBox.innerHTML = '<svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>';
         } else {
-          checkBox.className = 'w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 border-gray-300';
+          checkBox.className = 'acc-check w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 border-gray-300';
           checkBox.innerHTML = '';
         }
-      }
+      });
       updatePrice();
     });
 

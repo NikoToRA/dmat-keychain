@@ -132,33 +132,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </section>
 
-  <!-- 使用シーン -->
-  <section class="section-alt" style="padding: 6rem 0;">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-12 animate-on-scroll">
-        <span class="text-xs font-medium tracking-widest uppercase" style="color: var(--color-text-tertiary);">In the Field</span>
-        <h2 class="font-bold mt-1" style="font-size: var(--text-3xl); color: var(--color-primary);">現場で使われています</h2>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 stagger-children">
-        <!-- Photo 1 -->
-        <div class="animate-on-scroll" style="border-radius: 12px; overflow: hidden; aspect-ratio: 4/5;">
-          <img src="/images/scene-1.webp" alt="DMAT隊員がキーホルダーを使用" class="w-full h-full object-cover"
-               onerror="this.style.display='none';this.parentElement.style.background='var(--color-surface-alt)';this.parentElement.innerHTML='<div class=&quot;flex items-center justify-center h-full&quot;><span class=&quot;text-xs&quot; style=&quot;color:var(--color-text-tertiary)&quot;>使用シーン写真 1</span></div>'" />
-        </div>
-        <!-- Photo 2 -->
-        <div class="animate-on-scroll" style="border-radius: 12px; overflow: hidden; aspect-ratio: 4/5;">
-          <img src="/images/scene-2.webp" alt="病院スタッフがNFCをかざす" class="w-full h-full object-cover"
-               onerror="this.style.display='none';this.parentElement.style.background='var(--color-surface-alt)';this.parentElement.innerHTML='<div class=&quot;flex items-center justify-center h-full&quot;><span class=&quot;text-xs&quot; style=&quot;color:var(--color-text-tertiary)&quot;>使用シーン写真 2</span></div>'" />
-        </div>
-        <!-- Photo 3 -->
-        <div class="animate-on-scroll" style="border-radius: 12px; overflow: hidden; aspect-ratio: 4/5;">
-          <img src="/images/scene-3.webp" alt="災害訓練でのキーホルダー" class="w-full h-full object-cover"
-               onerror="this.style.display='none';this.parentElement.style.background='var(--color-surface-alt)';this.parentElement.innerHTML='<div class=&quot;flex items-center justify-center h-full&quot;><span class=&quot;text-xs&quot; style=&quot;color:var(--color-text-tertiary)&quot;>使用シーン写真 3</span></div>'" />
-        </div>
-      </div>
-      <p class="text-center text-xs mt-8 animate-on-scroll" style="color: var(--color-text-tertiary);">※ 写真はイメージです。後日差し替え予定。</p>
-    </div>
-  </section>
 </BaseLayout>
 
 <script is:inline>
@@ -203,26 +176,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     window.dispatchEvent(new Event('cart-updated'));
   }
 
-  function addSetToCart(set) {
+  function addSetToCart(set, qty) {
+    qty = qty || 1;
     var cart = getCart();
     var price = calcSetPrice(set);
     var existing = cart.find(function (item) {
-      return item.colorId === set.color && JSON.stringify(item.accessoryIds.sort()) === JSON.stringify(set.accessories.slice().sort());
+      return item.colorId === set.color && item.category === set.category && JSON.stringify(item.accessoryIds.sort()) === JSON.stringify(set.accessories.slice().sort());
     });
     if (existing) {
-      existing.quantity += 1;
+      existing.quantity += qty;
     } else {
       cart.push({
         id: BASE_PRODUCT.id + '-' + Date.now(),
         colorId: set.color,
         accessoryIds: set.accessories.slice(),
-        quantity: 1,
+        quantity: qty,
         unitPrice: price,
-        description: set.name
+        description: set.name,
+        category: set.category
       });
     }
     saveCart(cart);
-    showToast(set.name + ' をカートに追加しました');
+    showToast(set.name + ' × ' + qty + ' をカートに追加しました');
   }
 
   function showToast(message) {
@@ -251,7 +226,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         var a = ACCESSORIES.find(function (x) { return x.id === accId; });
         return a ? a.name : '';
       }).filter(Boolean).join('、');
-      var hospitalExtra = set.category === 'hospital' ? ' <span style="color: #999; font-weight: 400; font-size: 0.75rem;">+¥300</span>' : '';
       return '<div class="product-card animate-on-scroll" data-set-id="' + set.id + '">' +
         '<a href="/product?set=' + set.id + '" class="block">' +
           '<div class="product-image-wrapper">' +
@@ -264,21 +238,47 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             '<h3 style="font-size: 0.875rem; font-weight: 500; color: var(--color-primary);">' + set.name + '</h3>' +
             '<p class="line-clamp-2" style="font-size: 0.75rem; color: var(--color-text-tertiary); margin-top: 0.25rem;">' + accNames + '</p>' +
           '</a>' +
-          '<div class="flex items-center justify-between" style="margin-top: 0.75rem;">' +
-            '<span style="font-size: 1rem; font-weight: 700; color: var(--color-primary);">&yen;' + price.toLocaleString() + hospitalExtra + '</span>' +
-            '<button class="add-set-btn" style="font-size: 0.75rem; color: #fff; background-color: var(--color-primary); border-radius: 6px; padding: 0.375rem 0.75rem; border: none; cursor: pointer; transition: opacity 150ms;" data-set-id="' + set.id + '" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'1\'">カートに入れる</button>' +
+          '<div style="margin-top: 0.75rem;">' +
+            '<div style="font-size: 1rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem;">&yen;' + price.toLocaleString() + '</div>' +
+            '<div class="flex items-center gap-2">' +
+              '<div class="flex items-center" style="border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden;">' +
+                '<button class="qty-minus" data-set-id="' + set.id + '" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--color-text-secondary); border: none; background: none; cursor: pointer;">&minus;</button>' +
+                '<span class="qty-display" data-set-id="' + set.id + '" style="padding: 0.25rem 0.375rem; font-size: 0.75rem; min-width: 1.5rem; text-align: center;">1</span>' +
+                '<button class="qty-plus" data-set-id="' + set.id + '" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--color-text-secondary); border: none; background: none; cursor: pointer;">&plus;</button>' +
+              '</div>' +
+              '<button class="add-set-btn" style="flex: 1; font-size: 0.75rem; color: #fff; background-color: var(--color-primary); border-radius: 6px; padding: 0.375rem 0.75rem; border: none; cursor: pointer; transition: opacity 150ms;" data-set-id="' + set.id + '" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'1\'">カートに入れる</button>' +
+            '</div>' +
           '</div>' +
         '</div>' +
       '</div>';
     }).join('');
 
     grid.addEventListener('click', function (e) {
+      // 数量ボタン
+      var minus = e.target.closest('.qty-minus');
+      var plus = e.target.closest('.qty-plus');
+      if (minus || plus) {
+        e.preventDefault();
+        var sid = (minus || plus).getAttribute('data-set-id');
+        var display = grid.querySelector('.qty-display[data-set-id="' + sid + '"]');
+        if (display) {
+          var val = parseInt(display.textContent) || 1;
+          val = minus ? Math.max(1, val - 1) : Math.min(99, val + 1);
+          display.textContent = val;
+        }
+        return;
+      }
+      // カートに入れる
       var btn = e.target.closest('.add-set-btn');
       if (!btn) return;
       e.preventDefault();
       var setId = btn.getAttribute('data-set-id');
       var set = RECOMMENDED_SETS.find(function (s) { return s.id === setId; });
-      if (set) addSetToCart(set);
+      if (!set) return;
+      var qtyEl = grid.querySelector('.qty-display[data-set-id="' + setId + '"]');
+      var qty = qtyEl ? parseInt(qtyEl.textContent) || 1 : 1;
+      addSetToCart(set, qty);
+      if (qtyEl) qtyEl.textContent = '1';
     });
   }
 
