@@ -13,44 +13,44 @@
   <script src="js/analytics-config.js"></script>
   <script src="js/analytics.js" defer></script>
 </head>
-<body class="bg-gray-50">
-  <header id="site-header" class="bg-white shadow-sm sticky top-0 z-40"></header>
+<body class="bg-white">
+  <header id="site-header" class="bg-white sticky top-0 z-40 transition-shadow duration-300"></header>
 
   <main>
     <!-- カテゴリヒーロー -->
-    <section id="category-hero" class="hero-gradient text-white py-12 sm:py-16">
-      <div class="max-w-6xl mx-auto px-4 text-center">
-        <h1 id="category-title" class="text-2xl sm:text-4xl font-bold mb-2"></h1>
-        <p id="category-desc" class="text-gray-300"></p>
+    <section id="category-hero" class="hero-gradient text-white py-16 sm:py-20">
+      <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
+        <h1 id="category-title" class="text-2xl sm:text-4xl font-bold mb-3 tracking-tight"></h1>
+        <p id="category-desc" class="text-gray-400 text-sm font-light"></p>
       </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-4 py-10">
+    <section class="max-w-6xl mx-auto px-6 py-12">
       <!-- パンくず -->
-      <nav class="text-sm text-gray-500 mb-6">
+      <nav class="text-xs text-gray-400 mb-8 font-light">
         <a href="index.html" class="hover:text-dmat-navy transition-colors">トップ</a>
-        <span class="mx-2">&gt;</span>
-        <span id="breadcrumb-category"></span>
+        <span class="mx-2 text-gray-300">/</span>
+        <span id="breadcrumb-category" class="text-gray-600"></span>
       </nav>
 
       <!-- ソートバー -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <p id="result-count" class="text-sm text-gray-500"></p>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+        <p id="result-count" class="text-xs text-gray-400 font-light"></p>
         <div class="flex gap-2">
-          <button onclick="sortSets('recommended')" class="sort-btn px-4 py-2 rounded-lg text-sm font-medium bg-dmat-navy text-white" data-sort="recommended">おすすめ順</button>
-          <button onclick="sortSets('price-asc')" class="sort-btn px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200" data-sort="price-asc">価格が安い順</button>
-          <button onclick="sortSets('price-desc')" class="sort-btn px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200" data-sort="price-desc">価格が高い順</button>
+          <button onclick="sortSets('recommended')" class="sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-dmat-navy text-white" data-sort="recommended">おすすめ順</button>
+          <button onclick="sortSets('price-asc')" class="sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100" data-sort="price-asc">価格が安い順</button>
+          <button onclick="sortSets('price-desc')" class="sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100" data-sort="price-desc">価格が高い順</button>
         </div>
       </div>
 
       <!-- 商品グリッド -->
-      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"></div>
 
       <!-- カスタムビルダーへの誘導 -->
-      <div class="mt-12 bg-white rounded-xl p-8 text-center shadow-sm border border-gray-100">
-        <h3 class="text-lg font-bold text-dmat-navy mb-2">お好みの組み合わせで注文</h3>
-        <p class="text-sm text-gray-500 mb-4">カラーと付属品を自由に選んで、あなただけのキーホルダーを作れます</p>
-        <a href="product.html?custom=true" class="inline-block bg-dmat-red text-white py-3 px-8 rounded-xl hover:bg-dmat-red-dark transition-colors font-medium">
+      <div class="mt-16 bg-gray-50 rounded-2xl p-10 text-center">
+        <h3 class="text-base font-bold text-dmat-navy mb-2 tracking-tight">お好みの組み合わせで注文</h3>
+        <p class="text-xs text-gray-400 mb-6 font-light">カラーと付属品を自由に選んで、あなただけのキーホルダーを作れます</p>
+        <a href="product.html?custom=true" class="inline-block bg-dmat-red text-white py-3 px-8 rounded-lg hover:bg-dmat-red-dark transition-all font-medium text-sm tracking-wide hover:shadow-lg hover:shadow-red-100">
           カスタムで注文する
         </a>
       </div>
@@ -74,12 +74,11 @@
 
     function sortSets(sortType) {
       currentSort = sortType;
-      // ソートボタンのアクティブ状態を更新
       document.querySelectorAll('.sort-btn').forEach(btn => {
         if (btn.dataset.sort === sortType) {
-          btn.className = 'sort-btn px-4 py-2 rounded-lg text-sm font-medium bg-dmat-navy text-white';
+          btn.className = 'sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-dmat-navy text-white';
         } else {
-          btn.className = 'sort-btn px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200';
+          btn.className = 'sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100';
         }
       });
       renderSets();
@@ -98,6 +97,11 @@
       const count = document.getElementById('result-count');
       grid.innerHTML = sets.map(s => createSetCard(s)).join('');
       count.textContent = sets.length + '件の商品';
+
+      // Re-init scroll animations for new cards
+      if (typeof initScrollAnimations === 'function') {
+        initScrollAnimations();
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {

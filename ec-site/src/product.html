@@ -13,10 +13,10 @@
   <script src="js/analytics-config.js"></script>
   <script src="js/analytics.js" defer></script>
 </head>
-<body class="bg-gray-50">
-  <header id="site-header" class="bg-white shadow-sm sticky top-0 z-40"></header>
+<body class="bg-white">
+  <header id="site-header" class="bg-white sticky top-0 z-40 transition-shadow duration-300"></header>
 
-  <main class="max-w-6xl mx-auto px-4 py-8">
+  <main class="max-w-6xl mx-auto px-6 py-10">
     <div id="product-detail"></div>
   </main>
 
@@ -43,7 +43,7 @@
     function renderSetMode(setId, container) {
       const set = RECOMMENDED_SETS.find(s => s.id === setId);
       if (!set) {
-        container.innerHTML = '<p class="text-center text-gray-500 py-16">商品が見つかりません</p>';
+        container.innerHTML = '<p class="text-center text-gray-400 py-20 text-sm">商品が見つかりません</p>';
         return;
       }
 
@@ -59,60 +59,60 @@
       document.title = set.name + ' - DMAT STORE';
 
       container.innerHTML = `
-        <nav class="text-sm text-gray-500 mb-6">
+        <nav class="text-xs text-gray-400 mb-8 font-light">
           <a href="index.html" class="hover:text-dmat-navy transition-colors">トップ</a>
-          <span class="mx-2">&gt;</span>
-          <span>${set.name}</span>
+          <span class="mx-2 text-gray-300">/</span>
+          <span class="text-gray-600">${set.name}</span>
         </nav>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-          <div class="aspect-square bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden border border-gray-100">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-14">
+          <div class="aspect-square bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden">
             <img src="${image}" alt="${set.name}"
                  class="w-full h-full object-cover"
-                 onerror="this.parentElement.innerHTML='<div class=\\'flex flex-col items-center justify-center h-full\\' ><span class=\\'text-6xl mb-2\\'>&#128273;</span><span class=\\'text-gray-400\\'>DMAT キーホルダー</span></div>'" />
+                 onerror="this.parentElement.innerHTML='<div class=\\'flex flex-col items-center justify-center h-full\\'><svg class=\\'w-20 h-20 text-gray-200 mb-3\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'1\\' d=\\'M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z\\'/></svg><span class=\\'text-xs text-gray-300\\'>DMAT Keychain</span></div>'" />
           </div>
           <div>
-            ${set.badge ? `<span class="inline-block bg-dmat-red text-white text-xs font-bold px-3 py-1 rounded-full mb-4">${set.badge}</span>` : ''}
-            <h1 class="text-2xl sm:text-3xl font-bold text-dmat-navy mb-3">${set.name}</h1>
-            <p class="text-gray-600 mb-6 leading-relaxed">${set.description}</p>
+            ${set.badge ? `<span class="badge-pill bg-dmat-red text-white mb-5 inline-block">${set.badge}</span>` : ''}
+            <h1 class="text-2xl sm:text-3xl font-bold text-dmat-navy mb-3 tracking-tight">${set.name}</h1>
+            <p class="text-sm text-gray-400 mb-8 leading-relaxed font-light">${set.description}</p>
 
-            <div class="bg-gray-50 rounded-xl p-4 mb-6">
-              <h3 class="text-sm font-bold text-gray-700 mb-3">セット内容</h3>
-              <div class="space-y-2">
-                <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 bg-dmat-red rounded-full"></span>
-                  <span class="text-sm text-gray-700">カラー: <strong>${colorName}</strong></span>
-                  ${colorVariant && colorVariant.priceDiff > 0 ? `<span class="text-xs text-gray-400">+${formatPrice(colorVariant.priceDiff)}</span>` : ''}
+            <div class="bg-gray-50 rounded-xl p-5 mb-8">
+              <h3 class="text-xs font-semibold text-gray-500 mb-3 tracking-widest uppercase">Set Contents</h3>
+              <div class="space-y-2.5">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-1.5 h-1.5 bg-dmat-red rounded-full"></span>
+                  <span class="text-sm text-gray-600">カラー: <strong class="font-medium text-dmat-navy">${colorName}</strong></span>
+                  ${colorVariant && colorVariant.priceDiff > 0 ? `<span class="text-[10px] text-gray-400">+${formatPrice(colorVariant.priceDiff)}</span>` : ''}
                 </div>
                 ${accNames.map(name => {
                   const acc = ACCESSORIES.find(a => a.name === name);
-                  return `<div class="flex items-center gap-2">
-                    <span class="w-2 h-2 bg-dmat-navy rounded-full"></span>
-                    <span class="text-sm text-gray-700">${name}</span>
-                    ${acc && acc.price > 0 ? `<span class="text-xs text-gray-400">+${formatPrice(acc.price)}</span>` : '<span class="text-xs text-green-600">無料</span>'}
+                  return `<div class="flex items-center gap-2.5">
+                    <span class="w-1.5 h-1.5 bg-dmat-navy rounded-full"></span>
+                    <span class="text-sm text-gray-600">${name}</span>
+                    ${acc && acc.price > 0 ? `<span class="text-[10px] text-gray-400">+${formatPrice(acc.price)}</span>` : '<span class="text-[10px] text-green-600">無料</span>'}
                   </div>`;
                 }).join('')}
               </div>
             </div>
 
-            <p class="text-3xl font-bold text-dmat-red mb-1">${formatPrice(price)}</p>
-            <p class="text-sm text-gray-400 mb-6">税込価格</p>
+            <p class="text-3xl font-bold text-dmat-navy mb-1 tracking-tight">${formatPrice(price)}</p>
+            <p class="text-[10px] text-gray-400 mb-8 tracking-wide uppercase">Tax included</p>
 
-            <div class="flex items-center gap-3 mb-6">
-              <label class="text-sm text-gray-600 font-medium">数量:</label>
+            <div class="flex items-center gap-3 mb-8">
+              <label class="text-xs text-gray-400 font-medium tracking-wide">数量</label>
               <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
-                <button onclick="changeQuantity(-1)" class="px-3 py-2 text-gray-500 hover:bg-gray-100 transition-colors text-lg font-bold">&minus;</button>
-                <input type="number" id="quantity" value="1" min="1" max="99" class="w-14 text-center border-x border-gray-200 py-2 text-sm font-medium" />
-                <button onclick="changeQuantity(1)" class="px-3 py-2 text-gray-500 hover:bg-gray-100 transition-colors text-lg font-bold">&plus;</button>
+                <button onclick="changeQuantity(-1)" class="px-3 py-2.5 text-gray-400 hover:bg-gray-50 transition-colors text-sm">&minus;</button>
+                <input type="number" id="quantity" value="1" min="1" max="99" class="w-14 text-center border-x border-gray-200 py-2.5 text-sm font-medium" />
+                <button onclick="changeQuantity(1)" class="px-3 py-2.5 text-gray-400 hover:bg-gray-50 transition-colors text-sm">&plus;</button>
               </div>
             </div>
 
-            <div class="flex gap-3 mb-8">
+            <div class="flex gap-3 mb-10">
               <button onclick="handleAddSetToCart('${set.id}')"
-                      class="flex-1 bg-dmat-red text-white py-3.5 px-6 rounded-xl hover:bg-dmat-red-dark transition-all font-bold text-lg shadow-lg shadow-red-200">
+                      class="flex-1 bg-dmat-red text-white py-4 px-6 rounded-lg hover:bg-dmat-red-dark transition-all font-semibold text-sm tracking-wide hover:shadow-lg hover:shadow-red-100">
                 カートに入れる
               </button>
               <button onclick="handleBuyNowSet('${set.id}')"
-                      class="flex-1 bg-dmat-navy text-white py-3.5 px-6 rounded-xl hover:bg-dmat-navy-light transition-all font-bold text-lg">
+                      class="flex-1 bg-dmat-navy text-white py-4 px-6 rounded-lg hover:bg-dmat-navy-light transition-all font-semibold text-sm tracking-wide">
                 今すぐ購入
               </button>
             </div>
@@ -134,11 +134,11 @@
             <input type="radio" name="color" value="${c.id}" ${i === 0 ? 'checked' : ''} class="hidden" />
             <div class="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
               <img src="${c.image}" alt="${c.name}" class="w-full h-full object-cover"
-                   onerror="this.parentElement.innerHTML='<span class=\\'text-lg flex items-center justify-center h-full\\'>&#128273;</span>'" />
+                   onerror="this.parentElement.innerHTML='<svg class=\\'w-5 h-5 text-gray-300 m-auto\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'1.5\\' d=\\'M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z\\'/></svg>'" />
             </div>
             <div class="flex-1">
-              <span class="font-medium text-gray-800 text-sm">${c.name}</span>
-              <span class="text-xs text-gray-400 block">${c.priceDiff > 0 ? '+' + formatPrice(c.priceDiff) : '基本価格'}</span>
+              <span class="font-medium text-gray-700 text-sm">${c.name}</span>
+              <span class="text-[10px] text-gray-400 block">${c.priceDiff > 0 ? '+' + formatPrice(c.priceDiff) : '基本価格'}</span>
             </div>
           </div>
         </label>
@@ -150,11 +150,11 @@
             <input type="checkbox" name="accessory" value="${a.id}" ${a.isDefault ? 'checked' : ''} class="hidden" />
             <div class="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center">
               <img src="${a.image || 'images/' + a.id + '.webp'}" alt="${a.name}" class="w-full h-full object-cover"
-                   onerror="this.parentElement.innerHTML='<span class=\\'text-lg\\'>&#128279;</span>'" />
+                   onerror="this.parentElement.innerHTML='<svg class=\\'w-5 h-5 text-gray-300\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'1.5\\' d=\\'M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244\\'/></svg>'" />
             </div>
             <div class="flex-1">
-              <span class="font-medium text-gray-800 text-sm">${a.name}</span>
-              <span class="text-xs text-gray-400 block">${a.price > 0 ? '+' + formatPrice(a.price) : '無料'}</span>
+              <span class="font-medium text-gray-700 text-sm">${a.name}</span>
+              <span class="text-[10px] text-gray-400 block">${a.price > 0 ? '+' + formatPrice(a.price) : '無料'}</span>
             </div>
           </div>
         </label>
@@ -163,66 +163,66 @@
       const defaultPrice = calculateItemPrice('standard-red', ACCESSORIES.filter(a => a.isDefault).map(a => a.id));
 
       container.innerHTML = `
-        <nav class="text-sm text-gray-500 mb-6">
+        <nav class="text-xs text-gray-400 mb-8 font-light">
           <a href="index.html" class="hover:text-dmat-navy transition-colors">トップ</a>
-          <span class="mx-2">&gt;</span>
-          <span>カスタム注文</span>
+          <span class="mx-2 text-gray-300">/</span>
+          <span class="text-gray-600">カスタム注文</span>
         </nav>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-14">
           <div>
-            <div class="aspect-square bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden border border-gray-100 sticky top-24">
+            <div class="aspect-square bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden sticky top-24">
               <img id="builder-image" src="${COLOR_VARIANTS[0].image}" alt="${COLOR_VARIANTS[0].name}"
                    class="w-full h-full object-cover"
-                   onerror="this.parentElement.innerHTML='<div class=\\'flex flex-col items-center justify-center h-full\\'><span class=\\'text-6xl mb-2\\'>&#128273;</span><span class=\\'text-gray-400\\'>DMAT キーホルダー</span></div>'" />
+                   onerror="this.parentElement.innerHTML='<div class=\\'flex flex-col items-center justify-center h-full\\'><svg class=\\'w-20 h-20 text-gray-200 mb-3\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'1\\' d=\\'M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z\\'/></svg><span class=\\'text-xs text-gray-300\\'>DMAT Keychain</span></div>'" />
             </div>
           </div>
           <div>
-            <span class="inline-block bg-dmat-navy text-white text-xs font-bold px-3 py-1 rounded-full mb-4">カスタム</span>
-            <h1 class="text-2xl sm:text-3xl font-bold text-dmat-navy mb-2">${BASE_PRODUCT.name}</h1>
-            <p class="text-gray-600 mb-6 leading-relaxed">${BASE_PRODUCT.description}</p>
+            <span class="badge-pill bg-dmat-navy text-white mb-5 inline-block">Custom Order</span>
+            <h1 class="text-2xl sm:text-3xl font-bold text-dmat-navy mb-3 tracking-tight">${BASE_PRODUCT.name}</h1>
+            <p class="text-sm text-gray-400 mb-8 leading-relaxed font-light">${BASE_PRODUCT.description}</p>
 
             <!-- カラー選択 -->
-            <div class="mb-6">
-              <h3 class="text-sm font-bold text-dmat-navy mb-3">1. カラーを選択</h3>
+            <div class="mb-8">
+              <h3 class="text-xs font-semibold text-gray-500 mb-3 tracking-widest uppercase">1. Color</h3>
               <div class="space-y-3">
                 ${colorOptions}
               </div>
             </div>
 
             <!-- 付属品選択 -->
-            <div class="mb-6">
-              <h3 class="text-sm font-bold text-dmat-navy mb-3">2. 付属品を選択</h3>
+            <div class="mb-8">
+              <h3 class="text-xs font-semibold text-gray-500 mb-3 tracking-widest uppercase">2. Accessories</h3>
               <div class="space-y-3">
                 ${accOptions}
               </div>
             </div>
 
             <!-- 構成表示 -->
-            <div class="bg-gray-50 rounded-xl p-4 mb-6">
-              <p id="builder-desc" class="text-sm text-gray-600"></p>
+            <div class="bg-gray-50 rounded-xl p-5 mb-8">
+              <p id="builder-desc" class="text-sm text-gray-500 font-light"></p>
             </div>
 
             <!-- 価格表示 -->
-            <p id="builder-price" class="text-3xl font-bold text-dmat-red mb-1">${formatPrice(defaultPrice)}</p>
-            <p class="text-sm text-gray-400 mb-6">税込価格</p>
+            <p id="builder-price" class="text-3xl font-bold text-dmat-navy mb-1 tracking-tight">${formatPrice(defaultPrice)}</p>
+            <p class="text-[10px] text-gray-400 mb-8 tracking-wide uppercase">Tax included</p>
 
             <!-- 数量 -->
-            <div class="flex items-center gap-3 mb-6">
-              <label class="text-sm text-gray-600 font-medium">数量:</label>
+            <div class="flex items-center gap-3 mb-8">
+              <label class="text-xs text-gray-400 font-medium tracking-wide">数量</label>
               <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
-                <button onclick="changeQuantity(-1)" class="px-3 py-2 text-gray-500 hover:bg-gray-100 transition-colors text-lg font-bold">&minus;</button>
-                <input type="number" id="quantity" value="1" min="1" max="99" class="w-14 text-center border-x border-gray-200 py-2 text-sm font-medium" />
-                <button onclick="changeQuantity(1)" class="px-3 py-2 text-gray-500 hover:bg-gray-100 transition-colors text-lg font-bold">&plus;</button>
+                <button onclick="changeQuantity(-1)" class="px-3 py-2.5 text-gray-400 hover:bg-gray-50 transition-colors text-sm">&minus;</button>
+                <input type="number" id="quantity" value="1" min="1" max="99" class="w-14 text-center border-x border-gray-200 py-2.5 text-sm font-medium" />
+                <button onclick="changeQuantity(1)" class="px-3 py-2.5 text-gray-400 hover:bg-gray-50 transition-colors text-sm">&plus;</button>
               </div>
             </div>
 
-            <div class="flex gap-3 mb-8">
+            <div class="flex gap-3 mb-10">
               <button onclick="handleAddCustomToCart()"
-                      class="flex-1 bg-dmat-red text-white py-3.5 px-6 rounded-xl hover:bg-dmat-red-dark transition-all font-bold text-lg shadow-lg shadow-red-200">
+                      class="flex-1 bg-dmat-red text-white py-4 px-6 rounded-lg hover:bg-dmat-red-dark transition-all font-semibold text-sm tracking-wide hover:shadow-lg hover:shadow-red-100">
                 カートに入れる
               </button>
               <button onclick="handleBuyNowCustom()"
-                      class="flex-1 bg-dmat-navy text-white py-3.5 px-6 rounded-xl hover:bg-dmat-navy-light transition-all font-bold text-lg">
+                      class="flex-1 bg-dmat-navy text-white py-4 px-6 rounded-lg hover:bg-dmat-navy-light transition-all font-semibold text-sm tracking-wide">
                 今すぐ購入
               </button>
             </div>
@@ -232,9 +232,9 @@
         </div>
 
         <!-- おすすめセットも表示 -->
-        <section class="mt-16">
-          <h2 class="text-xl font-bold text-dmat-navy mb-6">おすすめセット</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section class="mt-20">
+          <h2 class="text-xl font-bold text-dmat-navy mb-8 tracking-tight">おすすめセット</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
             ${RECOMMENDED_SETS.slice(0, 4).map(s => createSetCard(s)).join('')}
           </div>
         </section>
@@ -246,18 +246,24 @@
 
     function renderProductInfo() {
       return `
-        <div class="space-y-4">
-          <details class="bg-white border border-gray-100 rounded-xl overflow-hidden">
-            <summary class="px-5 py-4 cursor-pointer text-sm font-bold text-dmat-navy hover:bg-gray-50 transition-colors">商品説明</summary>
-            <div class="px-5 pb-4 text-sm text-gray-600 space-y-2">
+        <div class="space-y-3 mt-2">
+          <details class="border border-gray-100 rounded-xl overflow-hidden group">
+            <summary class="px-5 py-4 cursor-pointer text-xs font-semibold text-gray-500 hover:bg-gray-50 transition-colors tracking-wide uppercase flex items-center justify-between">
+              商品説明
+              <svg class="w-4 h-4 text-gray-300 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-5 pb-5 text-sm text-gray-400 space-y-2 font-light leading-relaxed">
               <p>DMAT（災害派遣医療チーム）の公式カラーを使用したキーホルダーです。</p>
               <p>3Dプリント技術により、精密な造形を実現。NFC チップ内蔵で、緊急連絡先やプロフィールを登録できます。</p>
             </div>
           </details>
-          <details class="bg-white border border-gray-100 rounded-xl overflow-hidden">
-            <summary class="px-5 py-4 cursor-pointer text-sm font-bold text-dmat-navy hover:bg-gray-50 transition-colors">利用シーン</summary>
-            <div class="px-5 pb-4 text-sm text-gray-600 space-y-2">
-              <ul class="list-disc list-inside space-y-1">
+          <details class="border border-gray-100 rounded-xl overflow-hidden group">
+            <summary class="px-5 py-4 cursor-pointer text-xs font-semibold text-gray-500 hover:bg-gray-50 transition-colors tracking-wide uppercase flex items-center justify-between">
+              利用シーン
+              <svg class="w-4 h-4 text-gray-300 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-5 pb-5 text-sm text-gray-400 space-y-2 font-light">
+              <ul class="list-disc list-inside space-y-1.5">
                 <li>DMAT活動時の身分表示・チーム連帯感の向上</li>
                 <li>災害拠点病院のスタッフ記念品として</li>
                 <li>防災訓練・研修の記念グッズとして</li>
@@ -265,10 +271,13 @@
               </ul>
             </div>
           </details>
-          <details class="bg-white border border-gray-100 rounded-xl overflow-hidden">
-            <summary class="px-5 py-4 cursor-pointer text-sm font-bold text-dmat-navy hover:bg-gray-50 transition-colors">サイズ・素材</summary>
-            <div class="px-5 pb-4 text-sm text-gray-600 space-y-2">
-              <ul class="list-disc list-inside space-y-1">
+          <details class="border border-gray-100 rounded-xl overflow-hidden group">
+            <summary class="px-5 py-4 cursor-pointer text-xs font-semibold text-gray-500 hover:bg-gray-50 transition-colors tracking-wide uppercase flex items-center justify-between">
+              サイズ・素材
+              <svg class="w-4 h-4 text-gray-300 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-5 pb-5 text-sm text-gray-400 space-y-2 font-light">
+              <ul class="list-disc list-inside space-y-1.5">
                 <li>サイズ: 約 43mm x 50mm x 7mm</li>
                 <li>素材: PLA樹脂（3Dプリント）</li>
                 <li>NFC: NTAG215 内蔵</li>
@@ -276,10 +285,13 @@
               </ul>
             </div>
           </details>
-          <details class="bg-white border border-gray-100 rounded-xl overflow-hidden">
-            <summary class="px-5 py-4 cursor-pointer text-sm font-bold text-dmat-navy hover:bg-gray-50 transition-colors">配送・返品</summary>
-            <div class="px-5 pb-4 text-sm text-gray-600 space-y-2">
-              <ul class="list-disc list-inside space-y-1">
+          <details class="border border-gray-100 rounded-xl overflow-hidden group">
+            <summary class="px-5 py-4 cursor-pointer text-xs font-semibold text-gray-500 hover:bg-gray-50 transition-colors tracking-wide uppercase flex items-center justify-between">
+              配送・返品
+              <svg class="w-4 h-4 text-gray-300 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-5 pb-5 text-sm text-gray-400 space-y-2 font-light">
+              <ul class="list-disc list-inside space-y-1.5">
                 <li>受注生産: ご注文確定後、10日以内に発送</li>
                 <li>送料: 1~4個 &#165;185（クリックポスト）/ 5個以上 &#165;370（レターパック）</li>
                 <li>全国一律・追跡あり</li>
@@ -296,9 +308,9 @@
       const related = RECOMMENDED_SETS.filter(s => s.id !== currentSetId).slice(0, 3);
       if (related.length === 0) return '';
       return `
-        <section class="mt-16">
-          <h2 class="text-xl font-bold text-dmat-navy mb-6">その他のセット</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section class="mt-20">
+          <h2 class="text-xl font-bold text-dmat-navy mb-8 tracking-tight">その他のセット</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
             ${related.map(s => createSetCard(s)).join('')}
           </div>
         </section>

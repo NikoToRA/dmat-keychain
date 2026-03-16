@@ -13,37 +13,37 @@
   <script src="js/analytics-config.js"></script>
   <script src="js/analytics.js" defer></script>
 </head>
-<body class="bg-gray-50">
-  <header id="site-header" class="bg-white shadow-sm sticky top-0 z-40"></header>
+<body class="bg-white">
+  <header id="site-header" class="bg-white sticky top-0 z-40 transition-shadow duration-300"></header>
 
-  <main class="max-w-4xl mx-auto px-4 py-8">
-    <nav class="text-sm text-gray-500 mb-6">
+  <main class="max-w-4xl mx-auto px-6 py-10">
+    <nav class="text-xs text-gray-400 mb-8 font-light">
       <a href="index.html" class="hover:text-dmat-navy transition-colors">トップ</a>
-      <span class="mx-2">&gt;</span>
+      <span class="mx-2 text-gray-300">/</span>
       <a href="cart.html" class="hover:text-dmat-navy transition-colors">カート</a>
-      <span class="mx-2">&gt;</span>
-      <span>注文確認</span>
+      <span class="mx-2 text-gray-300">/</span>
+      <span class="text-gray-600">注文確認</span>
     </nav>
 
     <!-- ステップインジケーター -->
-    <div class="flex items-center justify-center gap-3 mb-8 text-sm">
-      <span class="flex items-center gap-1.5 text-gray-400">
-        <span class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold">1</span>
-        カート
+    <div class="flex items-center justify-center gap-4 mb-10 text-xs">
+      <span class="flex items-center gap-2 text-gray-300">
+        <span class="w-7 h-7 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-[10px] font-bold">1</span>
+        <span class="hidden sm:inline">カート</span>
       </span>
-      <span class="w-8 h-px bg-gray-300"></span>
-      <span class="flex items-center gap-1.5 text-dmat-red font-bold">
-        <span class="w-6 h-6 rounded-full bg-dmat-red text-white flex items-center justify-center text-xs font-bold">2</span>
-        確認
+      <span class="w-10 h-px bg-gray-200"></span>
+      <span class="flex items-center gap-2 text-dmat-navy font-semibold">
+        <span class="w-7 h-7 rounded-full bg-dmat-navy text-white flex items-center justify-center text-[10px] font-bold">2</span>
+        <span class="hidden sm:inline">確認</span>
       </span>
-      <span class="w-8 h-px bg-gray-300"></span>
-      <span class="flex items-center gap-1.5 text-gray-400">
-        <span class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold">3</span>
-        決済
+      <span class="w-10 h-px bg-gray-200"></span>
+      <span class="flex items-center gap-2 text-gray-300">
+        <span class="w-7 h-7 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-[10px] font-bold">3</span>
+        <span class="hidden sm:inline">決済</span>
       </span>
     </div>
 
-    <h1 class="text-2xl font-bold text-dmat-navy mb-6">ご注文内容の確認</h1>
+    <h1 class="text-2xl font-bold text-dmat-navy mb-8 tracking-tight">ご注文内容の確認</h1>
     <div id="confirm-content"></div>
   </main>
 
@@ -61,9 +61,9 @@
 
       if (cartData.items.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-20">
-            <p class="text-gray-500 mb-4">カートに商品がありません</p>
-            <a href="index.html" class="inline-block bg-dmat-red text-white py-3 px-8 rounded-xl hover:bg-dmat-red-dark transition-colors font-medium">
+          <div class="text-center py-24">
+            <p class="text-gray-400 mb-6 text-sm">カートに商品がありません</p>
+            <a href="index.html" class="inline-block bg-dmat-red text-white py-3 px-8 rounded-lg hover:bg-dmat-red-dark transition-all font-medium text-sm tracking-wide">
               商品を見る
             </a>
           </div>
@@ -76,61 +76,61 @@
           <td class="py-4">
             <p class="font-medium text-dmat-navy text-sm">${item.description}</p>
           </td>
-          <td class="py-4 text-center text-sm text-gray-600">${item.quantity}</td>
-          <td class="py-4 text-right text-sm text-gray-600">${formatPrice(item.unitPrice)}</td>
+          <td class="py-4 text-center text-xs text-gray-400">${item.quantity}</td>
+          <td class="py-4 text-right text-xs text-gray-400">${formatPrice(item.unitPrice)}</td>
           <td class="py-4 text-right text-sm font-medium text-dmat-navy">${formatPrice(item.unitPrice * item.quantity)}</td>
         </tr>
       `).join('');
 
       container.innerHTML = `
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 class="font-bold text-lg text-dmat-navy mb-4">ご注文商品</h2>
+        <div class="bg-gray-50 rounded-2xl p-6 sm:p-8">
+          <h2 class="font-semibold text-base text-dmat-navy mb-5 tracking-tight">ご注文商品</h2>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
                 <tr class="border-b-2 border-gray-200">
-                  <th class="py-3 text-left text-gray-500 font-medium">商品名</th>
-                  <th class="py-3 text-center text-gray-500 font-medium w-20">数量</th>
-                  <th class="py-3 text-right text-gray-500 font-medium w-24">単価</th>
-                  <th class="py-3 text-right text-gray-500 font-medium w-24">小計</th>
+                  <th class="py-3 text-left text-[10px] text-gray-400 font-medium tracking-widest uppercase">商品名</th>
+                  <th class="py-3 text-center text-[10px] text-gray-400 font-medium w-20 tracking-widest uppercase">数量</th>
+                  <th class="py-3 text-right text-[10px] text-gray-400 font-medium w-24 tracking-widest uppercase">単価</th>
+                  <th class="py-3 text-right text-[10px] text-gray-400 font-medium w-24 tracking-widest uppercase">小計</th>
                 </tr>
               </thead>
               <tbody>${itemsHtml}</tbody>
             </table>
           </div>
           <div class="mt-6 space-y-3 text-sm">
-            <div class="flex justify-between"><span class="text-gray-500">商品小計</span><span class="font-medium">${formatPrice(cartData.subtotal)}</span></div>
-            <div class="flex justify-between"><span class="text-gray-500">送料（${cartData.shipping.method}）</span><span class="font-medium">${formatPrice(cartData.shipping.price)}</span></div>
-            <div class="flex justify-between text-xl font-bold border-t border-gray-200 pt-3 mt-3">
+            <div class="flex justify-between"><span class="text-gray-400 text-xs">商品小計</span><span class="font-medium">${formatPrice(cartData.subtotal)}</span></div>
+            <div class="flex justify-between"><span class="text-gray-400 text-xs">送料（${cartData.shipping.method}）</span><span class="font-medium">${formatPrice(cartData.shipping.price)}</span></div>
+            <div class="flex justify-between text-xl font-bold border-t border-gray-200 pt-4 mt-4">
               <span class="text-dmat-navy">合計（税込・送料込）</span>
-              <span class="text-dmat-red">${formatPrice(cartData.total)}</span>
+              <span class="text-dmat-navy">${formatPrice(cartData.total)}</span>
             </div>
           </div>
         </div>
 
-        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mt-4">
-          <h3 class="font-bold text-amber-800 mb-3 text-sm flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="bg-amber-50/50 border border-amber-100 rounded-2xl p-6 mt-4">
+          <h3 class="font-semibold text-amber-800 mb-3 text-xs flex items-center gap-2 tracking-wide">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             ご注意事項
           </h3>
-          <ul class="text-sm text-amber-700 space-y-1.5">
-            <li>本商品は<strong>受注生産</strong>です。ご注文確定後に製作いたします。</li>
-            <li>ご注文確定後、<strong>10日以内</strong>に発送いたします。</li>
+          <ul class="text-xs text-amber-700/80 space-y-1.5 font-light leading-relaxed">
+            <li>本商品は<strong class="font-medium">受注生産</strong>です。ご注文確定後に製作いたします。</li>
+            <li>ご注文確定後、<strong class="font-medium">10日以内</strong>に発送いたします。</li>
             <li>受注生産品のためお客様都合による返品・交換は承っておりません。</li>
           </ul>
         </div>
 
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mt-4">
-          <h3 class="font-bold text-blue-800 mb-2 text-sm">配送目安</h3>
-          <p class="text-sm text-blue-700">ご注文確定後、10日以内に発送いたします。発送後、追跡番号をメールでご連絡します。</p>
+        <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 mt-4">
+          <h3 class="font-semibold text-blue-800 mb-2 text-xs tracking-wide">配送目安</h3>
+          <p class="text-xs text-blue-700/80 font-light leading-relaxed">ご注文確定後、10日以内に発送いたします。発送後、追跡番号をメールでご連絡します。</p>
         </div>
 
-        <div class="mt-6 space-y-3">
+        <div class="mt-8 space-y-3">
           <button id="checkout-button" onclick="startCheckout()"
-                  class="w-full bg-dmat-red text-white py-4 px-6 rounded-xl hover:bg-dmat-red-dark transition-all font-bold text-lg shadow-lg shadow-red-100">
+                  class="w-full bg-dmat-red text-white py-4 px-6 rounded-lg hover:bg-dmat-red-dark transition-all font-semibold text-sm tracking-wide hover:shadow-lg hover:shadow-red-100">
             注文を確定して決済へ進む
           </button>
-          <a href="cart.html" class="block text-center text-sm text-gray-400 hover:text-dmat-navy transition-colors">カートに戻る</a>
+          <a href="cart.html" class="block text-center text-xs text-gray-300 hover:text-dmat-navy transition-colors">カートに戻る</a>
         </div>
       `;
     });
