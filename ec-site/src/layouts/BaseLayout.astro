@@ -117,28 +117,38 @@ const { title, description = 'DMATロゴ入りキーホルダー。3Dプリン�
           }
         });
       }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -40px 0px'
+        threshold: 0.05,
+        rootMargin: '0px 0px -20px 0px'
       });
+
+      window.observeNewElements = function () {
+        document.querySelectorAll('.animate-on-scroll:not(.is-visible)').forEach(function (el) {
+          observer.observe(el);
+        });
+      };
 
       function observeElements() {
         document.querySelectorAll('.animate-on-scroll').forEach(function (el) {
           observer.observe(el);
         });
-        // Also observe stagger children
-        document.querySelectorAll('.stagger-children > *').forEach(function (el) {
-          if (!el.classList.contains('animate-on-scroll')) {
-            el.classList.add('animate-on-scroll');
-            observer.observe(el);
-          }
-        });
       }
 
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', observeElements);
+        document.addEventListener('DOMContentLoaded', function () {
+          observeElements();
+          // Re-observe after dynamic content is rendered (slight delay)
+          setTimeout(window.observeNewElements, 200);
+        });
       } else {
         observeElements();
+        setTimeout(window.observeNewElements, 200);
       }
+
+      // MutationObserver for dynamically added elements
+      var mo = new MutationObserver(function () {
+        window.observeNewElements();
+      });
+      mo.observe(document.documentElement, { childList: true, subtree: true });
     })();
   </script>
 

@@ -58,7 +58,7 @@
       var badge = document.getElementById('cart-badge');
       if (!badge) return;
       try {
-        var cart = JSON.parse(localStorage.getItem('dmat-cart') || '[]');
+        var cart = JSON.parse(localStorage.getItem('dmat_cart') || '[]');
         var count = cart.reduce(function (sum, item) {
           return sum + (item.quantity || 1);
         }, 0);
