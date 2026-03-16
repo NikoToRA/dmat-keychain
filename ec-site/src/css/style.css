@@ -1,0 +1,125 @@
+/* DMAT STORE カスタムスタイル */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --dmat-navy: #1a2332;
+  --dmat-navy-light: #2a3a4e;
+  --dmat-red: #CC0000;
+  --dmat-red-dark: #AA0000;
+  --dmat-red-light: #FF1A1A;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+main {
+  flex: 1;
+}
+
+/* 商品カードホバーエフェクト */
+.group:hover .group-hover\:scale-105 {
+  transform: scale(1.05);
+}
+
+/* ビルダー選択状態 */
+.builder-option {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.builder-option:hover {
+  border-color: #999;
+}
+
+/* ボタンスタイル */
+.btn-primary {
+  background-color: var(--dmat-red);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--dmat-red-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(204, 0, 0, 0.3);
+}
+
+.btn-secondary {
+  background-color: var(--dmat-navy);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--dmat-navy-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 35, 50, 0.3);
+}
+
+/* 数量入力 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ヒーローグラデーション */
+.hero-gradient {
+  background: linear-gradient(135deg, var(--dmat-navy) 0%, #2a3a4e 50%, #1a2332 100%);
+}
+
+/* テキストクランプ */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 安心情報カード */
+.trust-card {
+  transition: transform 0.2s ease;
+}
+.trust-card:hover {
+  transform: translateY(-2px);
+}
+
+/* スクロールアニメーション */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 640px) {
+  .hero-gradient h1 {
+    font-size: 1.75rem;
+  }
+}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カート - DMAT STORE</title>
+  <meta property="og:title" content="DMAT STORE - DMAT隊員・病院向けグッズ" />
+  <meta property="og:description" content="DMATロゴ入りキーホルダー。3Dプリント製、NFC内蔵。" />
+  <meta property="og:image" content="images/og-image.webp" />
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/analytics-config.js"></script>
+  <script src="js/analytics.js" defer></script>
+</head>
+<body class="bg-gray-50">
+  <header id="site-header" class="bg-white shadow-sm sticky top-0 z-40"></header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <nav class="text-sm text-gray-500 mb-6">
+      <a href="index.html" class="hover:text-dmat-navy transition-colors">トップ</a>
+      <span class="mx-2">&gt;</span>
+      <span>カート</span>
+    </nav>
+    <h1 class="text-2xl font-bold text-dmat-navy mb-6">ショッピングカート</h1>
+    <div id="cart-content"></div>
+  </main>
+
+  <footer id="site-footer" class="bg-gray-900 text-gray-300"></footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/shipping.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    function renderCart() {
+      const container = document.getElementById('cart-content');
+      const cartData = getCartTotal();
+
+      if (cartData.items.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-20">
+            <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/>
+              </svg>
+            </div>
+            <p class="text-gray-500 mb-2 text-lg">カートに商品がありません</p>
+            <p class="text-gray-400 text-sm mb-6">お気に入りの商品を見つけてください</p>
+            <a href="index.html" class="inline-block bg-dmat-red text-white py-3 px-8 rounded-xl hover:bg-dmat-red-dark transition-colors font-medium">
+              商品を見る
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      const itemsHtml = cartData.items.map(item => {
+        const colorVariant = COLOR_VARIANTS.find(c => c.id === item.colorId);
+        const image = colorVariant ? colorVariant.image : BASE_PRODUCT.image;
+        return `
+        <div class="flex items-start gap-4 py-5 border-b border-gray-100 last:border-0">
+          <div class="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden border border-gray-100">
+            <img src="${image}" alt="${item.description}" class="w-full h-full object-cover"
+                 onerror="this.parentElement.innerHTML='<span class=\\'text-2xl\\'>&#128273;</span>'" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="font-medium text-dmat-navy text-sm">${item.description}</h3>
+            <p class="text-sm text-gray-400 mt-0.5">${formatPrice(item.unitPrice)} / 個</p>
+          </div>
+          <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+            <button onclick="handleQuantityChange('${item.id}', ${item.quantity - 1})" class="px-2.5 py-1.5 text-gray-500 hover:bg-gray-100 transition-colors text-sm">&minus;</button>
+            <span class="px-3 py-1.5 text-sm font-medium min-w-[2rem] text-center">${item.quantity}</span>
+            <button onclick="handleQuantityChange('${item.id}', ${item.quantity + 1})" class="px-2.5 py-1.5 text-gray-500 hover:bg-gray-100 transition-colors text-sm">&plus;</button>
+          </div>
+          <div class="text-right flex-shrink-0 w-20">
+            <p class="font-bold text-dmat-navy text-sm">${formatPrice(item.unitPrice * item.quantity)}</p>
+          </div>
+          <button onclick="handleRemove('${item.id}')" class="text-gray-300 hover:text-red-500 transition-colors flex-shrink-0 p-1" title="削除">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      `}).join('');
+
+      const shippingNote = cartData.totalQuantity < 5
+        ? '<span class="text-xs text-blue-600">5個以上のご注文で送料&#165;370に</span>'
+        : '';
+
+      container.innerHTML = `
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          ${itemsHtml}
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-4">
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-500">小計（${cartData.totalQuantity}点）</span>
+              <span class="font-medium">${formatPrice(cartData.subtotal)}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-500">送料（${cartData.shipping.method || '-'}）${shippingNote}</span>
+              <span class="font-medium">${formatPrice(cartData.shipping.price)}</span>
+            </div>
+            <div class="flex justify-between text-lg font-bold border-t border-gray-100 pt-3 mt-3">
+              <span class="text-dmat-navy">合計（税込）</span>
+              <span class="text-dmat-red">${formatPrice(cartData.total)}</span>
+            </div>
+          </div>
+          <a href="confirm.html"
+             class="block mt-6 w-full bg-dmat-red text-white py-4 px-6 rounded-xl hover:bg-dmat-red-dark transition-all font-bold text-center text-lg shadow-lg shadow-red-100">
+            まとめて購入する
+          </a>
+          <a href="index.html" class="block mt-3 text-center text-sm text-gray-400 hover:text-dmat-navy transition-colors">買い物を続ける</a>
+        </div>
+      `;
+    }
+
+    function handleQuantityChange(itemId, newQty) {
+      updateQuantity(itemId, newQty);
+      renderCart();
+    }
+
+    function handleRemove(itemId) {
+      removeFromCart(itemId);
+      renderCart();
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCart);
+  </script>
+</body>
+</html>

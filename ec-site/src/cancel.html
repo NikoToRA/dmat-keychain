@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>決済キャンセル - DMAT STORE</title>
+  <meta property="og:title" content="DMAT STORE - DMAT隊員・病院向けグッズ" />
+  <meta property="og:description" content="DMATロゴ入りキーホルダー。3Dプリント製、NFC内蔵。" />
+  <meta property="og:image" content="images/og-image.webp" />
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/analytics-config.js"></script>
+  <script src="js/analytics.js" defer></script>
+</head>
+<body class="bg-gray-50">
+  <header id="site-header" class="bg-white shadow-sm sticky top-0 z-40"></header>
+
+  <main class="max-w-2xl mx-auto px-4 py-16">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-12 text-center">
+      <div class="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-10 h-10 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+        </svg>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-dmat-navy mb-4">決済がキャンセルされました</h1>
+      <p class="text-gray-600 mb-8 leading-relaxed">
+        お支払いは完了していません。<br>
+        カートの商品はそのまま残っています。
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="cart.html" class="bg-dmat-red text-white py-3 px-8 rounded-xl hover:bg-dmat-red-dark transition-colors font-medium">
+          カートに戻る
+        </a>
+        <a href="index.html" class="bg-gray-100 text-gray-700 py-3 px-8 rounded-xl hover:bg-gray-200 transition-colors font-medium">
+          トップに戻る
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="bg-gray-900 text-gray-300"></footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/shipping.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

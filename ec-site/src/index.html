@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DMAT STORE - DMAT隊員・病院向けグッズ公式通販</title>
+  <meta name="description" content="DMATロゴ入りキーホルダー。3Dプリント製、NFC内蔵。受注生産。DMAT隊員・病院スタッフ向け公式グッズ。">
+  <meta property="og:title" content="DMAT STORE - DMAT隊員・病院向けグッズ" />
+  <meta property="og:description" content="DMATロゴ入りキーホルダー。3Dプリント製、NFC内蔵。" />
+  <meta property="og:image" content="images/og-image.webp" />
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/analytics-config.js"></script>
+  <script src="js/analytics.js" defer></script>
+</head>
+<body class="bg-gray-50">
+  <header id="site-header" class="bg-white shadow-sm sticky top-0 z-40"></header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero-gradient text-white py-20 sm:py-28">
+      <div class="max-w-6xl mx-auto px-4 text-center">
+        <p class="text-red-400 font-bold text-sm tracking-widest mb-4 uppercase">Disaster Medical Assistance Team</p>
+        <h1 class="text-3xl sm:text-5xl font-bold mb-4 tracking-tight">DMAT隊員・病院向けグッズ</h1>
+        <p class="text-lg sm:text-xl text-gray-300 mb-2">現場で使いやすい / 記念性 / 信頼感</p>
+        <p class="text-sm text-gray-400 mb-8">3Dプリント製 ・ NFC内蔵 ・ 受注生産</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="#recommended" class="btn-primary inline-block text-center">新着商品を見る</a>
+          <a href="#categories" class="bg-white/10 text-white py-3 px-6 rounded-xl font-semibold hover:bg-white/20 transition-colors text-center backdrop-blur">カテゴリから探す</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- カテゴリー選択 -->
+    <section id="categories" class="max-w-6xl mx-auto px-4 py-16">
+      <h2 class="text-2xl font-bold text-dmat-navy text-center mb-2">カテゴリーから探す</h2>
+      <p class="text-gray-500 text-sm text-center mb-10">用途に合わせてお選びください</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto" id="category-cards"></div>
+    </section>
+
+    <!-- おすすめ商品 -->
+    <section id="recommended" class="bg-white py-16">
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-2xl font-bold text-dmat-navy text-center mb-2">おすすめ商品</h2>
+        <p class="text-gray-500 text-sm text-center mb-10">人気の組み合わせセット</p>
+        <div id="recommended-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        <div class="text-center mt-10">
+          <a href="product.html?custom=true" class="inline-block bg-white text-dmat-navy py-3 px-8 rounded-xl border-2 border-dmat-navy hover:bg-dmat-navy hover:text-white transition-colors font-medium">
+            自分だけの組み合わせを作る
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 安心情報 -->
+    <section class="max-w-6xl mx-auto px-4 py-16">
+      <h2 class="text-2xl font-bold text-dmat-navy text-center mb-10">安心してご購入いただけます</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="trust-card bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100">
+          <div class="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-dmat-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          </div>
+          <h3 class="font-bold text-dmat-navy mb-2">全国配送対応</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">1~4個: &#165;185（クリックポスト）<br>5個以上: &#165;370（レターパック）</p>
+        </div>
+        <div class="trust-card bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100">
+          <div class="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-dmat-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-bold text-dmat-navy mb-2">10日以内に発送</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">受注生産のため、ご注文確定後<br>10日以内に発送いたします</p>
+        </div>
+        <div class="trust-card bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100">
+          <div class="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-dmat-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h3 class="font-bold text-dmat-navy mb-2">安心の品質保証</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">不良品・破損品は到着後7日以内に<br>ご連絡で交換対応</p>
+        </div>
+        <div class="trust-card bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100">
+          <div class="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-dmat-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-bold text-dmat-navy mb-2">メールでサポート</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">ご不明点はいつでも<br>support@wonder-drill.com へ</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer" class="bg-gray-900 text-gray-300"></footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/shipping.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // カテゴリカード
+      const catContainer = document.getElementById('category-cards');
+      const catIcons = { 'dmat-member': '&#x1F3E5;', 'hospital': '&#x1F3E2;' };
+      CATEGORIES.forEach(cat => {
+        catContainer.innerHTML += `
+          <a href="category.html?cat=${cat.id}" class="group block bg-white rounded-xl shadow-sm border border-gray-100 p-8 hover:shadow-lg hover:border-dmat-red/30 transition-all text-center">
+            <div class="text-4xl mb-4">${catIcons[cat.id] || ''}</div>
+            <h3 class="text-lg font-bold text-dmat-navy mb-2 group-hover:text-dmat-red transition-colors">${cat.name}</h3>
+            <p class="text-sm text-gray-500 mb-4">${cat.description}</p>
+            <span class="inline-block text-dmat-red text-sm font-medium">商品を見る &rarr;</span>
+          </a>
+        `;
+      });
+
+      // おすすめ商品（DMAT隊員用を優先表示、最大4つ）
+      const grid = document.getElementById('recommended-grid');
+      const sets = RECOMMENDED_SETS.slice(0, 4);
+      grid.innerHTML = sets.map(s => createSetCard(s)).join('');
+    });
+  </script>
+</body>
+</html>

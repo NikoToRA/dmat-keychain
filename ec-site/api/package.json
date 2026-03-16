@@ -1,0 +1,16 @@
+{
+  "name": "dmat-keychain-api",
+  "version": "1.0.0",
+  "description": "DMAT キーホルダー EC サイト API",
+  "dependencies": {
+    "@azure/communication-email": "^1.0.0",
+    "@notionhq/client": "^2.2.0",
+    "stripe": "^14.0.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0"
+  }
+}
