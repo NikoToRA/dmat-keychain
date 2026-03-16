@@ -1,40 +1,49 @@
 ---
-// Footer component
+// Footer — Dieter Rams: every element must serve a purpose
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="bg-gray-900 text-gray-400 pt-16 pb-8">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+<footer style="background-color: var(--color-primary, #1B2838);" class="py-16">
+  <div class="mx-auto px-6" style="max-width: 72rem;">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+
       <!-- Brand -->
       <div>
-        <div class="flex items-center gap-2.5 mb-4">
-          <div class="w-8 h-8 bg-dmat-red rounded-md flex items-center justify-center">
-            <span class="text-white font-bold text-sm">D</span>
-          </div>
-          <span class="text-white font-bold text-base tracking-tight">DMAT STORE</span>
-        </div>
-        <p class="text-sm leading-relaxed text-gray-500">
+        <p class="text-white font-bold text-base mb-3" style="letter-spacing: 0.06em;">
+          DMAT STORE
+        </p>
+        <p class="text-sm" style="color: rgba(255, 255, 255, 0.5);">
           DMAT隊員・病院向けグッズ通販サイト
         </p>
       </div>
 
-      <!-- Information -->
+      <!-- Links -->
       <div>
-        <h3 class="text-white text-sm font-medium mb-4 tracking-wide">Information</h3>
-        <ul class="space-y-2.5">
+        <p class="text-xs font-medium uppercase mb-4" style="letter-spacing: 0.1em; color: rgba(255, 255, 255, 0.3);">
+          Information
+        </p>
+        <ul class="space-y-3">
           <li>
-            <a href="/legal/tokushoho" class="text-sm hover:text-white transition-colors">
+            <a href="/legal/tokushoho" class="text-sm transition-colors" style="color: rgba(255, 255, 255, 0.6);"
+              onmouseenter="this.style.color='rgba(255,255,255,0.9)'"
+              onmouseleave="this.style.color='rgba(255,255,255,0.6)'"
+            >
               特定商取引法に基づく表記
             </a>
           </li>
           <li>
-            <a href="/legal/returns" class="text-sm hover:text-white transition-colors">
+            <a href="/legal/returns" class="text-sm transition-colors" style="color: rgba(255, 255, 255, 0.6);"
+              onmouseenter="this.style.color='rgba(255,255,255,0.9)'"
+              onmouseleave="this.style.color='rgba(255,255,255,0.6)'"
+            >
               返品・交換について
             </a>
           </li>
           <li>
-            <a href="/legal/privacy" class="text-sm hover:text-white transition-colors">
+            <a href="/legal/privacy" class="text-sm transition-colors" style="color: rgba(255, 255, 255, 0.6);"
+              onmouseenter="this.style.color='rgba(255,255,255,0.9)'"
+              onmouseleave="this.style.color='rgba(255,255,255,0.6)'"
+            >
               プライバシーポリシー
             </a>
           </li>
@@ -43,29 +52,31 @@ const currentYear = new Date().getFullYear();
 
       <!-- Contact -->
       <div>
-        <h3 class="text-white text-sm font-medium mb-4 tracking-wide">Contact</h3>
-        <ul class="space-y-2.5">
-          <li class="flex items-center gap-2 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-            </svg>
-            <a href="mailto:support@wonder-drill.com" class="hover:text-white transition-colors">
+        <p class="text-xs font-medium uppercase mb-4" style="letter-spacing: 0.1em; color: rgba(255, 255, 255, 0.3);">
+          Contact
+        </p>
+        <ul class="space-y-3">
+          <li>
+            <a href="mailto:support@wonder-drill.com" class="text-sm transition-colors" style="color: rgba(255, 255, 255, 0.6);"
+              onmouseenter="this.style.color='rgba(255,255,255,0.9)'"
+              onmouseleave="this.style.color='rgba(255,255,255,0.6)'"
+            >
               support@wonder-drill.com
             </a>
           </li>
-          <li class="flex items-center gap-2 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
-            </svg>
-            <span>Wonder Drill株式会社</span>
+          <li>
+            <span class="text-sm" style="color: rgba(255, 255, 255, 0.6);">
+              Wonder Drill株式会社
+            </span>
           </li>
         </ul>
       </div>
+
     </div>
 
-    <!-- Divider -->
-    <div class="border-t border-gray-800 pt-6">
-      <p class="text-center text-xs text-gray-600">
+    <!-- Bottom bar -->
+    <div class="pt-6" style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
+      <p class="text-center text-xs" style="color: rgba(255, 255, 255, 0.3);">
         &copy; {currentYear} Wonder Drill Inc. All rights reserved.
       </p>
     </div>
