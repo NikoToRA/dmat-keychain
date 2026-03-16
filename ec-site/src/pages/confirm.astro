@@ -151,6 +151,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           accessoryIds: item.accessoryIds,
           quantity: item.quantity,
           unitPrice: item.unitPrice,
+          category: item.category || 'dmat-member',
           description: item.description
         };
       });

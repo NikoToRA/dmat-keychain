@@ -23,6 +23,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </button>
         <div id="acc-desc" class="accordion-body hidden pb-4">
           <p class="text-sm text-gray-600 leading-relaxed">DMATのカラーを使用した3Dプリント製キーホルダーです。NFC内蔵で、お好みの情報を書き込むことができます。受注生産のため、ご注文後10日以内に発送いたします。</p>
+          <p class="text-sm text-gray-600 leading-relaxed mt-2">病院向けキーホルダーには特設サイトURLをNFCに書き込みます。</p>
         </div>
       </div>
       <div class="accordion-item border-b border-gray-100">
@@ -93,8 +94,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     { id: 'basic', name: 'ベーシックセット', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
     { id: 'premium', name: 'プレミアムセット', description: 'プレミアレッド + カラビナ + 蓄光バンド', color: 'premium-red', accessories: ['ball-chain', 'carabiner', 'glow-band'], badge: 'フルセット', category: 'dmat-member' },
     { id: 'hospital-basic', name: '病院用ベーシック', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '施設向け', category: 'hospital' },
-    { id: 'hospital-glow', name: '病院用 夜勤対応', description: 'スタンダードレッド + 蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '夜勤に', category: 'hospital' }
+    { id: 'hospital-glow', name: '病院用 蓄光バンド付き', description: 'スタンダードレッド + 蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '蓄光付き', category: 'hospital' }
   ];
+
+  var CATEGORY_PRICE = { 'dmat-member': 0, 'hospital': 300 };
 
   function calculateShipping(qty) {
     if (qty <= 0) return { method: null, price: 0 };
@@ -113,6 +116,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   function calcSetPrice(set) {
     var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
     var price = BASE_PRODUCT.basePrice + (colorVar ? colorVar.priceDiff : 0);
+    price += CATEGORY_PRICE[set.category] || 0;
     set.accessories.forEach(function (accId) {
       var acc = ACCESSORIES.find(function (a) { return a.id === accId; });
       if (acc) price += acc.price;
@@ -120,9 +124,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     return price;
   }
 
-  function calcCustomPrice(colorId, accessoryIds) {
+  function calcCustomPrice(colorId, accessoryIds, category) {
     var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === colorId; });
     var price = BASE_PRODUCT.basePrice + (colorVar ? colorVar.priceDiff : 0);
+    price += CATEGORY_PRICE[category] || 0;
     accessoryIds.forEach(function (accId) {
       var acc = ACCESSORIES.find(function (a) { return a.id === accId; });
       if (acc) price += acc.price;
@@ -144,12 +149,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }, 2500);
   }
 
-  function addToCart(colorId, accessoryIds, qty, description) {
+  function addToCart(colorId, accessoryIds, qty, description, category) {
     var cart = getCart();
-    var price = calcCustomPrice(colorId, accessoryIds);
+    var cat = category || 'dmat-member';
+    var price = calcCustomPrice(colorId, accessoryIds, cat);
     var sortedAcc = accessoryIds.slice().sort();
     var existing = cart.find(function (item) {
-      return item.colorId === colorId && JSON.stringify(item.accessoryIds.slice().sort()) === JSON.stringify(sortedAcc);
+      return item.colorId === colorId && item.category === cat && JSON.stringify(item.accessoryIds.slice().sort()) === JSON.stringify(sortedAcc);
     });
     if (existing) {
       existing.quantity += qty;
@@ -160,7 +166,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         accessoryIds: accessoryIds.slice(),
         quantity: qty,
         unitPrice: price,
-        description: description || BASE_PRODUCT.name
+        description: description || BASE_PRODUCT.name,
+        category: cat
       });
     }
     saveCart(cart);
@@ -238,11 +245,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
     document.getElementById('add-to-cart-btn').addEventListener('click', function () {
       var qty = parseInt(qtyInput.value) || 1;
-      addToCart(set.color, set.accessories, qty, set.name);
+      addToCart(set.color, set.accessories, qty, set.name, set.category);
     });
     document.getElementById('buy-now-btn').addEventListener('click', function () {
       var qty = parseInt(qtyInput.value) || 1;
-      addToCart(set.color, set.accessories, qty, set.name);
+      addToCart(set.color, set.accessories, qty, set.name, set.category);
       window.location.href = '/cart';
     });
   }
@@ -250,6 +257,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   function renderCustomMode() {
     document.getElementById('breadcrumb-current').textContent = 'カスタムオーダー';
     var selectedColor = COLOR_VARIANTS[0].id;
+    var selectedCategory = 'dmat-member';
     var selectedAccessories = ACCESSORIES.filter(function (a) { return a.isDefault; }).map(function (a) { return a.id; });
 
     content.innerHTML =
@@ -262,8 +270,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         '<div>' +
           '<h1 class="text-2xl font-bold text-dmat-navy">' + BASE_PRODUCT.name + '</h1>' +
           '<p class="text-sm text-gray-500 mt-2">' + BASE_PRODUCT.description + '</p>' +
+          '<div class="mb-8 mt-6">' +
+            '<h3 class="text-xs font-semibold text-gray-500 mb-3 tracking-widest uppercase">1. 用途を選ぶ</h3>' +
+            '<div id="category-options" class="grid grid-cols-2 gap-3">' +
+              '<label class="builder-option selected" data-category="dmat-member">' +
+                '<input type="radio" name="category" value="dmat-member" checked class="hidden" />' +
+                '<div class="text-center py-3">' +
+                  '<span class="block font-bold text-sm text-dmat-navy">DMAT隊員向け</span>' +
+                  '<span class="block text-xs text-gray-400 mt-1">基本価格</span>' +
+                '</div>' +
+              '</label>' +
+              '<label class="builder-option" data-category="hospital">' +
+                '<input type="radio" name="category" value="hospital" class="hidden" />' +
+                '<div class="text-center py-3">' +
+                  '<span class="block font-bold text-sm text-dmat-navy">病院向け</span>' +
+                  '<span class="block text-xs text-gray-400 mt-1">基本価格 +&yen;300</span>' +
+                  '<span class="block text-[10px] text-dmat-red mt-0.5">特設サイト構築費込み</span>' +
+                '</div>' +
+              '</label>' +
+            '</div>' +
+          '</div>' +
           '<div class="mt-6">' +
-            '<h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">カラーを選ぶ</h3>' +
+            '<h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">2. カラーを選ぶ</h3>' +
             '<div id="color-options" class="grid grid-cols-2 gap-3">' +
               COLOR_VARIANTS.map(function (c) {
                 return '<div class="builder-option' + (c.id === selectedColor ? ' selected' : '') + '" data-color="' + c.id + '">' +
@@ -281,7 +309,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             '</div>' +
           '</div>' +
           '<div class="mt-6">' +
-            '<h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">アクセサリを選ぶ</h3>' +
+            '<h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">3. アクセサリを選ぶ</h3>' +
             '<div id="accessory-options" class="space-y-3">' +
               ACCESSORIES.map(function (a) {
                 var checked = selectedAccessories.indexOf(a.id) >= 0;
@@ -304,7 +332,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           '<div class="mt-6 p-4 bg-gray-50 rounded-xl">' +
             '<div class="flex items-center justify-between">' +
               '<span class="text-sm text-gray-500">合計</span>' +
-              '<span id="custom-price" class="text-3xl font-bold text-dmat-navy">&yen;' + calcCustomPrice(selectedColor, selectedAccessories).toLocaleString() + '</span>' +
+              '<span id="custom-price" class="text-3xl font-bold text-dmat-navy">&yen;' + calcCustomPrice(selectedColor, selectedAccessories, selectedCategory).toLocaleString() + '</span>' +
             '</div>' +
             '<p class="text-xs text-gray-400 text-right">(税込)</p>' +
           '</div>' +
@@ -322,6 +350,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           '</div>' +
         '</div>' +
       '</div>';
+
+    // Category selection
+    document.getElementById('category-options').addEventListener('click', function (e) {
+      var label = e.target.closest('.builder-option');
+      if (!label) return;
+      var radio = label.querySelector('input[type="radio"]');
+      if (!radio) return;
+      selectedCategory = radio.value;
+      document.querySelectorAll('#category-options .builder-option').forEach(function (el) { el.classList.remove('selected'); });
+      label.classList.add('selected');
+      radio.checked = true;
+      updatePrice();
+    });
 
     // Color selection
     document.getElementById('color-options').addEventListener('click', function (e) {
@@ -368,7 +409,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     function updatePrice() {
       var priceEl = document.getElementById('custom-price');
       if (priceEl) {
-        priceEl.innerHTML = '&yen;' + calcCustomPrice(selectedColor, selectedAccessories).toLocaleString();
+        priceEl.innerHTML = '&yen;' + calcCustomPrice(selectedColor, selectedAccessories, selectedCategory).toLocaleString();
       }
     }
 
@@ -395,11 +436,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     document.getElementById('add-to-cart-btn').addEventListener('click', function () {
       var qty = parseInt(qtyInput.value) || 1;
-      addToCart(selectedColor, selectedAccessories, qty, getDescription());
+      addToCart(selectedColor, selectedAccessories, qty, getDescription(), selectedCategory);
     });
     document.getElementById('buy-now-btn').addEventListener('click', function () {
       var qty = parseInt(qtyInput.value) || 1;
-      addToCart(selectedColor, selectedAccessories, qty, getDescription());
+      addToCart(selectedColor, selectedAccessories, qty, getDescription(), selectedCategory);
       window.location.href = '/cart';
     });
   }

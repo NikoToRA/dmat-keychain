@@ -33,6 +33,66 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </section>
 
+  <!-- 使い方・動画 -->
+  <section class="section-white" style="padding: var(--section-padding) 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-12 animate-on-scroll">
+        <span class="text-xs font-medium tracking-widest text-gray-400 uppercase">How to Use</span>
+        <h2 class="text-2xl font-bold text-dmat-navy mt-1">キーホルダーの使い方</h2>
+        <p class="text-sm text-gray-500 mt-2">NFC内蔵キーホルダーの活用シーンをご紹介</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- DMAT隊員向け -->
+        <div class="rounded-2xl overflow-hidden bg-white border border-gray-100 animate-on-scroll">
+          <div class="aspect-video bg-gray-100 flex items-center justify-center">
+            <div class="text-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+              </svg>
+              <span class="text-xs text-gray-400">動画準備中</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="badge-pill badge-pill-navy">DMAT隊員向け</span>
+            </div>
+            <h3 class="font-bold text-dmat-navy text-base mb-2">災害現場での身元確認・連絡先共有</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">NFCチップにプロフィールや緊急連絡先を登録。スマートフォンをかざすだけで情報を即座に共有できます。DMAT活動時のチーム連携や身分表示に最適です。</p>
+          </div>
+        </div>
+        <!-- 病院向け -->
+        <div class="rounded-2xl overflow-hidden bg-white border border-gray-100 animate-on-scroll">
+          <div class="aspect-video bg-gray-100 flex items-center justify-center">
+            <div class="text-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+              </svg>
+              <span class="text-xs text-gray-400">動画準備中</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="badge-pill badge-pill-red">病院向け</span>
+            </div>
+            <h3 class="font-bold text-dmat-navy text-base mb-2">病院特設サイトへのNFCアクセス</h3>
+            <p class="text-sm text-gray-500 leading-relaxed mb-4">病院向けキーホルダーのNFCには、各病院の特設サイトURLを書き込みます。スマートフォンをかざすと病院の災害対応情報や連絡網に即座にアクセスできます。</p>
+            <a href="#" class="inline-flex items-center gap-1.5 text-sm text-dmat-red font-medium hover:underline">
+              病院向け特設サイトのサンプルを見る
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-8 animate-on-scroll">
+        <p class="text-xs text-gray-400">※ 病院向けキーホルダーは特設サイト構築費用を含むため、基本価格が+¥300となります</p>
+      </div>
+    </div>
+  </section>
+
   <!-- カテゴリー別 -->
   <section class="section-alt" style="padding: var(--section-padding) 0;">
     <div class="max-w-6xl mx-auto px-6">
@@ -144,12 +204,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     { id: 'basic', name: 'ベーシックセット', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
     { id: 'premium', name: 'プレミアムセット', description: 'プレミアレッド + カラビナ + 蓄光バンド', color: 'premium-red', accessories: ['ball-chain', 'carabiner', 'glow-band'], badge: 'フルセット', category: 'dmat-member' },
     { id: 'hospital-basic', name: '病院用ベーシック', description: 'スタンダードレッド + ボールチェーン', color: 'standard-red', accessories: ['ball-chain'], badge: '施設向け', category: 'hospital' },
-    { id: 'hospital-glow', name: '病院用 夜勤対応', description: 'スタンダードレッド + 蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '夜勤に', category: 'hospital' }
+    { id: 'hospital-glow', name: '病院用 蓄光バンド付き', description: 'スタンダードレッド + 蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '蓄光付き', category: 'hospital' }
   ];
+  var CATEGORY_PRICE = { 'dmat-member': 0, 'hospital': 300 };
 
   function calcSetPrice(set) {
     var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
     var price = BASE_PRODUCT.basePrice + (colorVar ? colorVar.priceDiff : 0);
+    price += CATEGORY_PRICE[set.category] || 0;
     set.accessories.forEach(function (accId) {
       var acc = ACCESSORIES.find(function (a) { return a.id === accId; });
       if (acc) price += acc.price;
@@ -221,7 +283,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           '</div>' +
         '</a>' +
         '<div class="p-4">' +
-          '<div class="mb-2"><span class="badge-pill badge-pill-red">' + set.badge + '</span></div>' +
+          '<div class="mb-2"><span class="badge-pill badge-pill-red">' + set.badge + '</span>' + (set.category === 'hospital' ? '<span class="badge-pill badge-pill-gray ml-1">+¥300</span>' : '') + '</div>' +
           '<a href="/product?set=' + set.id + '" class="block">' +
             '<h3 class="text-sm font-bold text-dmat-navy">' + set.name + '</h3>' +
             '<p class="text-xs text-gray-500 mt-1 line-clamp-2">' + accNames + '</p>' +

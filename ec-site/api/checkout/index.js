@@ -20,7 +20,7 @@ module.exports = async function (context, req) {
         return;
       }
 
-      const unitAmount = calculateItemPrice(item.colorId, item.accessoryIds);
+      const unitAmount = calculateItemPrice(item.colorId, item.accessoryIds, item.category || 'dmat-member');
       if (unitAmount === null) {
         context.res = { status: 400, body: { error: '無効な商品構成です' } };
         return;

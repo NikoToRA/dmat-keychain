@@ -16,7 +16,12 @@ const ACCESSORIES = [
   { id: 'glow-band', name: '蓄光バンド', price: 400 },
 ];
 
-function calculateItemPrice(colorId, accessoryIds) {
+const CATEGORY_PRICE = {
+  'dmat-member': 0,
+  'hospital': 300,
+};
+
+function calculateItemPrice(colorId, accessoryIds, category) {
   const color = COLOR_VARIANTS.find(c => c.id === colorId);
   if (!color) return null;
 
@@ -24,11 +29,12 @@ function calculateItemPrice(colorId, accessoryIds) {
   if (invalidAcc) return null;
 
   const colorDiff = color.priceDiff;
+  const categoryDiff = CATEGORY_PRICE[category] || 0;
   const accessoryTotal = accessoryIds.reduce((sum, accId) => {
     const acc = ACCESSORIES.find(a => a.id === accId);
     return sum + (acc ? acc.price : 0);
   }, 0);
-  return BASE_PRODUCT.basePrice + colorDiff + accessoryTotal;
+  return BASE_PRODUCT.basePrice + colorDiff + categoryDiff + accessoryTotal;
 }
 
 function getItemDescription(colorId, accessoryIds) {
@@ -58,6 +64,7 @@ module.exports = {
   BASE_PRODUCT,
   COLOR_VARIANTS,
   ACCESSORIES,
+  CATEGORY_PRICE,
   calculateItemPrice,
   getItemDescription,
   calculateShipping,

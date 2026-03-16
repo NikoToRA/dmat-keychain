@@ -63,6 +63,11 @@ export const CATEGORIES: Category[] = [
   { id: 'hospital', name: '病院用グッズ', description: '病院・施設導入向け' },
 ];
 
+export const CATEGORY_PRICE: Record<string, number> = {
+  'dmat-member': 0,
+  'hospital': 300,
+};
+
 export const RECOMMENDED_SETS: RecommendedSet[] = [
   {
     id: 'basic',
@@ -93,27 +98,28 @@ export const RECOMMENDED_SETS: RecommendedSet[] = [
   },
   {
     id: 'hospital-glow',
-    name: '病院用 夜勤対応',
+    name: '病院用 蓄光バンド付き',
     description: 'スタンダードレッド + 蓄光バンド',
     color: 'standard-red',
     accessories: ['ball-chain', 'glow-band'],
-    badge: '夜勤に',
+    badge: '蓄光付き',
     category: 'hospital',
   },
 ];
 
-export function calculateItemPrice(colorId: string, accessoryIds: string[]): number {
+export function calculateItemPrice(colorId: string, accessoryIds: string[], category?: string): number {
   const color = COLOR_VARIANTS.find((c) => c.id === colorId);
   const colorDiff = color ? color.priceDiff : 0;
+  const categoryDiff = CATEGORY_PRICE[category || ''] || 0;
   const accessoryTotal = accessoryIds.reduce((sum, accId) => {
     const acc = ACCESSORIES.find((a) => a.id === accId);
     return sum + (acc ? acc.price : 0);
   }, 0);
-  return BASE_PRODUCT.basePrice + colorDiff + accessoryTotal;
+  return BASE_PRODUCT.basePrice + colorDiff + categoryDiff + accessoryTotal;
 }
 
-export function calculateSetPrice(set: { color: string; accessories: string[] }): number {
-  return calculateItemPrice(set.color, set.accessories);
+export function calculateSetPrice(set: { color: string; accessories: string[]; category?: string }): number {
+  return calculateItemPrice(set.color, set.accessories, set.category);
 }
 
 export function getItemDescription(colorId: string, accessoryIds: string[]): string {
