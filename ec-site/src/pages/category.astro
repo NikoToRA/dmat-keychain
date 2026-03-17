@@ -166,7 +166,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     grid.innerHTML = sorted.map(function (set) {
       var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
       var price = set._price;
-      var accNames = set.accessories.map(function (accId) {
+      var accNames = set.accessories.filter(function (accId) { return accId !== 'ball-chain'; }).map(function (accId) {
         var a = ACCESSORIES.find(function (x) { return x.id === accId; });
         return a ? a.name : '';
       }).filter(Boolean).join('、');

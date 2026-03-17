@@ -192,9 +192,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     if (!set) { renderCustomMode(); return; }
     var colorVar = COLOR_VARIANTS.find(function (c) { return c.id === set.color; });
     var price = calcSetPrice(set);
-    var accNames = set.accessories.map(function (accId) {
+    var accNames = set.accessories.filter(function (accId) { return accId !== 'ball-chain'; }).map(function (accId) {
       var a = ACCESSORIES.find(function (x) { return x.id === accId; });
-      return a ? a.name + (a.price > 0 ? ' (+\u00a5' + a.price.toLocaleString() + ')' : ' (付属)') : '';
+      return a ? a.name + (a.price > 0 ? ' (+\u00a5' + a.price.toLocaleString() + ')' : '') : '';
     }).filter(Boolean);
 
     document.getElementById('breadcrumb-current').textContent = set.name;
