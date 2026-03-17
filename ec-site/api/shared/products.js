@@ -37,13 +37,14 @@ function calculateItemPrice(colorId, accessoryIds, category) {
   return BASE_PRODUCT.basePrice + colorDiff + categoryDiff + accessoryTotal;
 }
 
-function getItemDescription(colorId, accessoryIds) {
+function getItemDescription(colorId, accessoryIds, category) {
   const color = COLOR_VARIANTS.find(c => c.id === colorId);
   const accNames = accessoryIds
     .map(id => ACCESSORIES.find(a => a.id === id))
     .filter(Boolean)
     .map(a => a.name);
-  return `${BASE_PRODUCT.name}（${color ? color.name : ''}）${accNames.length > 0 ? ' + ' + accNames.join(' + ') : ''}`;
+  const categoryLabel = category === 'hospital' ? '（病院向け）' : '';
+  return `${BASE_PRODUCT.name}（${color ? color.name : ''}）${accNames.length > 0 ? ' + ' + accNames.join(' + ') : ''}${categoryLabel}`;
 }
 
 // 送料計算

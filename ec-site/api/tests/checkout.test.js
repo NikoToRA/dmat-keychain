@@ -49,18 +49,51 @@ describe('checkout API', () => {
     const context = createContext();
     await checkoutHandler(context, {
       body: {
-        items: [{ colorId: 'invalid', accessoryIds: ['ball-chain'], quantity: 1 }],
+        items: [{ colorId: 'invalid', accessoryIds: ['ball-chain'], quantity: 1, category: 'dmat-member' }],
       },
     });
     expect(context.res.status).toBe(400);
     expect(context.res.body.error).toBe('無効な商品構成です');
   });
 
+  test('category未指定 → 400エラー', async () => {
+    const context = createContext();
+    await checkoutHandler(context, {
+      body: {
+        items: [{ colorId: 'standard-red', accessoryIds: ['ball-chain'], quantity: 1 }],
+      },
+    });
+    expect(context.res.status).toBe(400);
+    expect(context.res.body.error).toBe('無効なカテゴリです');
+  });
+
+  test('不正なcategory → 400エラー', async () => {
+    const context = createContext();
+    await checkoutHandler(context, {
+      body: {
+        items: [{ colorId: 'standard-red', accessoryIds: ['ball-chain'], quantity: 1, category: 'fake' }],
+      },
+    });
+    expect(context.res.status).toBe(400);
+    expect(context.res.body.error).toBe('無効なカテゴリです');
+  });
+
+  test('数量100 → 400エラー（上限超過）', async () => {
+    const context = createContext();
+    await checkoutHandler(context, {
+      body: {
+        items: [{ colorId: 'standard-red', accessoryIds: ['ball-chain'], quantity: 100, category: 'dmat-member' }],
+      },
+    });
+    expect(context.res.status).toBe(400);
+    expect(context.res.body.error).toBe('不正なリクエストです');
+  });
+
   test('数量0 → 400エラー', async () => {
     const context = createContext();
     await checkoutHandler(context, {
       body: {
-        items: [{ colorId: 'standard-red', accessoryIds: ['ball-chain'], quantity: 0 }],
+        items: [{ colorId: 'standard-red', accessoryIds: ['ball-chain'], quantity: 0, category: 'dmat-member' }],
       },
     });
     expect(context.res.status).toBe(400);
@@ -71,7 +104,7 @@ describe('checkout API', () => {
     const context = createContext();
     await checkoutHandler(context, {
       body: {
-        items: [{ colorId: 'standard-red', accessoryIds: ['ball-chain'], quantity: 2 }],
+        items: [{ colorId: 'standard-red', accessoryIds: ['ball-chain'], quantity: 2, category: 'dmat-member' }],
       },
     });
 

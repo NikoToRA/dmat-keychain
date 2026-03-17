@@ -15,18 +15,25 @@ module.exports = async function (context, req) {
     let totalQuantity = 0;
 
     for (const item of items) {
-      if (!item.colorId || !Array.isArray(item.accessoryIds) || !item.quantity || item.quantity < 1) {
+      const qty = item.quantity;
+      if (!item.colorId || !Array.isArray(item.accessoryIds) || !Number.isInteger(qty) || qty < 1 || qty > 99) {
         context.res = { status: 400, body: { error: '不正なリクエストです' } };
         return;
       }
 
-      const unitAmount = calculateItemPrice(item.colorId, item.accessoryIds, item.category || 'dmat-member');
+      const category = item.category;
+      if (!category || (category !== 'dmat-member' && category !== 'hospital')) {
+        context.res = { status: 400, body: { error: '無効なカテゴリです' } };
+        return;
+      }
+
+      const unitAmount = calculateItemPrice(item.colorId, item.accessoryIds, category);
       if (unitAmount === null) {
         context.res = { status: 400, body: { error: '無効な商品構成です' } };
         return;
       }
 
-      const name = getItemDescription(item.colorId, item.accessoryIds);
+      const name = getItemDescription(item.colorId, item.accessoryIds, category);
 
       lineItems.push({
         price_data: {
@@ -34,12 +41,15 @@ module.exports = async function (context, req) {
           unit_amount: unitAmount,
           product_data: {
             name,
+            metadata: {
+              category: category,
+            },
           },
         },
-        quantity: item.quantity,
+        quantity: qty,
       });
 
-      totalQuantity += item.quantity;
+      totalQuantity += qty;
     }
 
     // 送料を独立line_itemとして追加

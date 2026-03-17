@@ -390,6 +390,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         selectedAccessories.push(accId);
         label.classList.add('selected');
       }
+      // Update hidden checkbox state
+      var checkbox = label.querySelector('.acc-checkbox');
+      if (checkbox) checkbox.checked = selectedAccessories.indexOf(accId) >= 0;
       // Update checkbox visual
       var boxes = label.querySelectorAll('.acc-check');
       boxes.forEach(function (checkBox) {
