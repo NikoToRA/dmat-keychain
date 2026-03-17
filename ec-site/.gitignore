@@ -6,5 +6,9 @@ dist/
 local.settings.json
 api/local.settings.json
 *.log
+*.pem
+*.key
+*.p12
+*.pfx
 .DS_Store
 Thumbs.db

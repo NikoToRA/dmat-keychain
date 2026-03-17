@@ -103,7 +103,7 @@ module.exports = async function (context, req) {
     context.log.info('Order processed:', orderId);
     context.res = { status: 200, body: 'OK' };
   } catch (err) {
-    context.log.error('Webhook processing error:', err);
+    context.log.error('Webhook processing error:', err.message);
     // 処理失敗時は 500 を返し、Stripe にリトライさせる
     context.res = { status: 500, body: 'Processing failed' };
   }
