@@ -72,7 +72,7 @@ export const RECOMMENDED_SETS: RecommendedSet[] = [
   {
     id: 'basic',
     name: 'ベーシックセット',
-    description: 'スタンダードレッド + ボールチェーン',
+    description: 'スタンダードレッド',
     color: 'standard-red',
     accessories: ['ball-chain'],
     badge: '定番',
@@ -90,7 +90,7 @@ export const RECOMMENDED_SETS: RecommendedSet[] = [
   {
     id: 'hospital-basic',
     name: '病院用ベーシック',
-    description: 'スタンダードレッド + ボールチェーン',
+    description: 'スタンダードレッド',
     color: 'standard-red',
     accessories: ['ball-chain'],
     badge: '施設向け',
