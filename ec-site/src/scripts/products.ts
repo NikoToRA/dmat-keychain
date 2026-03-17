@@ -80,11 +80,11 @@ export const RECOMMENDED_SETS: RecommendedSet[] = [
   },
   {
     id: 'premium',
-    name: 'プレミアムセット',
-    description: 'プレミアレッド + カラビナ + 蓄光バンド',
+    name: 'カラビナセット',
+    description: 'カラビナ',
     color: 'premium-red',
-    accessories: ['ball-chain', 'carabiner', 'glow-band'],
-    badge: 'フルセット',
+    accessories: ['ball-chain', 'carabiner'],
+    badge: 'カラビナ付き',
     category: 'dmat-member',
   },
   {
