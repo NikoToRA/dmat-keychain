@@ -50,6 +50,7 @@ export const BASE_PRODUCT: BaseProduct = {
 export const COLOR_VARIANTS: ColorVariant[] = [
   { id: 'standard-red', name: 'スタンダードレッド', priceDiff: 0, image: 'images/keychain-standard.webp' },
   { id: 'premium-red', name: 'プレミアレッド', priceDiff: 0, image: 'images/keychain-premium.webp' },
+  { id: 'black', name: 'ブラック', priceDiff: 0, image: 'images/keychain-black.webp' },
 ];
 
 export const ACCESSORIES: Accessory[] = [

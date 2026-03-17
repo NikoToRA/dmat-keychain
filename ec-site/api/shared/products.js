@@ -8,6 +8,7 @@ const BASE_PRODUCT = {
 const COLOR_VARIANTS = [
   { id: 'standard-red', name: 'スタンダードレッド', priceDiff: 0 },
   { id: 'premium-red', name: 'プレミアレッド', priceDiff: 0 },
+  { id: 'black', name: 'ブラック', priceDiff: 0 },
 ];
 
 const ACCESSORIES = [
