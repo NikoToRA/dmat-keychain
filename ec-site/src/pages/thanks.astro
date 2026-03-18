@@ -57,63 +57,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 (function () {
   'use strict';
 
-  var params = new URLSearchParams(window.location.search);
-  var sessionId = params.get('session_id');
-
-  // カートデータを取得（クリア前に）
-  var cart = [];
-  try {
-    cart = JSON.parse(localStorage.getItem('dmat_cart') || '[]');
-  } catch (e) { cart = []; }
-
-  // 注文登録（Notion + ACSメール）
-  if (sessionId && cart.length > 0) {
-    var items = cart.map(function (item) {
-      // 商品名を判定
-      var productName = 'ベーシック';
-      var accIds = item.accessoryIds || [];
-      var hasCarabiner = accIds.indexOf('carabiner') >= 0;
-      var hasGlow = accIds.indexOf('glow-band') >= 0;
-      if (hasCarabiner && hasGlow) productName = 'カラビナ+蓄光バンド付き';
-      else if (hasCarabiner) productName = 'カラビナ付き';
-      else if (hasGlow) productName = '蓄光バンド付き';
-
-      // カラー名を取得
-      var colorNames = {
-        'standard-red': 'スタンダードレッド',
-        'premium-red': 'プレミアレッド',
-        'black': 'ブラック'
-      };
-      var colorName = colorNames[item.colorId] || item.colorId;
-
-      return {
-        productName: productName,
-        colorName: colorName,
-        category: item.category || 'dmat-member',
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        description: item.description || (colorName + (productName !== 'ベーシック' ? ' + ' + productName : '')),
-      };
-    });
-
-    fetch('/api/register-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: sessionId, items: items }),
-    })
-    .then(function (res) { return res.json(); })
-    .then(function (data) {
-      if (data.success) {
-        console.log('注文登録完了:', data.orderId);
-      } else {
-        console.error('注文登録失敗:', data.error);
-      }
-    })
-    .catch(function (err) {
-      console.error('注文登録エラー:', err);
-    });
-  }
-
   // カートクリア
   try {
     localStorage.removeItem('dmat_cart');
@@ -122,8 +65,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   // Track purchase event
   if (typeof window.trackEvent === 'function') {
+    var params = new URLSearchParams(window.location.search);
     window.trackEvent('purchase', {
-      transaction_id: sessionId || '',
+      transaction_id: params.get('session_id') || '',
       currency: 'JPY'
     });
   }
