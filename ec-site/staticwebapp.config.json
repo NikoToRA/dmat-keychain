@@ -13,6 +13,11 @@
       "route": "/api/webhook",
       "methods": ["POST"],
       "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/api/register-order",
+      "methods": ["POST"],
+      "allowedRoles": ["anonymous"]
     }
   ],
   "responseOverrides": {

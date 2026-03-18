@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ご注文完了 - DMAT STORE</title>
+  <meta property="og:title" content="DMAT STORE - DMAT隊員・病院向けグッズ" />
+  <meta property="og:description" content="DMATロゴ入りキーホルダー。3Dプリント製、NFC内蔵。" />
+  <meta property="og:image" content="images/og-image.webp" />
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/analytics-config.js"></script>
+  <script src="js/analytics.js" defer></script>
+</head>
+<body class="bg-white">
+  <header id="site-header" class="bg-white sticky top-0 z-40 transition-shadow duration-300"></header>
+
+  <main class="max-w-2xl mx-auto px-6 py-20">
+    <div class="bg-gray-50 rounded-3xl p-10 sm:p-14 text-center">
+      <div class="w-20 h-20 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-8">
+        <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-dmat-navy mb-4 tracking-tight">ご注文ありがとうございます</h1>
+      <p class="text-sm text-gray-400 mb-10 leading-relaxed font-light">
+        ご注文確認メールをお送りしました。<br>
+        受注生産のため、ご注文確定後10日以内に発送いたします。
+      </p>
+
+      <div class="bg-white rounded-2xl p-8 mb-10 text-left">
+        <h3 class="font-semibold text-dmat-navy mb-5 text-xs tracking-widest uppercase">Next Steps</h3>
+        <div class="space-y-5">
+          <div class="flex gap-4">
+            <div class="w-8 h-8 bg-dmat-navy rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-white text-[10px] font-bold">1</span>
+            </div>
+            <div>
+              <p class="font-medium text-gray-700 text-sm">ご注文確認メール</p>
+              <p class="text-gray-400 text-xs font-light">ご登録のメールアドレスに届きます</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-8 h-8 bg-dmat-navy rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-white text-[10px] font-bold">2</span>
+            </div>
+            <div>
+              <p class="font-medium text-gray-700 text-sm">製作・梱包</p>
+              <p class="text-gray-400 text-xs font-light">一つ一つ丁寧にお作りいたします</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-8 h-8 bg-dmat-navy rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-white text-[10px] font-bold">3</span>
+            </div>
+            <div>
+              <p class="font-medium text-gray-700 text-sm">発送・追跡番号連絡</p>
+              <p class="text-gray-400 text-xs font-light">発送後、追跡番号をメールでご連絡します</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-xs text-gray-300 mb-10 font-light">
+        ご不明点は <a href="mailto:support@wonder-drill.com" class="text-dmat-navy hover:underline font-medium">support@wonder-drill.com</a> までお気軽にどうぞ
+      </p>
+
+      <a href="index.html" class="inline-block bg-dmat-navy text-white py-3.5 px-12 rounded-lg hover:bg-dmat-navy-light transition-all font-medium text-sm tracking-wide">
+        トップに戻る
+      </a>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="bg-gray-900 text-gray-300"></footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/shipping.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      clearCart();
+    });
+  </script>
+</body>
+</html>

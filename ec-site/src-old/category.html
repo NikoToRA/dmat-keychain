@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カテゴリ - DMAT STORE</title>
+  <meta property="og:title" content="DMAT STORE - DMAT隊員・病院向けグッズ" />
+  <meta property="og:description" content="DMATロゴ入りキーホルダー。3Dプリント製、NFC内蔵。" />
+  <meta property="og:image" content="images/og-image.webp" />
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/analytics-config.js"></script>
+  <script src="js/analytics.js" defer></script>
+</head>
+<body class="bg-white">
+  <header id="site-header" class="bg-white sticky top-0 z-40 transition-shadow duration-300"></header>
+
+  <main>
+    <!-- カテゴリヒーロー -->
+    <section id="category-hero" class="hero-gradient text-white py-16 sm:py-20">
+      <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
+        <h1 id="category-title" class="text-2xl sm:text-4xl font-bold mb-3 tracking-tight"></h1>
+        <p id="category-desc" class="text-gray-400 text-sm font-light"></p>
+      </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-6 py-12">
+      <!-- パンくず -->
+      <nav class="text-xs text-gray-400 mb-8 font-light">
+        <a href="index.html" class="hover:text-dmat-navy transition-colors">トップ</a>
+        <span class="mx-2 text-gray-300">/</span>
+        <span id="breadcrumb-category" class="text-gray-600"></span>
+      </nav>
+
+      <!-- ソートバー -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+        <p id="result-count" class="text-xs text-gray-400 font-light"></p>
+        <div class="flex gap-2">
+          <button onclick="sortSets('recommended')" class="sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-dmat-navy text-white" data-sort="recommended">おすすめ順</button>
+          <button onclick="sortSets('price-asc')" class="sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100" data-sort="price-asc">価格が安い順</button>
+          <button onclick="sortSets('price-desc')" class="sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100" data-sort="price-desc">価格が高い順</button>
+        </div>
+      </div>
+
+      <!-- 商品グリッド -->
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+
+      <!-- カスタムビルダーへの誘導 -->
+      <div class="mt-16 bg-gray-50 rounded-2xl p-10 text-center">
+        <h3 class="text-base font-bold text-dmat-navy mb-2 tracking-tight">お好みの組み合わせで注文</h3>
+        <p class="text-xs text-gray-400 mb-6 font-light">カラーと付属品を自由に選んで、あなただけのキーホルダーを作れます</p>
+        <a href="product.html?custom=true" class="inline-block bg-dmat-red text-white py-3 px-8 rounded-lg hover:bg-dmat-red-dark transition-all font-medium text-sm tracking-wide hover:shadow-lg hover:shadow-red-100">
+          カスタムで注文する
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer" class="bg-gray-900 text-gray-300"></footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/shipping.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    let currentCategoryId = 'all';
+    let currentSort = 'recommended';
+
+    function getCategorySets() {
+      if (currentCategoryId === 'all') return [...RECOMMENDED_SETS];
+      return RECOMMENDED_SETS.filter(s => s.category === currentCategoryId);
+    }
+
+    function sortSets(sortType) {
+      currentSort = sortType;
+      document.querySelectorAll('.sort-btn').forEach(btn => {
+        if (btn.dataset.sort === sortType) {
+          btn.className = 'sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-dmat-navy text-white';
+        } else {
+          btn.className = 'sort-btn px-4 py-2 rounded-lg text-xs font-medium bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100';
+        }
+      });
+      renderSets();
+    }
+
+    function renderSets() {
+      let sets = getCategorySets();
+
+      if (currentSort === 'price-asc') {
+        sets.sort((a, b) => calculateSetPrice(a) - calculateSetPrice(b));
+      } else if (currentSort === 'price-desc') {
+        sets.sort((a, b) => calculateSetPrice(b) - calculateSetPrice(a));
+      }
+
+      const grid = document.getElementById('product-grid');
+      const count = document.getElementById('result-count');
+      grid.innerHTML = sets.map(s => createSetCard(s)).join('');
+      count.textContent = sets.length + '件の商品';
+
+      // Re-init scroll animations for new cards
+      if (typeof initScrollAnimations === 'function') {
+        initScrollAnimations();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      currentCategoryId = params.get('cat') || 'all';
+      const category = CATEGORIES.find(c => c.id === currentCategoryId);
+
+      const title = category ? category.name : 'すべての商品';
+      const desc = category ? category.description : 'DMAT関連グッズをすべて表示';
+
+      document.getElementById('category-title').textContent = title;
+      document.getElementById('category-desc').textContent = desc;
+      document.getElementById('breadcrumb-category').textContent = title;
+      document.title = title + ' - DMAT STORE';
+
+      renderSets();
+    });
+  </script>
+</body>
+</html>
