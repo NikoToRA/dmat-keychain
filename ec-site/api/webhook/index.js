@@ -235,9 +235,10 @@ async function sendConfirmationEmail(context, data) {
     },
   };
 
-  const poller = await emailClient.beginSend(message);
-  await poller.pollUntilDone();
-  context.log.info('Confirmation email sent to:', customerEmail);
+  // beginSendでACSにキュー → pollUntilDoneは待たない（SWAタイムアウト対策）
+  // メールはACS側で非同期送信されるので、ここで完了を待つ必要なし
+  await emailClient.beginSend(message);
+  context.log.info('Confirmation email queued for:', customerEmail);
 }
 
 async function registerToNotion(context, data) {
@@ -270,12 +271,11 @@ async function registerToNotion(context, data) {
 
   context.log.info('Notion order registered:', data.orderId, orderPage.id);
 
-  // 2. 注文明細DB（子）に商品ごとに登録
+  // 2. 注文明細DB（子）に商品ごとに並列登録（タイムアウト対策）
   const itemsDbId = process.env.NOTION_ORDER_ITEMS_DB_ID;
   if (itemsDbId && data.productItems) {
-    for (const item of data.productItems) {
+    const itemPromises = data.productItems.map(item => {
       const desc = item.description || '';
-      // 商品名・カラー・用途をdescriptionからパース
       const colorMatch = desc.match(/（(.+?)）/);
       const colorName = colorMatch ? colorMatch[1] : '';
       const isHospital = desc.includes('病院向け');
@@ -286,7 +286,7 @@ async function registerToNotion(context, data) {
       else if (hasCarabiner) productName = 'カラビナ付き';
       else if (hasGlow) productName = '蓄光バンド付き';
 
-      await notion.pages.create({
+      return notion.pages.create({
         parent: { database_id: itemsDbId },
         properties: {
           '明細ID': { title: [{ text: { content: `${data.orderId}-${item.quantity}x` } }] },
@@ -298,7 +298,8 @@ async function registerToNotion(context, data) {
           '単価': { number: Math.round(item.amount_total / item.quantity) },
         },
       });
-    }
+    });
+    await Promise.all(itemPromises);
     context.log.info('Notion order items registered:', data.productItems.length, 'items');
   }
 }
