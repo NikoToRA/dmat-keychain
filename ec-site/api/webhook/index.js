@@ -195,7 +195,8 @@ async function registerToNotion(context, data) {
     ? `〒${data.shipping.address.postal_code} ${data.shipping.address.state}${data.shipping.address.city}${data.shipping.address.line1}${data.shipping.address.line2 || ''}`
     : '';
 
-  await notion.pages.create({
+  // 1. 発送管理DB（親）に注文を登録
+  const orderPage = await notion.pages.create({
     parent: { database_id: process.env.NOTION_DATABASE_ID },
     properties: {
       '注文番号': { title: [{ text: { content: data.orderId } }] },
@@ -207,14 +208,45 @@ async function registerToNotion(context, data) {
       '郵便番号': { rich_text: [{ text: { content: data.shipping?.address?.postal_code || '' } }] },
       '住所': { rich_text: [{ text: { content: address } }] },
       '商品名一覧': { rich_text: [{ text: { content: data.productNames } }] },
-      '商品明細JSON': { rich_text: [{ text: { content: data.productItemsJson.substring(0, 2000) } }] },
       '合計個数': { number: data.totalQuantity },
       '送料区分': { select: { name: data.shippingMethod === 'letterpack' ? 'レターパックライト' : 'クリックポスト' } },
-      '発送ステータス': { select: { name: '未対応' } },
+      '発送ステータス': { select: { name: '注文受付' } },
       '注文日時': { date: { start: orderDate } },
       'Notion作成元': { select: { name: 'auto' } },
     },
   });
 
-  context.log.info('Notion DB registered:', data.orderId);
+  context.log.info('Notion order registered:', data.orderId, orderPage.id);
+
+  // 2. 注文明細DB（子）に商品ごとに登録
+  const itemsDbId = process.env.NOTION_ORDER_ITEMS_DB_ID;
+  if (itemsDbId && data.productItems) {
+    for (const item of data.productItems) {
+      const desc = item.description || '';
+      // 商品名・カラー・用途をdescriptionからパース
+      const colorMatch = desc.match(/（(.+?)）/);
+      const colorName = colorMatch ? colorMatch[1] : '';
+      const isHospital = desc.includes('病院向け');
+      const hasCarabiner = desc.includes('カラビナ');
+      const hasGlow = desc.includes('蓄光');
+      let productName = 'ベーシック';
+      if (hasCarabiner && hasGlow) productName = 'カラビナ+蓄光バンド付き';
+      else if (hasCarabiner) productName = 'カラビナ付き';
+      else if (hasGlow) productName = '蓄光バンド付き';
+
+      await notion.pages.create({
+        parent: { database_id: itemsDbId },
+        properties: {
+          '明細ID': { title: [{ text: { content: `${data.orderId}-${item.quantity}x` } }] },
+          '注文': { relation: [{ id: orderPage.id }] },
+          '商品名': { select: { name: productName } },
+          'カラー': colorName ? { select: { name: colorName } } : undefined,
+          '用途': { select: { name: isHospital ? '病院用' : 'DMAT隊員用' } },
+          '個数': { number: item.quantity },
+          '単価': { number: Math.round(item.amount_total / item.quantity) },
+        },
+      });
+    }
+    context.log.info('Notion order items registered:', data.productItems.length, 'items');
+  }
 }
