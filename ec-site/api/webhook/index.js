@@ -67,7 +67,8 @@ module.exports = async function (context, req) {
     const customerName = session.customer_details?.name;
     const customerPhone = session.customer_details?.phone;
 
-    const orderId = `DMAT-${Date.now().toString(36).toUpperCase()}`;
+    // 注文番号 = Stripe Payment Intent ID（Stripe側と自動的に一致）
+    const orderId = session.payment_intent;
 
     const productItems = lineItems.data.filter(item => !item.description.includes('送料'));
     const shippingItem = lineItems.data.find(item => item.description.includes('送料'));
@@ -95,7 +96,8 @@ module.exports = async function (context, req) {
         shippingLabel: shippingItem ? shippingItem.description : '',
       }),
       registerNotion(context, {
-        orderId, customerName, customerEmail, customerPhone,
+        orderId, sessionId, paymentIntentId: session.payment_intent,
+        customerName, customerEmail, customerPhone,
         address, postalCode: shipping?.address?.postal_code || '',
         productNames, productItems, totalQuantity, shippingMethod,
       }),
@@ -162,6 +164,8 @@ async function registerNotion(context, data) {
     parent: { database_id: process.env.NOTION_DATABASE_ID },
     properties: {
       '注文番号': { title: [{ text: { content: data.orderId } }] },
+      'Stripe Session ID': { rich_text: [{ text: { content: data.sessionId || '' } }] },
+      'Payment Intent ID': { rich_text: [{ text: { content: data.paymentIntentId || '' } }] },
       '顧客名': { rich_text: [{ text: { content: data.customerName || '' } }] },
       'メールアドレス': { email: data.customerEmail },
       '電話番号': { phone_number: data.customerPhone || '' },
