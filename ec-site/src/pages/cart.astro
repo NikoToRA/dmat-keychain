@@ -79,7 +79,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     var itemsHtml = cart.map(function (item, index) {
       var lineTotal = item.unitPrice * item.quantity;
-      return '<div class="flex gap-4 py-5 border-b border-gray-100" data-index="' + index + '">' +
+      return '<div class="flex gap-4 py-5 border-b border-gray-100" data-index="' + index + '" data-cart-item-id="' + (item.id || index) + '" aria-label="カート商品: ' + (item.description || BASE_PRODUCT.name) + '">' +
         '<div class="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">' +
           '<img src="' + getColorImage(item.colorId) + '" alt="" class="w-full h-full object-contain p-2" onerror="this.style.display=\'none\'" />' +
         '</div>' +
@@ -123,7 +123,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       '</div>' +
       '<div class="mt-6 flex flex-col sm:flex-row gap-3">' +
         '<a href="/" class="btn-secondary flex-1 text-center">買い物を続ける</a>' +
-        '<a href="/confirm" class="btn-primary flex-1 text-center">まとめて購入する</a>' +
+        '<a href="/confirm" class="btn-primary flex-1 text-center" aria-label="購入手続きへ進む">まとめて購入する</a>' +
       '</div>';
 
     // Event delegation for cart actions

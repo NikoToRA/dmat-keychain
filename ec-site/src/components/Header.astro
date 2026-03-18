@@ -2,15 +2,15 @@
 // Header — Dieter Rams: "Less, but better"
 ---
 
-<header id="site-header" class="fixed top-0 left-0 right-0 z-40 bg-white" style="height: 64px;">
+<header id="site-header" class="fixed top-0 left-0 right-0 z-40 bg-white" role="banner" style="height: 64px;">
   <div class="mx-auto px-6 h-full flex items-center justify-between" style="max-width: 72rem;">
     <!-- Logo: typography only -->
-    <a href="/" class="text-[var(--color-primary,#1B2838)] font-bold text-base" style="letter-spacing: 0.06em;">
+    <a href="/" class="text-[var(--color-primary,#1B2838)] font-bold text-base" style="letter-spacing: 0.06em;" aria-label="DMAT STORE トップページ">
       DMAT STORE
     </a>
 
     <!-- Navigation -->
-    <nav class="flex items-center gap-6">
+    <nav class="flex items-center gap-6" aria-label="メインナビゲーション">
       <a
         href="/#recommended"
         class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
@@ -19,7 +19,7 @@
       </a>
 
       <!-- Cart -->
-      <a href="/cart" class="relative p-1">
+      <a href="/cart" class="relative p-1" aria-label="ショッピングカート">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"

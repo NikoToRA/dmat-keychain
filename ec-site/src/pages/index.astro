@@ -137,6 +137,97 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </section>
 
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "おすすめ商品",
+  "itemListElement": [
+    {
+      "@type": "Product",
+      "position": 1,
+      "name": "DMAT キーホルダー ベーシック",
+      "description": "NFC内蔵。かざすだけで災害情報にすぐアクセス。スタンダードレッド、ボールチェーン付属。",
+      "brand": {"@type": "Brand", "name": "DMAT STORE"},
+      "category": "DMAT隊員用",
+      "material": "PLA樹脂（3Dプリント）",
+      "offers": {
+        "@type": "Offer",
+        "price": "680",
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/MadeToOrder",
+        "deliveryLeadTime": {"@type": "QuantitativeValue", "value": "10", "unitCode": "DAY"},
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "JP"},
+          "shippingRate": {"@type": "MonetaryAmount", "value": "185", "currency": "JPY"}
+        },
+        "url": "https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=basic"
+      }
+    },
+    {
+      "@type": "Product",
+      "position": 2,
+      "name": "DMAT キーホルダー プレミアレッド",
+      "description": "NFC内蔵。プレミアレッドカラー。",
+      "brand": {"@type": "Brand", "name": "DMAT STORE"},
+      "category": "DMAT隊員用",
+      "offers": {
+        "@type": "Offer",
+        "price": "680",
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/MadeToOrder",
+        "url": "https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=premium-red"
+      }
+    },
+    {
+      "@type": "Product",
+      "position": 3,
+      "name": "DMAT キーホルダー ブラック",
+      "description": "NFC内蔵。ブラックカラー。",
+      "brand": {"@type": "Brand", "name": "DMAT STORE"},
+      "category": "DMAT隊員用",
+      "offers": {
+        "@type": "Offer",
+        "price": "680",
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/MadeToOrder",
+        "url": "https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=black"
+      }
+    },
+    {
+      "@type": "Product",
+      "position": 4,
+      "name": "DMAT キーホルダー カラビナ付き",
+      "description": "NFC内蔵。カラビナアクセサリ付属。",
+      "brand": {"@type": "Brand", "name": "DMAT STORE"},
+      "category": "DMAT隊員用",
+      "offers": {
+        "@type": "Offer",
+        "price": "980",
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/MadeToOrder",
+        "url": "https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=carabiner"
+      }
+    },
+    {
+      "@type": "Product",
+      "position": 5,
+      "name": "DMAT キーホルダー 蓄光バンド付き",
+      "description": "NFC内蔵。暗闘で光る蓄光バンド付属。",
+      "brand": {"@type": "Brand", "name": "DMAT STORE"},
+      "category": "DMAT隊員用",
+      "offers": {
+        "@type": "Offer",
+        "price": "1080",
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/MadeToOrder",
+        "url": "https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=glow"
+      }
+    }
+  ]
+}
+</script>
 </BaseLayout>
 
 <script is:inline>
@@ -233,7 +324,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         var a = ACCESSORIES.find(function (x) { return x.id === accId; });
         return a ? a.name : '';
       }).filter(Boolean).join('、');
-      return '<div class="product-card animate-on-scroll" data-set-id="' + set.id + '">' +
+      return '<div class="product-card animate-on-scroll" data-set-id="' + set.id + '" data-product-name="' + set.name + '" data-product-price="' + price + '" data-product-id="' + set.id + '" role="article" aria-label="商品: ' + set.name + ', 価格: ¥' + price.toLocaleString() + '">' +
         '<a href="/product?set=' + set.id + '" class="block">' +
           '<div class="product-image-wrapper">' +
             '<img src="' + (colorVar ? colorVar.image : BASE_PRODUCT.image) + '" alt="' + set.name + '" class="w-full h-full object-contain p-4" onerror="this.style.display=\'none\'" />' +
@@ -249,11 +340,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             '<div style="font-size: 1rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem;">&yen;' + price.toLocaleString() + '</div>' +
             '<div class="flex items-center gap-2">' +
               '<div class="flex items-center" style="border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden;">' +
-                '<button class="qty-minus" data-set-id="' + set.id + '" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--color-text-secondary); border: none; background: none; cursor: pointer;">&minus;</button>' +
+                '<button class="qty-minus" data-set-id="' + set.id + '" aria-label="数量を減らす" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--color-text-secondary); border: none; background: none; cursor: pointer;">&minus;</button>' +
                 '<span class="qty-display" data-set-id="' + set.id + '" style="padding: 0.25rem 0.375rem; font-size: 0.75rem; min-width: 1.5rem; text-align: center;">1</span>' +
-                '<button class="qty-plus" data-set-id="' + set.id + '" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--color-text-secondary); border: none; background: none; cursor: pointer;">&plus;</button>' +
+                '<button class="qty-plus" data-set-id="' + set.id + '" aria-label="数量を増やす" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--color-text-secondary); border: none; background: none; cursor: pointer;">&plus;</button>' +
               '</div>' +
-              '<button class="add-set-btn" style="flex: 1; font-size: 0.75rem; color: #fff; background-color: var(--color-primary); border-radius: 6px; padding: 0.375rem 0.75rem; border: none; cursor: pointer; transition: opacity 150ms;" data-set-id="' + set.id + '" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'1\'">カートに入れる</button>' +
+              '<button class="add-set-btn" style="flex: 1; font-size: 0.75rem; color: #fff; background-color: var(--color-primary); border-radius: 6px; padding: 0.375rem 0.75rem; border: none; cursor: pointer; transition: opacity 150ms;" data-set-id="' + set.id + '" aria-label="' + set.name + 'をカートに入れる" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'1\'">カートに入れる</button>' +
             '</div>' +
           '</div>' +
         '</div>' +
