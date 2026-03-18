@@ -21,16 +21,18 @@ function markProcessed(sessionId) {
 module.exports = async function (context, req) {
   const sig = req.headers['stripe-signature'];
 
-  // 署名検証
+  // 署名検証（SWA Managed Functionsではreq.rawBodyが無い場合がある）
+  const rawBody = req.rawBody || (typeof req.body === 'string' ? req.body : JSON.stringify(req.body));
   let event;
   try {
     event = stripe.webhooks.constructEvent(
-      req.rawBody,
+      rawBody,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
     context.log.error('Webhook signature verification failed:', err.message);
+    context.log.error('rawBody type:', typeof req.rawBody, 'body type:', typeof req.body);
     context.res = { status: 400, body: 'Webhook signature verification failed' };
     return;
   }
@@ -100,27 +102,32 @@ module.exports = async function (context, req) {
     });
 
     // Notion DB 登録（親: 発送管理 + 子: 注文明細）
-    await registerToNotion(context, {
-      orderId,
-      sessionId: session.id,
-      paymentIntentId: session.payment_intent,
-      customerName,
-      customerEmail,
-      customerPhone,
-      shipping,
-      productNames,
-      productItems,
-      productItemsJson: JSON.stringify(lineItems.data),
-      totalQuantity,
-      shippingMethod,
-    });
+    context.log.info('Starting Notion registration for:', orderId);
+    try {
+      await registerToNotion(context, {
+        orderId,
+        sessionId: session.id,
+        paymentIntentId: session.payment_intent,
+        customerName,
+        customerEmail,
+        customerPhone,
+        shipping,
+        productNames,
+        productItems,
+        totalQuantity,
+        shippingMethod,
+      });
+      context.log.info('Notion registration completed:', orderId);
+    } catch (notionErr) {
+      // Notion失敗してもメールは送信済みなので200を返す（リトライでメール重複を防ぐ）
+      context.log.error('Notion registration failed:', notionErr.message);
+    }
 
     markProcessed(session.id);
     context.log.info('Order processed:', orderId);
     context.res = { status: 200, body: 'OK' };
   } catch (err) {
     context.log.error('Webhook processing error:', err.message);
-    // 処理失敗時は 500 を返し、Stripe にリトライさせる
     context.res = { status: 500, body: 'Processing failed' };
   }
 };
