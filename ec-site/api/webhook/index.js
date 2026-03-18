@@ -126,47 +126,49 @@ async function sendConfirmationEmail(context, data) {
     : '未入力';
 
   const htmlContent = `
-    <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #2d3748;">
-      <div style="background: #1a365d; padding: 24px; text-align: center;">
-        <h1 style="color: #ffffff; margin: 0; font-size: 20px;">DMAT キーホルダー ご注文確認</h1>
+    <div style="font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', sans-serif; max-width: 600px; margin: 0 auto; color: #1A1A1A; background: #ffffff;">
+      <div style="background: #1B2838; padding: 28px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 18px; font-weight: 700; letter-spacing: 0.06em;">DMAT STORE</h1>
       </div>
 
-      <div style="padding: 24px;">
-        <p>${customerName} 様</p>
-        <p>この度はご注文いただき、誠にありがとうございます。<br>以下の内容でご注文を承りました。</p>
+      <div style="padding: 32px 24px;">
+        <p style="font-size: 15px; margin: 0 0 8px;">${customerName} 様</p>
+        <p style="font-size: 14px; color: #6B6B6B; margin: 0 0 28px;">Wonder Drill株式会社です。お買い上げありがとうございます。<br>以下の内容でご注文を承りました。</p>
 
-        <table style="width: 100%; border-collapse: collapse; margin: 16px 0; background: #f7fafc; border-radius: 4px;">
-          <tr><th style="padding: 12px; text-align: left; color: #4a5568;">注文番号</th><td style="padding: 12px; font-weight: bold;">${orderId}</td></tr>
+        <table style="width: 100%; border-collapse: collapse; margin: 0 0 8px; background: #F5F5F5; border-radius: 4px;">
+          <tr><td style="padding: 12px; font-size: 13px; color: #999;">注文番号</td><td style="padding: 12px; font-weight: 700;">${orderId}</td></tr>
         </table>
 
-        <h3 style="color: #1a365d; border-bottom: 2px solid #e53e3e; padding-bottom: 8px;">ご注文内容</h3>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr style="background: #edf2f7;">
-            <th style="padding: 8px; text-align: left;">商品名</th>
-            <th style="padding: 8px; text-align: center;">数量</th>
-            <th style="padding: 8px; text-align: right;">小計</th>
+        <h3 style="font-size: 14px; color: #1B2838; border-bottom: 2px solid #C41E3A; padding-bottom: 8px; margin: 28px 0 12px;">ご注文内容</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <tr style="background: #F5F5F5;">
+            <th style="padding: 10px 12px; text-align: left; font-weight: 500;">商品名</th>
+            <th style="padding: 10px 12px; text-align: center; width: 60px; font-weight: 500;">数量</th>
+            <th style="padding: 10px 12px; text-align: right; width: 100px; font-weight: 500;">小計</th>
           </tr>
           ${itemsHtml}
-          <tr style="font-weight: bold; background: #f7fafc;">
-            <td colspan="2" style="padding: 12px; text-align: right;">合計（税込・送料込）</td>
-            <td style="padding: 12px; text-align: right; color: #e53e3e; font-size: 18px;">&yen;${totalAmount.toLocaleString()}</td>
+          <tr style="font-weight: 700; background: #F9F9F9;">
+            <td colspan="2" style="padding: 14px 12px; text-align: right; font-size: 15px;">合計（税込・送料込）</td>
+            <td style="padding: 14px 12px; text-align: right; color: #C41E3A; font-size: 18px;">&yen;${totalAmount.toLocaleString()}</td>
           </tr>
         </table>
 
-        <h3 style="color: #1a365d; border-bottom: 2px solid #e53e3e; padding-bottom: 8px;">配送先</h3>
-        <p>${address}</p>
+        <h3 style="font-size: 14px; color: #1B2838; border-bottom: 2px solid #C41E3A; padding-bottom: 8px; margin: 28px 0 12px;">配送先</h3>
+        <p style="font-size: 14px; margin: 0;">${address}</p>
 
-        <h3 style="color: #1a365d; border-bottom: 2px solid #e53e3e; padding-bottom: 8px;">配送について</h3>
-        <div style="background: #fffbeb; border-left: 4px solid #ecc94b; padding: 12px; margin: 8px 0;">
-          <p style="margin: 0;">本商品は<strong>受注生産</strong>のため、製作後に発送いたします。</p>
-          <p style="margin: 8px 0 0 0;">ご注文確定後、<strong>10営業日以内</strong>に発送予定です。</p>
+        <div style="background: #FFFBEB; border-left: 4px solid #ECC94B; padding: 14px; margin: 28px 0;">
+          <p style="margin: 0; font-size: 13px;">本商品は<strong>受注生産</strong>のため、ご注文確定後<strong>10日以内</strong>に発送いたします。</p>
+          <p style="margin: 8px 0 0; font-size: 13px;">発送時に追跡番号をメールでお知らせいたします。</p>
         </div>
-        <p style="font-size: 14px; color: #718096;">発送時に追跡番号をメールでお知らせいたします。</p>
 
-        <hr style="margin: 24px 0; border: none; border-top: 1px solid #e2e8f0;">
-        <p style="color: #718096; font-size: 13px;">
-          ご不明点がございましたら、下記までお問い合わせください。<br>
-          <a href="mailto:support@wonder-drill.com" style="color: #3182ce;">support@wonder-drill.com</a><br>
+        <div style="background: #F0F7FF; border-left: 4px solid #3182CE; padding: 14px; margin: 0 0 28px;">
+          <p style="margin: 0; font-size: 13px;"><strong>領収書について</strong></p>
+          <p style="margin: 8px 0 0; font-size: 13px;">領収書は決済サービス（Stripe）より別途メールでお届けします。届かない場合はお問い合わせください。</p>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #E8E8E8; margin: 0 0 20px;">
+        <p style="font-size: 12px; color: #999; margin: 0;">
+          ご不明点は <a href="mailto:support@wonder-drill.com" style="color: #1B2838;">support@wonder-drill.com</a> までお問い合わせください。<br>
           Wonder Drill株式会社
         </p>
       </div>
@@ -176,7 +178,7 @@ async function sendConfirmationEmail(context, data) {
   const message = {
     senderAddress: process.env.ACS_SENDER_ADDRESS,
     content: {
-      subject: `【DMAT キーホルダー】ご注文確認 ${orderId}`,
+      subject: `【DMAT STORE】ご注文確認 ${orderId}`,
       html: htmlContent,
     },
     recipients: {
