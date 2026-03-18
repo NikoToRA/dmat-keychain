@@ -42,6 +42,13 @@ module.exports = async function (context, req) {
 
   const session = event.data.object;
 
+  // DMAT STORE の注文のみ処理（KarteAI等の他サービスの注文を無視）
+  if (session.metadata?.service !== 'dmat-store') {
+    context.log.info('Skipping non-DMAT-STORE session:', session.id);
+    context.res = { status: 200, body: 'Not DMAT STORE' };
+    return;
+  }
+
   // 二重処理防止
   if (processedSessions.has(session.id)) {
     context.log.warn('Duplicate session:', session.id);

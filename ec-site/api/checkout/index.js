@@ -80,6 +80,7 @@ module.exports = async function (context, req) {
       cancel_url: `${process.env.PUBLIC_BASE_URL}/cancel`,
       locale: 'ja',
       metadata: {
+        service: 'dmat-store',
         total_quantity: String(totalQuantity),
         shipping_method: totalQuantity <= 4 ? 'clickpost' : 'letterpack_x' + Math.ceil(totalQuantity / 15),
       },
