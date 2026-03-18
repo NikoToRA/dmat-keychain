@@ -52,7 +52,8 @@ module.exports = async function (context, req) {
   try {
     // Stripe から詳細取得
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
-    const shipping = session.shipping_details;
+    // 住所: shipping_details > customer_details.address の優先順で取得
+    const shipping = session.shipping_details || { address: session.customer_details?.address };
     const customerEmail = session.customer_details.email;
     const customerName = session.customer_details.name;
     const customerPhone = session.customer_details.phone;
@@ -65,7 +66,7 @@ module.exports = async function (context, req) {
       item => !item.description.includes('送料')
     );
     const productNames = productItems.map(
-      item => `${item.description} x${item.quantity}`
+      item => `${item.description.replace(/\s*\+\s*ボールチェーン/g, '').replace(/ボールチェーン\s*\+\s*/g, '')} x${item.quantity}`
     ).join(', ');
     const totalQuantity = productItems.reduce(
       (sum, item) => sum + item.quantity, 0
@@ -230,7 +231,6 @@ async function registerToNotion(context, data) {
       '郵便番号': { rich_text: [{ text: { content: data.shipping?.address?.postal_code || '' } }] },
       '住所': { rich_text: [{ text: { content: address } }] },
       '商品名一覧': { rich_text: [{ text: { content: data.productNames } }] },
-      '商品明細JSON': { rich_text: [{ text: { content: (data.productItemsJson || '').substring(0, 2000) } }] },
       '合計個数': { number: data.totalQuantity },
       '送料区分': { select: { name: data.shippingMethod === 'letterpack' ? 'レターパックライト' : 'クリックポスト' } },
       '発送ステータス': { select: { name: '注文受付' } },
