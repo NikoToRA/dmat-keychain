@@ -27,13 +27,21 @@ function markProcessed(sessionId) {
 }
 
 module.exports = async function (context, req) {
-  const sig = req.headers['stripe-signature'];
+  // デバッグ: 処理開始をNotionに記録
+  const debugLog = [];
+  debugLog.push('WEBHOOK_START:' + new Date().toISOString());
 
-  // 署名検証（SWA Managed Functionsではreq.rawBodyが無い場合がある）
+  const sig = req.headers['stripe-signature'];
+  debugLog.push('SIG:' + (sig ? 'present' : 'missing'));
+  debugLog.push('RAWBODY:' + (req.rawBody ? 'yes(' + typeof req.rawBody + ')' : 'no'));
+  debugLog.push('BODY:' + typeof req.body);
+
+  // 署名検証
   const rawBody = req.rawBody || (typeof req.body === 'string' ? req.body : null);
   if (!rawBody) {
-    context.log.error('Neither rawBody nor string body available');
-    context.res = { status: 400, body: 'Raw body required for signature verification' };
+    debugLog.push('ERROR:no_rawbody');
+    await writeDebugLog(debugLog.join('|'));
+    context.res = { status: 400, body: 'Raw body required' };
     return;
   }
   let event;
@@ -43,10 +51,11 @@ module.exports = async function (context, req) {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+    debugLog.push('SIG_OK');
   } catch (err) {
-    context.log.error('Webhook signature verification failed:', err.message);
-    context.log.error('rawBody type:', typeof req.rawBody, 'body type:', typeof req.body);
-    context.res = { status: 400, body: 'Webhook signature verification failed' };
+    debugLog.push('SIG_FAIL:' + err.message.substring(0, 100));
+    await writeDebugLog(debugLog.join('|'));
+    context.res = { status: 400, body: 'Signature failed' };
     return;
   }
 
@@ -142,6 +151,8 @@ module.exports = async function (context, req) {
       }
     });
   } catch (err) {
+    debugLog.push('PROCESS_ERROR:' + err.message.substring(0, 200));
+    await writeDebugLog(debugLog.join('|'));
     context.log.error('Webhook processing error:', err.message);
     context.res = { status: 500, body: 'Processing failed' };
   }
@@ -301,5 +312,22 @@ async function registerToNotion(context, data) {
     });
     await Promise.all(itemPromises);
     context.log.info('Notion order items registered:', data.productItems.length, 'items');
+  }
+}
+
+// デバッグ用: 処理ログをNotionに書き込み（本番前に削除）
+async function writeDebugLog(log) {
+  try {
+    const n = new Client({ auth: process.env.NOTION_TOKEN });
+    await n.pages.create({
+      parent: { database_id: process.env.NOTION_DATABASE_ID },
+      properties: {
+        '注文番号': { title: [{ text: { content: 'DEBUG-' + Date.now() } }] },
+        '商品名一覧': { rich_text: [{ text: { content: log.substring(0, 2000) } }] },
+        'Notion作成元': { select: { name: 'test' } },
+      },
+    });
+  } catch (e) {
+    // デバッグログ自体が失敗しても無視
   }
 }
