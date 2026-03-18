@@ -30,14 +30,12 @@ test.describe('1. Top page loads correctly', () => {
     await expect(heading).toBeVisible()
   })
 
-  test('4 product cards are rendered', async ({ page }) => {
+  test('5 product cards are rendered', async ({ page }) => {
     await page.goto('/')
-    // Product cards are rendered by JS into #recommended-grid
     const grid = page.locator('#recommended-grid')
     await expect(grid).toBeVisible()
-    // Wait for JS to render product cards
     const cards = grid.locator('.product-card')
-    await expect(cards).toHaveCount(4, { timeout: 10000 })
+    await expect(cards).toHaveCount(5, { timeout: 10000 })
   })
 
   test('how-to-use section exists', async ({ page }) => {
@@ -113,7 +111,7 @@ test.describe('3. Product detail page - Set mode', () => {
     await expect(content).not.toBeEmpty({ timeout: 10000 })
 
     // Verify product name
-    await expect(content.locator('h1')).toContainText('ベーシックセット')
+    await expect(content.locator('h1')).toContainText('ベーシック')
 
     // Verify price is displayed (680 yen)
     await expect(content).toContainText('680')
@@ -298,10 +296,10 @@ test.describe('8. Category page', () => {
     const title = page.locator('#category-title')
     await expect(title).toHaveText('DMAT隊員用グッズ')
 
-    // Verify product cards are rendered (filtered to dmat-member: basic + premium = 2)
+    // Verify product cards are rendered (filtered to dmat-member: 5 products)
     const grid = page.locator('#category-grid')
     const cards = grid.locator('.product-card')
-    await expect(cards).toHaveCount(2, { timeout: 10000 })
+    await expect(cards).toHaveCount(5, { timeout: 10000 })
   })
 })
 
@@ -335,7 +333,7 @@ test.describe('10. Mobile responsive', () => {
     // Verify product cards are visible
     const grid = page.locator('#recommended-grid')
     const cards = grid.locator('.product-card')
-    await expect(cards).toHaveCount(4, { timeout: 10000 })
+    await expect(cards).toHaveCount(5, { timeout: 10000 })
 
     // On mobile (375px), grid-cols-1 means cards stack vertically
     // Verify by checking that first two cards have same X position (left aligned)

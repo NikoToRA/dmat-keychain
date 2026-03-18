@@ -32,7 +32,7 @@ function makeCartItem(overrides: Record<string, unknown> = {}) {
     accessoryIds: ['ball-chain'],
     quantity: 1,
     unitPrice: 680,
-    description: 'ベーシックセット',
+    description: 'ベーシック',
     category: 'dmat-member',
     ...overrides,
   }
@@ -64,7 +64,7 @@ test.describe('1. Happy Path: Top -> Cart -> Confirm', () => {
     await expect(cartContent).not.toBeEmpty({ timeout: 10000 })
 
     // Verify item is shown with price
-    await expect(cartContent).toContainText('ベーシックセット')
+    await expect(cartContent).toContainText('ベーシック')
     await expect(cartContent).toContainText('680')
 
     // Click "まとめて購入する" link to /confirm
@@ -76,7 +76,7 @@ test.describe('1. Happy Path: Top -> Cart -> Confirm', () => {
     await expect(page).toHaveURL(/\/confirm/)
     const confirmContent = page.locator('#confirm-content')
     await expect(confirmContent).not.toBeEmpty({ timeout: 10000 })
-    await expect(confirmContent).toContainText('ベーシックセット')
+    await expect(confirmContent).toContainText('ベーシック')
 
     // Verify checkout button exists
     const checkoutBtn = page.locator('#checkout-button')
@@ -198,7 +198,7 @@ test.describe('4. Cart persistence after navigating away', () => {
 
     // Go to cart
     await page.goto('/cart')
-    await expect(page.locator('#cart-content')).toContainText('ベーシックセット')
+    await expect(page.locator('#cart-content')).toContainText('ベーシック')
 
     // Click "買い物を続ける" -> goes to /
     const continueLink = page.locator('#cart-content a[href="/"]')
@@ -207,7 +207,7 @@ test.describe('4. Cart persistence after navigating away', () => {
 
     // Go back to cart -- item should still be there
     await page.goto('/cart')
-    await expect(page.locator('#cart-content')).toContainText('ベーシックセット')
+    await expect(page.locator('#cart-content')).toContainText('ベーシック')
   })
 })
 
@@ -222,14 +222,14 @@ test.describe('5. Confirm page -> back to cart', () => {
     await page.goto('/confirm')
     const confirmContent = page.locator('#confirm-content')
     await expect(confirmContent).not.toBeEmpty({ timeout: 10000 })
-    await expect(confirmContent).toContainText('ベーシックセット')
+    await expect(confirmContent).toContainText('ベーシック')
 
     // Click "カートに戻る"
     const backLink = confirmContent.locator('a[href="/cart"]')
     await backLink.click()
 
     await expect(page).toHaveURL(/\/cart/)
-    await expect(page.locator('#cart-content')).toContainText('ベーシックセット')
+    await expect(page.locator('#cart-content')).toContainText('ベーシック')
   })
 })
 
@@ -272,15 +272,15 @@ test.describe('8. Product detail: Set mode', () => {
   test.beforeEach(async ({ page }) => { await clearCart(page) })
 
   test('premium set page -> add to cart -> toast', async ({ page }) => {
-    await page.goto('/product?set=premium')
+    await page.goto('/product?set=premium-red')
     const content = page.locator('#product-content')
     await expect(content).not.toBeEmpty({ timeout: 15000 })
 
     // Verify product name
-    await expect(content.locator('h1')).toContainText('プレミアムセット')
+    await expect(content.locator('h1')).toContainText('プレミアレッド')
 
-    // Verify price is displayed (680 + carabiner 300 + glow 400 = 1,380)
-    await expect(content).toContainText('1,380')
+    // プレミアレッド = 680円
+    await expect(content).toContainText('680')
 
     // Click "カートに入れる"
     await page.locator('#add-to-cart-btn').click()
@@ -288,7 +288,7 @@ test.describe('8. Product detail: Set mode', () => {
   })
 
   test('buy now redirects to cart', async ({ page }) => {
-    await page.goto('/product?set=premium')
+    await page.goto('/product?set=premium-red')
     const content = page.locator('#product-content')
     await expect(content).not.toBeEmpty({ timeout: 15000 })
 
@@ -297,7 +297,7 @@ test.describe('8. Product detail: Set mode', () => {
 
     // Should redirect to /cart
     await expect(page).toHaveURL(/\/cart/)
-    await expect(page.locator('#cart-content')).toContainText('プレミアムセット')
+    await expect(page.locator('#cart-content')).toContainText('プレミアレッド')
   })
 })
 
@@ -327,11 +327,11 @@ test.describe('9. Multiple products in cart', () => {
     await expect(cartContent).not.toBeEmpty({ timeout: 10000 })
 
     // Verify 2 distinct items
-    await expect(cartContent).toContainText('ベーシックセット')
-    await expect(cartContent).toContainText('プレミアムセット')
+    await expect(cartContent).toContainText('ベーシック')
+    await expect(cartContent).toContainText('プレミアレッド')
 
-    // Subtotal: 680 + 1380 = 2,060
-    await expect(cartContent).toContainText('2,060')
+    // Subtotal: 680 + 680 = 1,360
+    await expect(cartContent).toContainText('1,360')
 
     // Shipping: 2 items -> click post 185
     await expect(cartContent).toContainText('185')
@@ -385,7 +385,7 @@ test.describe('11. Category page', () => {
 
     const grid = page.locator('#category-grid')
     const cards = grid.locator('.product-card')
-    await expect(cards).toHaveCount(2, { timeout: 10000 })
+    await expect(cards).toHaveCount(5, { timeout: 10000 })
   })
 
   test('clicking product card navigates to product detail', async ({ page }) => {
@@ -426,7 +426,7 @@ test.describe('12. Browser back navigation', () => {
 
     // Cart state should be preserved -- verify by going to cart
     await page.goto('/cart')
-    await expect(page.locator('#cart-content')).toContainText('ベーシックセット')
+    await expect(page.locator('#cart-content')).toContainText('ベーシック')
   })
 })
 
