@@ -1,0 +1,159 @@
+---
+// 配送ラベル印刷ページ
+// URL: /label?name=顧客名&postal=064-0805&address=北海道札幌市...&order=DMAT-XXX
+// Notionから1クリックで開いて印刷
+---
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>配送ラベル</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #fff;
+    }
+
+    /* 印刷時にボタン非表示 */
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff; }
+      .label { border: none !important; box-shadow: none !important; }
+    }
+
+    .controls {
+      padding: 20px;
+      text-align: center;
+      background: #f5f5f5;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .controls button {
+      background: #1B2838;
+      color: #fff;
+      border: none;
+      padding: 12px 32px;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+
+    .controls button:hover { opacity: 0.85; }
+
+    .label-container {
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .label {
+      width: 100mm;
+      min-height: 60mm;
+      border: 2px solid #333;
+      padding: 8mm;
+      position: relative;
+    }
+
+    .label-header {
+      font-size: 10px;
+      color: #999;
+      margin-bottom: 4mm;
+      letter-spacing: 0.1em;
+    }
+
+    .postal {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-bottom: 3mm;
+    }
+
+    .address {
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 4mm;
+    }
+
+    .name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 2mm;
+    }
+
+    .name-suffix {
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .order-id {
+      position: absolute;
+      bottom: 3mm;
+      right: 4mm;
+      font-size: 9px;
+      color: #999;
+    }
+
+    .sender {
+      margin-top: 6mm;
+      padding-top: 4mm;
+      border-top: 1px solid #ccc;
+      font-size: 10px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .error {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls no-print">
+    <button onclick="window.print()">このラベルを印刷する</button>
+  </div>
+
+  <div class="label-container">
+    <div class="label" id="label">
+      <div class="label-header">お届け先</div>
+      <div class="postal" id="postal"></div>
+      <div class="address" id="address"></div>
+      <div class="name"><span id="name"></span> <span class="name-suffix">様</span></div>
+      <div class="order-id" id="order-id"></div>
+      <div class="sender">
+        差出人: Wonder Drill株式会社<br>
+        〒064-0805 北海道札幌市中央区南5条西15丁目2-3
+      </div>
+    </div>
+  </div>
+
+  <div class="error" id="error" style="display:none;">
+    ラベル情報が不足しています。Notionの顧客管理DBから開いてください。
+  </div>
+
+  <script is:inline>
+    var params = new URLSearchParams(window.location.search);
+    var name = params.get('name');
+    var postal = params.get('postal');
+    var address = params.get('address');
+    var order = params.get('order');
+
+    if (!name || !address) {
+      document.getElementById('label').style.display = 'none';
+      document.getElementById('error').style.display = 'block';
+    } else {
+      document.getElementById('name').textContent = name;
+      document.getElementById('postal').textContent = postal ? '〒' + postal : '';
+      document.getElementById('address').textContent = address;
+      document.getElementById('order-id').textContent = order || '';
+    }
+  </script>
+</body>
+</html>
