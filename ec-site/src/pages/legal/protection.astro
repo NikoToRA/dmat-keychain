@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="個人情報保護方針 - DMAT STORE">
+  <div class="max-w-3xl mx-auto px-6" style="padding: var(--section-padding) 0;">
+    <nav class="text-xs mb-8" style="color: var(--color-text-tertiary);">
+      <a href="/" class="hover:underline">トップ</a>
+      <span class="mx-2">/</span>
+      <span style="color: var(--color-text-secondary);">個人情報保護方針</span>
+    </nav>
+
+    <h1 class="text-2xl font-bold mb-8" style="color: var(--color-primary);">個人情報保護方針</h1>
+
+    <div class="space-y-8 text-sm leading-relaxed" style="color: var(--color-text-secondary);">
+
+      <p>Wonder Drill株式会社（以下「当社」）は、DMAT STORE の運営にあたり、お客様からお預かりする個人情報の重要性を深く認識し、以下の方針に基づき個人情報の保護に努めます。</p>
+
+      <section>
+        <h2 class="text-lg font-bold mb-3" style="color: var(--color-primary);">1. 個人情報の定義</h2>
+        <p>個人情報とは、氏名、住所、電話番号、メールアドレス等、特定の個人を識別できる情報をいいます。</p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold mb-3" style="color: var(--color-primary);">2. 個人情報の収集</h2>
+        <p>当社は、商品のご注文・配送に必要な範囲で、適法かつ公正な手段により個人情報を収集いたします。収集する情報は以下の通りです。</p>
+        <ul class="list-disc list-inside mt-2 space-y-1">
+          <li>氏名</li>
+          <li>配送先住所・郵便番号</li>
+          <li>電話番号</li>
+          <li>メールアドレス</li>
+        </ul>
+        <p class="mt-2">クレジットカード情報は決済サービス提供元（Stripe, Inc.）が管理しており、当社のサーバーには一切保存されません。</p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold mb-3" style="color: var(--color-primary);">3. 利用目的</h2>
+        <p>収集した個人情報は、以下の目的にのみ利用いたします。</p>
+        <ul class="list-disc list-inside mt-2 space-y-1">
+          <li>ご注文商品の製作・発送</li>
+          <li>注文確認メール・発送通知メールの送信</li>
+          <li>お問い合わせへの対応</li>
+          <li>サービス改善のための統計分析（個人を特定しない形式）</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold mb-3" style="color: var(--color-primary);">4. 第三者への提供</h2>
+        <p>当社は、以下の場合を除き、お客様の個人情報を第三者に提供することはありません。</p>
+        <ul class="list-disc list-inside mt-2 space-y-1">
+          <li>お客様の同意がある場合</li>
+          <li>法令に基づく場合</li>
+          <li>配送業務に必要な範囲で配送業者に提供する場合</li>
+          <li>決済処理に必要な範囲で決済サービス提供元に提供する場合</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold mb-3" style="color: var(--color-primary);">5. 安全管理措置</h2>
+        <p>当社は、個人情報の漏洩、滅失、毀損を防止するために、以下の安全管理措置を講じます。</p>
+        <ul class="list-disc list-inside mt-2 space-y-1">
+          <li>SSL/TLS暗号化通信の使用</li>
+          <li>アクセス権限の適切な管理</li>
+          <li>個人情報を取り扱うシステムへの不正アクセス防止</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold mb-3" style="color: var(--color-primary);">6. 個人情報の開示・訂正・削除</h2>
+        <p>お客様は、当社が保有するご自身の個人情報について、開示・訂正・削除を請求することができます。ご請求は下記連絡先までお願いいたします。本人確認のうえ、合理的な期間内に対応いたします。</p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold mb-3" style="color: var(--color-primary);">7. 法令の遵守</h2>
+        <p>当社は、個人情報の保護に関する法律（個人情報保護法）その他の関連法令を遵守いたします。</p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold mb-3" style="color: var(--color-primary);">8. 方針の見直し</h2>
+        <p>当社は、個人情報保護の取り組みを継続的に見直し、改善してまいります。本方針を変更する場合は、当サイトにて公表いたします。</p>
+      </section>
+
+      <section class="mt-12 p-6 rounded-xl" style="background: var(--color-surface-alt);">
+        <h2 class="text-base font-bold mb-3" style="color: var(--color-primary);">お問い合わせ窓口</h2>
+        <p>Wonder Drill株式会社 個人情報保護管理者</p>
+        <p>代表取締役 平山 傑</p>
+        <p class="mt-2">
+          <a href="mailto:support@wonder-drill.com" class="underline" style="color: var(--color-primary);">support@wonder-drill.com</a>
+        </p>
+      </section>
+
+      <p class="text-xs mt-8" style="color: var(--color-text-tertiary);">制定日: 2026年3月18日</p>
+    </div>
+  </div>
+</BaseLayout>

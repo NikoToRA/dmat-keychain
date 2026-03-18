@@ -133,13 +133,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         '<h3 class="text-sm font-bold text-blue-800 mb-1">配送目安</h3>' +
         '<p class="text-xs text-blue-700">お届け予定: ' + deliveryStr + '（製作10日 + 配送2〜4日）</p>' +
       '</div>' +
-      '<div class="mt-8 flex flex-col sm:flex-row gap-3">' +
-        '<a href="/cart" class="btn-secondary flex-1 text-center">カートに戻る</a>' +
-        '<button id="checkout-button" class="btn-primary flex-1 text-center">注文を確定して決済へ進む</button>' +
+      '<div class="mt-8">' +
+        '<label class="flex items-start gap-3 cursor-pointer mb-6">' +
+          '<input type="checkbox" id="agree-checkbox" class="mt-1 w-4 h-4 rounded" />' +
+          '<span class="text-xs" style="color: var(--color-text-secondary); line-height: 1.6;">' +
+            '<a href="/legal/protection" target="_blank" class="underline" style="color: var(--color-primary);">個人情報保護方針</a>および' +
+            '<a href="/legal/privacy" target="_blank" class="underline" style="color: var(--color-primary);">プライバシーポリシー</a>に同意のうえ、ご注文ください。' +
+          '</span>' +
+        '</label>' +
+        '<div class="flex flex-col sm:flex-row gap-3">' +
+          '<a href="/cart" class="btn-secondary flex-1 text-center">カートに戻る</a>' +
+          '<button id="checkout-button" class="btn-primary flex-1 text-center" disabled style="opacity:0.4;cursor:not-allowed;">注文を確定して決済へ進む</button>' +
+        '</div>' +
       '</div>';
 
+    // 同意チェックボックス
+    var agreeBox = document.getElementById('agree-checkbox');
+    var checkoutBtn = document.getElementById('checkout-button');
+    agreeBox.addEventListener('change', function () {
+      checkoutBtn.disabled = !this.checked;
+      checkoutBtn.style.opacity = this.checked ? '1' : '0.4';
+      checkoutBtn.style.cursor = this.checked ? 'pointer' : 'not-allowed';
+    });
+
     // Checkout handler
-    document.getElementById('checkout-button').addEventListener('click', function () {
+    checkoutBtn.addEventListener('click', function () {
       var btn = this;
       btn.disabled = true;
       btn.textContent = '処理中...';
