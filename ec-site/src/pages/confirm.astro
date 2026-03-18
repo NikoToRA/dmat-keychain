@@ -47,8 +47,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   function calculateShipping(qty) {
     if (qty <= 0) return { method: null, price: 0 };
-    if (qty >= 5) return { method: 'レターパックライト', price: 370 };
-    return { method: 'クリックポスト', price: 185 };
+    if (qty <= 4) return { method: 'クリックポスト', price: 185 };
+    var packs = Math.ceil(qty / 15);
+    return { method: 'レターパックライト' + (packs > 1 ? ' ×' + packs : ''), price: 370 * packs };
   }
 
   function getCart() {

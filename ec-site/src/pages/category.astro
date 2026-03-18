@@ -33,7 +33,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <!-- Product grid -->
-    <div id="category-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div id="category-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6"></div>
 
     <!-- Custom builder CTA -->
     <div class="mt-16 text-center bg-gray-50 rounded-xl p-10">
@@ -67,10 +67,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   ];
   var CATEGORY_PRICE = { 'dmat-member': 0, 'hospital': 300 };
   var RECOMMENDED_SETS = [
-    { id: 'basic', name: 'ベーシックセット', description: 'スタンダードレッド', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
-    { id: 'premium', name: 'カラビナセット', description: 'カラビナ', color: 'premium-red', accessories: ['ball-chain', 'carabiner'], badge: 'カラビナ付き', category: 'dmat-member' },
-    { id: 'hospital-basic', name: '病院用ベーシック', description: 'スタンダードレッド', color: 'standard-red', accessories: ['ball-chain'], badge: '施設向け', category: 'hospital' },
-    { id: 'hospital-glow', name: '病院用 蓄光バンド付き', description: 'スタンダードレッド + 蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '蓄光付き', category: 'hospital' }
+    // DMAT隊員用
+    { id: 'basic', name: 'ベーシック', description: 'スタンダードレッド', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
+    { id: 'premium-red', name: 'プレミアレッド', description: '', color: 'premium-red', accessories: ['ball-chain'], badge: '', category: 'dmat-member' },
+    { id: 'black', name: 'ブラック', description: '', color: 'black', accessories: ['ball-chain'], badge: '', category: 'dmat-member' },
+    { id: 'carabiner', name: 'カラビナ付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'dmat-member' },
+    { id: 'glow', name: '蓄光バンド付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'dmat-member' },
+    // 病院用
+    { id: 'h-basic', name: 'ベーシック', description: 'スタンダードレッド', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'hospital' },
+    { id: 'h-premium-red', name: 'プレミアレッド', description: '', color: 'premium-red', accessories: ['ball-chain'], badge: '', category: 'hospital' },
+    { id: 'h-black', name: 'ブラック', description: '', color: 'black', accessories: ['ball-chain'], badge: '', category: 'hospital' },
+    { id: 'h-carabiner', name: 'カラビナ付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'hospital' },
+    { id: 'h-glow', name: '蓄光バンド付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'hospital' }
   ];
 
   function calcSetPrice(set) {
@@ -106,27 +114,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }, 2500);
   }
 
-  function addSetToCart(set) {
+  function addSetToCart(set, qty) {
+    qty = qty || 1;
     var cart = getCart();
     var price = calcSetPrice(set);
     var existing = cart.find(function (item) {
-      return item.colorId === set.color && JSON.stringify(item.accessoryIds.sort()) === JSON.stringify(set.accessories.slice().sort());
+      return item.colorId === set.color && item.category === set.category && JSON.stringify(item.accessoryIds.sort()) === JSON.stringify(set.accessories.slice().sort());
     });
     if (existing) {
-      existing.quantity += 1;
+      existing.quantity += qty;
     } else {
       cart.push({
         id: BASE_PRODUCT.id + '-' + Date.now(),
         colorId: set.color,
         accessoryIds: set.accessories.slice(),
-        quantity: 1,
+        quantity: qty,
         unitPrice: price,
         category: set.category,
         description: set.name
       });
     }
     saveCart(cart);
-    showToast(set.name + ' をカートに追加しました');
+    showToast(set.name + ' × ' + qty + ' をカートに追加しました');
   }
 
   // Get category from URL
@@ -172,21 +181,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         return a ? a.name : '';
       }).filter(Boolean).join('、');
 
-      return '<div class="product-card animate-on-scroll">' +
+      return '<div class="product-card animate-on-scroll" data-set-id="' + set.id + '">' +
         '<a href="/product?set=' + set.id + '" class="block">' +
           '<div class="product-image-wrapper bg-gray-50" style="aspect-ratio: 4/3;">' +
             '<img src="' + (colorVar ? colorVar.image : BASE_PRODUCT.image) + '" alt="' + set.name + '" class="w-full h-full object-contain p-6" onerror="this.style.display=\'none\'" />' +
           '</div>' +
         '</a>' +
-        '<div class="p-5">' +
-          '<div class="mb-2"><span class="badge-pill badge-pill-red">' + set.badge + '</span>' + (set.category === 'hospital' ? ' <span class="badge-pill" style="background:#fef3c7;color:#92400e;font-size:0.65rem;">+&yen;300</span>' : '') + '</div>' +
+        '<div class="p-4">' +
+          (set.badge ? '<div class="mb-2"><span class="badge-pill badge-pill-red">' + set.badge + '</span></div>' : '') +
           '<a href="/product?set=' + set.id + '" class="block">' +
             '<h3 class="text-sm font-bold text-dmat-navy">' + set.name + '</h3>' +
             '<p class="text-xs text-gray-500 mt-1">' + accNames + '</p>' +
           '</a>' +
-          '<div class="flex items-center justify-between mt-4">' +
-            '<span class="text-lg font-bold text-dmat-navy">&yen;' + price.toLocaleString() + '</span>' +
-            '<button class="add-set-btn text-xs text-white bg-dmat-navy rounded-md px-3 py-1.5 hover:bg-dmat-navy-light transition-colors" data-set-id="' + set.id + '">カートに入れる</button>' +
+          '<div style="margin-top: 0.75rem;">' +
+            '<div style="font-size: 1rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem;">&yen;' + price.toLocaleString() + '</div>' +
+            '<div class="flex items-center gap-2">' +
+              '<div class="flex items-center" style="border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden;">' +
+                '<button class="qty-minus" data-set-id="' + set.id + '" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--color-text-secondary); border: none; background: none; cursor: pointer;">&minus;</button>' +
+                '<span class="qty-display" data-set-id="' + set.id + '" style="padding: 0.25rem 0.375rem; font-size: 0.75rem; min-width: 1.5rem; text-align: center;">1</span>' +
+                '<button class="qty-plus" data-set-id="' + set.id + '" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--color-text-secondary); border: none; background: none; cursor: pointer;">&plus;</button>' +
+              '</div>' +
+              '<button class="add-set-btn" style="flex: 1; font-size: 0.75rem; color: #fff; background-color: var(--color-primary); border-radius: 6px; padding: 0.375rem 0.75rem; border: none; cursor: pointer; transition: opacity 150ms;" data-set-id="' + set.id + '" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'1\'">カートに入れる</button>' +
+            '</div>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -216,12 +232,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   // Add to cart handler (delegation)
   document.getElementById('category-grid').addEventListener('click', function (e) {
+    var grid = document.getElementById('category-grid');
+    // 数量ボタン
+    var minus = e.target.closest('.qty-minus');
+    var plus = e.target.closest('.qty-plus');
+    if (minus || plus) {
+      e.preventDefault();
+      var sid = (minus || plus).getAttribute('data-set-id');
+      var display = grid.querySelector('.qty-display[data-set-id="' + sid + '"]');
+      if (display) {
+        var val = parseInt(display.textContent) || 1;
+        val = minus ? Math.max(1, val - 1) : Math.min(99, val + 1);
+        display.textContent = val;
+      }
+      return;
+    }
+    // カートに入れる
     var btn = e.target.closest('.add-set-btn');
     if (!btn) return;
     e.preventDefault();
     var setId = btn.getAttribute('data-set-id');
     var set = RECOMMENDED_SETS.find(function (s) { return s.id === setId; });
-    if (set) addSetToCart(set);
+    if (!set) return;
+    var qtyEl = grid.querySelector('.qty-display[data-set-id="' + setId + '"]');
+    var qty = qtyEl ? parseInt(qtyEl.textContent) || 1 : 1;
+    addSetToCart(set, qty);
+    if (qtyEl) qtyEl.textContent = '1';
   });
 })();
 </script>

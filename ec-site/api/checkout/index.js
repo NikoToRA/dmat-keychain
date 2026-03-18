@@ -81,7 +81,7 @@ module.exports = async function (context, req) {
       locale: 'ja',
       metadata: {
         total_quantity: String(totalQuantity),
-        shipping_method: totalQuantity >= 5 ? 'letterpack' : 'clickpost',
+        shipping_method: totalQuantity <= 4 ? 'clickpost' : 'letterpack_x' + Math.ceil(totalQuantity / 15),
       },
     });
 

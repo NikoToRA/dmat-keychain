@@ -35,6 +35,22 @@ describe('calculateShipping', () => {
   test('5個 = 370円', () => {
     expect(calculateShipping(5)).toEqual({ method: 'レターパックライト', price: 370 });
   });
+
+  test('15個 = 370円', () => {
+    expect(calculateShipping(15)).toEqual({ method: 'レターパックライト', price: 370 });
+  });
+
+  test('16個 = 740円', () => {
+    expect(calculateShipping(16)).toEqual({ method: 'レターパックライト ×2', price: 740 });
+  });
+
+  test('30個 = 740円', () => {
+    expect(calculateShipping(30)).toEqual({ method: 'レターパックライト ×2', price: 740 });
+  });
+
+  test('31個 = 1110円', () => {
+    expect(calculateShipping(31)).toEqual({ method: 'レターパックライト ×3', price: 1110 });
+  });
 });
 
 describe('getItemDescription', () => {
