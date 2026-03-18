@@ -75,7 +75,7 @@ const { set } = Astro.props;
   (function () {
     // Product data (matches products.js)
     var BASE_PRICE = 680;
-    var COLOR_PRICES = { 'standard-red': 0, 'premium-red': 100 };
+    var COLOR_PRICES = { 'standard-red': 0, 'premium-red': 0 };
     var ACCESSORY_PRICES = { 'ball-chain': 0, 'carabiner': 300, 'glow-band': 400 };
 
     function calcPrice(colorId, accessoryIds) {
@@ -124,7 +124,7 @@ const { set } = Astro.props;
       // Add to cart in localStorage
       var cart = [];
       try {
-        cart = JSON.parse(localStorage.getItem('dmat-cart') || '[]');
+        cart = JSON.parse(localStorage.getItem('dmat_cart') || '[]');
       } catch (e) {
         cart = [];
       }
@@ -146,7 +146,7 @@ const { set } = Astro.props;
         });
       }
 
-      localStorage.setItem('dmat-cart', JSON.stringify(cart));
+      localStorage.setItem('dmat_cart', JSON.stringify(cart));
       window.dispatchEvent(new Event('cart-updated'));
 
       // Track event

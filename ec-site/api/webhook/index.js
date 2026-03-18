@@ -61,7 +61,7 @@ module.exports = async function (context, req) {
 
   try {
     // Stripe から商品明細を取得
-    const lineItems = await stripe.checkout.sessions.listLineItems(sessionId);
+    const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, { limit: 100 });
     const shipping = session.shipping_details || { address: session.customer_details?.address };
     const customerEmail = session.customer_details?.email;
     const customerName = session.customer_details?.name;
@@ -103,11 +103,26 @@ module.exports = async function (context, req) {
       }),
     ]);
 
-    results.forEach((r, i) => {
-      const label = i === 0 ? 'Email' : 'Notion';
-      if (r.status === 'fulfilled') context.log.info(label + ' OK:', orderId);
-      else context.log.error(label + ' FAIL:', orderId, r.reason?.message);
-    });
+    const emailResult = results[0];
+    const notionResult = results[1];
+
+    // Log individual results
+    if (emailResult.status === 'fulfilled') context.log.info('Email OK:', orderId);
+    else context.log.error('Email FAIL:', orderId, emailResult.reason?.message);
+
+    if (notionResult.status === 'fulfilled') context.log.info('Notion OK:', orderId);
+    else context.log.error('Notion FAIL:', orderId, notionResult.reason?.message);
+
+    // If both failed, return 500 to trigger Stripe retry
+    if (emailResult.status === 'rejected' && notionResult.status === 'rejected') {
+      context.res = { status: 500, body: 'Both email and Notion failed' };
+      return;
+    }
+
+    // If only one failed, mark as processed but log warning
+    if (emailResult.status === 'rejected' || notionResult.status === 'rejected') {
+      context.log.warn('Partial failure for:', orderId);
+    }
 
     markProcessed(sessionId);
     context.res = { status: 200, body: 'OK' };
@@ -183,7 +198,7 @@ async function registerNotion(context, data) {
   // 商品管理DB（並列）
   const itemsDbId = process.env.NOTION_ORDER_ITEMS_DB_ID;
   if (itemsDbId && data.productItems) {
-    await Promise.all(data.productItems.map(item => {
+    await Promise.all(data.productItems.map((item, idx) => {
       const desc = item.description || '';
       const colorMatch = desc.match(/（(.+?)）/);
       const colorName = colorMatch ? colorMatch[1] : '';
@@ -198,7 +213,7 @@ async function registerNotion(context, data) {
       return notion.pages.create({
         parent: { database_id: itemsDbId },
         properties: {
-          '明細ID': { title: [{ text: { content: `${data.orderId}-${item.quantity}x` } }] },
+          '明細ID': { title: [{ text: { content: `${data.orderId}-${idx + 1}` } }] },
           '注文': { relation: [{ id: orderPage.id }] },
           '商品名': { select: { name: productName } },
           ...(colorName ? { 'カラー': { select: { name: colorName } } } : {}),
