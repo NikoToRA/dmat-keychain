@@ -84,7 +84,7 @@ module.exports = async function (context, req) {
       shipping,
     });
 
-    // Notion DB 登録
+    // Notion DB 登録（親: 発送管理 + 子: 注文明細）
     await registerToNotion(context, {
       orderId,
       sessionId: session.id,
@@ -94,6 +94,7 @@ module.exports = async function (context, req) {
       customerPhone,
       shipping,
       productNames,
+      productItems,
       productItemsJson: JSON.stringify(lineItems.data),
       totalQuantity,
       shippingMethod,
@@ -208,6 +209,7 @@ async function registerToNotion(context, data) {
       '郵便番号': { rich_text: [{ text: { content: data.shipping?.address?.postal_code || '' } }] },
       '住所': { rich_text: [{ text: { content: address } }] },
       '商品名一覧': { rich_text: [{ text: { content: data.productNames } }] },
+      '商品明細JSON': { rich_text: [{ text: { content: (data.productItemsJson || '').substring(0, 2000) } }] },
       '合計個数': { number: data.totalQuantity },
       '送料区分': { select: { name: data.shippingMethod === 'letterpack' ? 'レターパックライト' : 'クリックポスト' } },
       '発送ステータス': { select: { name: '注文受付' } },
