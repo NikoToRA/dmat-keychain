@@ -71,6 +71,11 @@ module.exports = async function (context, req) {
       (sum, item) => sum + item.quantity, 0
     );
 
+    // 送料行を取得
+    const shippingItem = lineItems.data.find(item => item.description.includes('送料'));
+    const shippingCost = shippingItem ? shippingItem.amount_total : 0;
+    const shippingLabel = shippingItem ? shippingItem.description : '';
+
     // 送料区分判定
     const shippingMethod = session.metadata?.shipping_method || (totalQuantity >= 5 ? 'letterpack' : 'clickpost');
 
@@ -82,6 +87,8 @@ module.exports = async function (context, req) {
       productItems,
       totalAmount: session.amount_total,
       shipping,
+      shippingCost,
+      shippingLabel,
     });
 
     // Notion DB 登録（親: 発送管理 + 子: 注文明細）
@@ -111,15 +118,26 @@ module.exports = async function (context, req) {
 };
 
 async function sendConfirmationEmail(context, data) {
-  const { orderId, customerEmail, customerName, productItems, totalAmount, shipping } = data;
+  const { orderId, customerEmail, customerName, productItems, totalAmount, shipping, shippingCost, shippingLabel } = data;
+
+  // 商品名からボールチェーン（標準付属品）を除去
+  function cleanDescription(desc) {
+    return desc.replace(/\s*\+\s*ボールチェーン/g, '').replace(/ボールチェーン\s*\+\s*/g, '');
+  }
 
   const itemsHtml = productItems.map(item =>
     `<tr>
-      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${item.description}</td>
-      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: center;">${item.quantity}</td>
-      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: right;">&yen;${item.amount_total.toLocaleString()}</td>
+      <td style="padding: 10px 12px; border-bottom: 1px solid #eee;">${cleanDescription(item.description)}</td>
+      <td style="padding: 10px 12px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
+      <td style="padding: 10px 12px; border-bottom: 1px solid #eee; text-align: right;">&yen;${item.amount_total.toLocaleString()}</td>
     </tr>`
   ).join('');
+
+  // 送料行
+  const shippingHtml = shippingCost > 0 ? `<tr>
+    <td colspan="2" style="padding: 10px 12px; text-align: right; color: #999; font-size: 13px;">${shippingLabel || '送料'}</td>
+    <td style="padding: 10px 12px; text-align: right;">&yen;${shippingCost.toLocaleString()}</td>
+  </tr>` : '';
 
   const address = shipping?.address
     ? `〒${shipping.address.postal_code} ${shipping.address.state}${shipping.address.city}${shipping.address.line1}${shipping.address.line2 || ''}`
@@ -147,6 +165,7 @@ async function sendConfirmationEmail(context, data) {
             <th style="padding: 10px 12px; text-align: right; width: 100px; font-weight: 500;">小計</th>
           </tr>
           ${itemsHtml}
+          ${shippingHtml}
           <tr style="font-weight: 700; background: #F9F9F9;">
             <td colspan="2" style="padding: 14px 12px; text-align: right; font-size: 15px;">合計（税込・送料込）</td>
             <td style="padding: 14px 12px; text-align: right; color: #C41E3A; font-size: 18px;">&yen;${totalAmount.toLocaleString()}</td>

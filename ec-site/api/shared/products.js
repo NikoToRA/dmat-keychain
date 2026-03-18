@@ -41,6 +41,7 @@ function calculateItemPrice(colorId, accessoryIds, category) {
 function getItemDescription(colorId, accessoryIds, category) {
   const color = COLOR_VARIANTS.find(c => c.id === colorId);
   const accNames = accessoryIds
+    .filter(id => id !== 'ball-chain')
     .map(id => ACCESSORIES.find(a => a.id === id))
     .filter(Boolean)
     .map(a => a.name);
