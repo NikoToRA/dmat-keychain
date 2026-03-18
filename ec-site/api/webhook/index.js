@@ -102,8 +102,22 @@ module.exports = async function (context, req) {
     // 送料区分判定
     const shippingMethod = session.metadata?.shipping_method || (totalQuantity >= 5 ? 'letterpack' : 'clickpost');
 
-    // ACS メール送信
-    await sendConfirmationEmail(context, {
+    // ACS メール送信 + Notion DB 登録を並列実行
+    const notionData = {
+      orderId,
+      sessionId: session.id,
+      paymentIntentId: session.payment_intent,
+      customerName,
+      customerEmail,
+      customerPhone,
+      shipping,
+      productNames,
+      productItems,
+      totalQuantity,
+      shippingMethod,
+    };
+
+    const emailData = {
       orderId,
       customerEmail,
       customerName,
@@ -112,33 +126,21 @@ module.exports = async function (context, req) {
       shipping,
       shippingCost,
       shippingLabel,
+    };
+
+    const results = await Promise.allSettled([
+      sendConfirmationEmail(context, emailData),
+      registerToNotion(context, notionData),
+    ]);
+
+    results.forEach((r, i) => {
+      const label = i === 0 ? 'Email' : 'Notion';
+      if (r.status === 'fulfilled') {
+        context.log.info(label + ' OK for:', orderId);
+      } else {
+        context.log.error(label + ' FAILED for:', orderId, r.reason?.message);
+      }
     });
-
-    // Notion DB 登録（親: 発送管理 + 子: 注文明細）
-    context.log.info('Starting Notion registration for:', orderId);
-    try {
-      await registerToNotion(context, {
-        orderId,
-        sessionId: session.id,
-        paymentIntentId: session.payment_intent,
-        customerName,
-        customerEmail,
-        customerPhone,
-        shipping,
-        productNames,
-        productItems,
-        totalQuantity,
-        shippingMethod,
-      });
-      context.log.info('Notion registration completed:', orderId);
-    } catch (notionErr) {
-      // Notion失敗してもメールは送信済みなので200を返す（リトライでメール重複を防ぐ）
-      context.log.error('Notion registration failed:', notionErr.message);
-    }
-
-    markProcessed(session.id);
-    context.log.info('Order processed:', orderId);
-    context.res = { status: 200, body: 'OK' };
   } catch (err) {
     context.log.error('Webhook processing error:', err.message);
     context.res = { status: 500, body: 'Processing failed' };
