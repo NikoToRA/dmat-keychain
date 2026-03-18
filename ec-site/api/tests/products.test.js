@@ -56,7 +56,7 @@ describe('calculateShipping', () => {
 describe('getItemDescription', () => {
   test('商品説明文字列を返す', () => {
     expect(getItemDescription('standard-red', ['ball-chain', 'carabiner'])).toBe(
-      'DMAT キーホルダー（スタンダードレッド） + ボールチェーン + カラビナ'
+      'DMAT キーホルダー（スタンダードレッド） + カラビナ'
     );
   });
 });

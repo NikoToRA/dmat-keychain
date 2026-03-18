@@ -5,6 +5,14 @@ const { Client } = require('@notionhq/client');
 const emailClient = new EmailClient(process.env.ACS_CONNECTION_STRING);
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 // 二重処理防止用（インメモリ。本番はRedis等推奨）
 // 最大1000件保持し、古いものから削除
 const processedSessions = new Map();
@@ -22,7 +30,12 @@ module.exports = async function (context, req) {
   const sig = req.headers['stripe-signature'];
 
   // 署名検証（SWA Managed Functionsではreq.rawBodyが無い場合がある）
-  const rawBody = req.rawBody || (typeof req.body === 'string' ? req.body : JSON.stringify(req.body));
+  const rawBody = req.rawBody || (typeof req.body === 'string' ? req.body : null);
+  if (!rawBody) {
+    context.log.error('Neither rawBody nor string body available');
+    context.res = { status: 400, body: 'Raw body required for signature verification' };
+    return;
+  }
   let event;
   try {
     event = stripe.webhooks.constructEvent(
@@ -142,7 +155,7 @@ async function sendConfirmationEmail(context, data) {
 
   const itemsHtml = productItems.map(item =>
     `<tr>
-      <td style="padding: 10px 12px; border-bottom: 1px solid #eee;">${cleanDescription(item.description)}</td>
+      <td style="padding: 10px 12px; border-bottom: 1px solid #eee;">${escapeHtml(cleanDescription(item.description))}</td>
       <td style="padding: 10px 12px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
       <td style="padding: 10px 12px; border-bottom: 1px solid #eee; text-align: right;">&yen;${item.amount_total.toLocaleString()}</td>
     </tr>`
@@ -165,7 +178,7 @@ async function sendConfirmationEmail(context, data) {
       </div>
 
       <div style="padding: 32px 24px;">
-        <p style="font-size: 15px; margin: 0 0 8px;">${customerName} 様</p>
+        <p style="font-size: 15px; margin: 0 0 8px;">${escapeHtml(customerName)} 様</p>
         <p style="font-size: 14px; color: #6B6B6B; margin: 0 0 28px;">Wonder Drill株式会社です。お買い上げありがとうございます。<br>以下の内容でご注文を承りました。</p>
 
         <table style="width: 100%; border-collapse: collapse; margin: 0 0 8px; background: #F5F5F5; border-radius: 4px;">
@@ -188,7 +201,7 @@ async function sendConfirmationEmail(context, data) {
         </table>
 
         <h3 style="font-size: 14px; color: #1B2838; border-bottom: 2px solid #C41E3A; padding-bottom: 8px; margin: 28px 0 12px;">配送先</h3>
-        <p style="font-size: 14px; margin: 0;">${address}</p>
+        <p style="font-size: 14px; margin: 0;">${escapeHtml(address)}</p>
 
         <div style="background: #FFFBEB; border-left: 4px solid #ECC94B; padding: 14px; margin: 28px 0;">
           <p style="margin: 0; font-size: 13px;">本商品は<strong>受注生産</strong>のため、ご注文確定後<strong>10日以内</strong>に発送いたします。</p>

@@ -29,9 +29,11 @@ function calculateItemPrice(colorId, accessoryIds, category) {
   const invalidAcc = accessoryIds.find(id => !ACCESSORIES.find(a => a.id === id));
   if (invalidAcc) return null;
 
+  const uniqueAccessoryIds = [...new Set(accessoryIds)];
+
   const colorDiff = color.priceDiff;
   const categoryDiff = CATEGORY_PRICE[category] || 0;
-  const accessoryTotal = accessoryIds.reduce((sum, accId) => {
+  const accessoryTotal = uniqueAccessoryIds.reduce((sum, accId) => {
     const acc = ACCESSORIES.find(a => a.id === accId);
     return sum + (acc ? acc.price : 0);
   }, 0);

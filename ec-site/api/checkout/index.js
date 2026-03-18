@@ -52,6 +52,15 @@ module.exports = async function (context, req) {
       totalQuantity += qty;
     }
 
+    if (totalQuantity > 500) {
+      context.res = { status: 400, body: { error: '一度に注文できる数量を超えています' } };
+      return;
+    }
+    if (items.length > 20) {
+      context.res = { status: 400, body: { error: '一度に注文できるアイテム数を超えています' } };
+      return;
+    }
+
     // 送料を独立line_itemとして追加
     const shipping = calculateShipping(totalQuantity);
     if (shipping.price > 0) {

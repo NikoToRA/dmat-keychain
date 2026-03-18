@@ -13,6 +13,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <h1 class="text-2xl font-bold text-[#1B2838] mb-6">プライバシーポリシー</h1>
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-8 text-sm text-gray-600">
+
+      <p class="leading-relaxed">
+        Wonder Drill株式会社（以下「当社」）は、DMAT STORE（以下「当サイト」）におけるお客様の個人情報の取り扱いについて、以下のとおりプライバシーポリシーを定めます。
+      </p>
+
       <section>
         <h2 class="font-bold text-lg text-[#1B2838] mb-3">1. 個人情報の収集</h2>
         <p class="leading-relaxed mb-3">当サイトでは、商品のご購入時に以下の個人情報を収集します。</p>
@@ -51,27 +56,46 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             <span class="w-1.5 h-1.5 bg-[#1B2838] rounded-full mt-1.5 flex-shrink-0"></span>
             お問い合わせへの対応
           </li>
+          <li class="flex items-start gap-2">
+            <span class="w-1.5 h-1.5 bg-[#1B2838] rounded-full mt-1.5 flex-shrink-0"></span>
+            サービス改善のためのアクセス解析
+          </li>
         </ul>
       </section>
 
       <section>
-        <h2 class="font-bold text-lg text-[#1B2838] mb-3">3. 決済情報について</h2>
-        <p class="leading-relaxed">
-          クレジットカード情報は<strong class="text-[#1B2838]">Stripe Inc.</strong>が安全に管理しており、当社のサーバーには一切保存されません。
-          Stripeは PCI DSS Level 1 認証を取得しています。
-        </p>
-      </section>
-
-      <section>
-        <h2 class="font-bold text-lg text-[#1B2838] mb-3">4. アクセス解析ツール</h2>
-        <p class="leading-relaxed mb-4">当サイトでは、以下のアクセス解析ツールを使用しています。</p>
+        <h2 class="font-bold text-lg text-[#1B2838] mb-3">3. 第三者サービスの利用</h2>
+        <p class="leading-relaxed mb-4">当サイトでは、以下の第三者サービスを利用しています。各サービスにおけるデータの取り扱いは、それぞれのプライバシーポリシーに従います。</p>
         <div class="space-y-4">
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="font-bold text-gray-800 mb-1">Stripe Inc.（決済処理）</h3>
+            <p class="text-gray-500 text-xs leading-relaxed">
+              クレジットカード情報はStripeが安全に管理しており、当社のサーバーには一切保存されません。
+              Stripeは PCI DSS Level 1 認証を取得しています。Stripeは米国に本社を置く企業であり、決済処理に必要なデータは米国のサーバーで処理される場合があります。
+            </p>
+            <p class="text-gray-400 text-xs mt-1">処理データ: カード情報、請求先情報、取引履歴</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="font-bold text-gray-800 mb-1">Azure Communication Services（メール送信）</h3>
+            <p class="text-gray-500 text-xs leading-relaxed">
+              注文確認メールの送信にMicrosoft Azure Communication Servicesを使用しています。
+            </p>
+            <p class="text-gray-400 text-xs mt-1">処理データ: メールアドレス、お名前、注文内容</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="font-bold text-gray-800 mb-1">Notion（注文管理）</h3>
+            <p class="text-gray-500 text-xs leading-relaxed">
+              注文情報の管理にNotionを使用しています。注文データはNotionのサーバー（米国）に保存されます。
+            </p>
+            <p class="text-gray-400 text-xs mt-1">処理データ: お名前、住所、電話番号、メールアドレス、注文内容</p>
+          </div>
           <div class="bg-gray-50 rounded-lg p-4">
             <h3 class="font-bold text-gray-800 mb-1">Google Analytics 4 (GA4)</h3>
             <p class="text-gray-500 text-xs leading-relaxed">
               ページビュー、流入経路、コンバージョン等の分析にGoogleのCookieを使用します。
               収集されるデータはGoogleのプライバシーポリシーに基づき管理されます。
             </p>
+            <p class="text-gray-400 text-xs mt-1">処理データ: アクセスログ、Cookie、匿名化されたIPアドレス</p>
           </div>
           <div class="bg-gray-50 rounded-lg p-4">
             <h3 class="font-bold text-gray-800 mb-1">Microsoft Clarity</h3>
@@ -79,18 +103,80 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               ヒートマップ・セッション録画によるUX改善のため、匿名化されたユーザー操作データを収集します。
               個人を特定する情報は収集されません。
             </p>
+            <p class="text-gray-400 text-xs mt-1">処理データ: クリック操作、スクロール、匿名化された行動データ</p>
           </div>
         </div>
-        <p class="mt-3 text-gray-500 text-xs">これらのツールで収集されるデータは統計情報として利用し、個人を特定するものではありません。</p>
       </section>
 
       <section>
-        <h2 class="font-bold text-lg text-[#1B2838] mb-3">5. 個人情報の第三者提供</h2>
-        <p class="leading-relaxed">法令に基づく場合を除き、お客様の個人情報を第三者に提供することはありません。</p>
+        <h2 class="font-bold text-lg text-[#1B2838] mb-3">4. Cookieの使用</h2>
+        <p class="leading-relaxed mb-3">
+          当サイトでは、サービスの提供およびアクセス解析のためにCookieを使用しています。
+          Cookieとは、ウェブサイトがお客様のブラウザに保存する小さなテキストファイルです。
+        </p>
+        <p class="leading-relaxed">
+          ブラウザの設定によりCookieを無効にすることが可能ですが、その場合一部の機能が利用できなくなることがあります。
+          当サイトをご利用いただくことで、Cookieの使用に同意いただいたものとみなします。
+        </p>
       </section>
 
       <section>
-        <h2 class="font-bold text-lg text-[#1B2838] mb-3">6. お問い合わせ</h2>
+        <h2 class="font-bold text-lg text-[#1B2838] mb-3">5. データの越境移転</h2>
+        <p class="leading-relaxed">
+          当サイトで収集した個人情報は、上記第三者サービスの利用に伴い、日本国外（主に米国）のサーバーに転送・保存される場合があります。
+          各サービス提供者は適切なデータ保護措置を講じており、当社はこれらのサービスが十分なセキュリティ水準を満たしていることを確認しています。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-bold text-lg text-[#1B2838] mb-3">6. 個人情報の保持期間</h2>
+        <p class="leading-relaxed">
+          お客様の個人情報は、利用目的の達成に必要な期間保持します。
+          具体的には、注文に関する情報は税務上の要請に基づき<strong class="text-[#1B2838]">注文日から7年間</strong>保持し、その後速やかに削除します。
+          アクセス解析データは各サービスの保持ポリシーに従います。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-bold text-lg text-[#1B2838] mb-3">7. 個人情報の開示・訂正・削除請求</h2>
+        <p class="leading-relaxed mb-3">
+          お客様は、個人情報の保護に関する法律（個人情報保護法）に基づき、当社が保有するご自身の個人情報について、以下の権利を有します。
+        </p>
+        <ul class="space-y-1.5 pl-4 mb-3">
+          <li class="flex items-start gap-2">
+            <span class="w-1.5 h-1.5 bg-[#1B2838] rounded-full mt-1.5 flex-shrink-0"></span>
+            個人情報の開示請求
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="w-1.5 h-1.5 bg-[#1B2838] rounded-full mt-1.5 flex-shrink-0"></span>
+            個人情報の訂正・追加・削除請求
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="w-1.5 h-1.5 bg-[#1B2838] rounded-full mt-1.5 flex-shrink-0"></span>
+            個人情報の利用停止・消去請求
+          </li>
+        </ul>
+        <p class="leading-relaxed">
+          上記のご請求は、下記お問い合わせ先までご連絡ください。ご本人確認のうえ、合理的な期間内に対応いたします。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-bold text-lg text-[#1B2838] mb-3">8. 個人情報の第三者提供</h2>
+        <p class="leading-relaxed">法令に基づく場合、または上記第三者サービスの利用に必要な範囲を除き、お客様の個人情報を第三者に提供することはありません。</p>
+      </section>
+
+      <section>
+        <h2 class="font-bold text-lg text-[#1B2838] mb-3">9. ポリシーの変更</h2>
+        <p class="leading-relaxed">
+          当社は、必要に応じて本プライバシーポリシーを改定することがあります。
+          重要な変更がある場合は、当サイト上での告知またはメールにてお知らせいたします。
+          改定後のポリシーは、当サイトに掲載した時点から効力を生じます。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-bold text-lg text-[#1B2838] mb-3">10. お問い合わせ</h2>
         <p class="leading-relaxed mb-3">個人情報の取り扱いに関するお問い合わせは下記までご連絡ください。</p>
         <div class="bg-blue-50 rounded-lg p-4">
           <p class="text-[#1B2838] font-medium">
@@ -99,6 +185,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </p>
         </div>
       </section>
+
+      <div class="border-t border-gray-200 pt-4 text-xs text-gray-400 text-right">
+        <p>施行日: 2026年3月18日</p>
+      </div>
     </div>
   </div>
 </BaseLayout>

@@ -27,6 +27,7 @@
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.clarity.ms https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.clarity.ms https://www.google-analytics.com",
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
-    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "Access-Control-Allow-Origin": "https://thankful-sand-00abb1300.4.azurestaticapps.net"
   }
 }
