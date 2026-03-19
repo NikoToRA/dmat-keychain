@@ -201,7 +201,7 @@ async function sendEmail(context, data) {
       <h3 style="font-size:14px;color:#1B2838;border-bottom:2px solid #C41E3A;padding-bottom:8px;margin:28px 0 12px;">配送先</h3>
       <p style="font-size:14px;margin:0;">${escapeHtml(address)}</p>
       <div style="background:#FFFBEB;border-left:4px solid #ECC94B;padding:14px;margin:28px 0;"><p style="margin:0;font-size:13px;">受注生産のため、ご注文確定後<strong>10日以内</strong>に発送いたします。</p></div>
-      <div style="background:#F0F7FF;border-left:4px solid #3182CE;padding:14px;margin:0 0 28px;"><p style="margin:0;font-size:13px;"><strong>領収書</strong></p>${receiptUrl ? '<p style="margin:8px 0 0;font-size:13px;"><a href="' + receiptUrl + '" style="color:#3182CE;text-decoration:underline;">領収書をダウンロード</a></p>' : '<p style="margin:8px 0 0;font-size:13px;">領収書は準備でき次第メールでお届けします。</p>'}</div>
+      <div style="background:#F0F7FF;border-left:4px solid #3182CE;padding:14px;margin:0 0 28px;"><p style="margin:0;font-size:13px;"><strong>領収書</strong></p>${receiptUrl ? '<p style="margin:8px 0 0;font-size:13px;"><a href="' + receiptUrl + '" style="color:#3182CE;text-decoration:underline;">領収書をダウンロード</a></p>' : '<p style="margin:8px 0 0;font-size:13px;">領収書が必要な場合は support@wonder-drill.com までご連絡ください。</p>'}</div>
       <hr style="border:none;border-top:1px solid #E8E8E8;margin:0 0 20px;">
       <p style="font-size:12px;color:#999;margin:0;">ご不明点は <a href="mailto:support@wonder-drill.com" style="color:#1B2838;">support@wonder-drill.com</a> まで<br>Wonder Drill株式会社</p>
     </div></div>`;
