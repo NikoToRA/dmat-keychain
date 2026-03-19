@@ -59,7 +59,10 @@ module.exports = async function (context, req) {
   try {
     // Stripe から商品明細を取得
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, { limit: 100 });
-    const shipping = session.shipping_details || { address: session.customer_details?.address };
+    // 配送先住所: shipping_details > collected_information.shipping_details > customer_details.address の優先順
+    const shipping = session.shipping_details
+      || session.collected_information?.shipping_details
+      || { address: session.customer_details?.address, name: session.customer_details?.name };
     const customerEmail = session.customer_details?.email;
     const customerName = session.customer_details?.name;
     const customerPhone = session.customer_details?.phone;
@@ -92,13 +95,14 @@ module.exports = async function (context, req) {
     const totalQuantity = productItems.reduce((sum, item) => sum + item.quantity, 0);
     const shippingMethod = session.metadata?.shipping_method || 'clickpost';
 
-    const address = shipping?.address
+    const shippingAddress = shipping?.address
       ? `〒${shipping.address.postal_code || ''} ${shipping.address.state || ''}${shipping.address.city || ''}${shipping.address.line1 || ''}${shipping.address.line2 || ''}`
       : '';
+    const shippingName = shipping?.name || customerName;
 
     const emailData = {
-      orderId, customerEmail, customerName, productItems,
-      totalAmount: session.amount_total, address,
+      orderId, customerEmail, customerName, shippingName, productItems,
+      totalAmount: session.amount_total, address: shippingAddress,
       shippingCost: shippingItem ? shippingItem.amount_total : 0,
       shippingLabel: shippingItem ? shippingItem.description : '',
       receiptUrl,
@@ -106,8 +110,8 @@ module.exports = async function (context, req) {
 
     const notionData = {
       orderId, sessionId, paymentIntentId: session.payment_intent,
-      customerName, customerEmail, customerPhone,
-      address, postalCode: shipping?.address?.postal_code || '',
+      customerName, shippingName, customerEmail, customerPhone,
+      address: shippingAddress, postalCode: shipping?.address?.postal_code || '',
       productNames, productItems, totalQuantity, shippingMethod,
     };
 
@@ -178,7 +182,7 @@ module.exports = async function (context, req) {
 
 // ACS メール送信
 async function sendEmail(context, data) {
-  const { orderId, customerEmail, customerName, productItems, totalAmount, address, shippingCost, shippingLabel, receiptUrl } = data;
+  const { orderId, customerEmail, customerName, shippingName, productItems, totalAmount, address, shippingCost, shippingLabel, receiptUrl } = data;
 
   const itemsHtml = productItems.map(item =>
     `<tr><td style="padding:10px 12px;border-bottom:1px solid #eee;">${escapeHtml(item.description.replace(/\s*\+\s*ボールチェーン/g,'').replace(/ボールチェーン\s*\+\s*/g,''))}</td><td style="padding:10px 12px;border-bottom:1px solid #eee;text-align:center;">${item.quantity}</td><td style="padding:10px 12px;border-bottom:1px solid #eee;text-align:right;">&yen;${item.amount_total.toLocaleString()}</td></tr>`
@@ -199,7 +203,8 @@ async function sendEmail(context, data) {
         <tr style="font-weight:700;background:#F9F9F9;"><td colspan="2" style="padding:14px 12px;text-align:right;font-size:15px;">合計（税込・送料込）</td><td style="padding:14px 12px;text-align:right;color:#C41E3A;font-size:18px;">&yen;${totalAmount.toLocaleString()}</td></tr>
       </table>
       <h3 style="font-size:14px;color:#1B2838;border-bottom:2px solid #C41E3A;padding-bottom:8px;margin:28px 0 12px;">配送先</h3>
-      <p style="font-size:14px;margin:0;">${escapeHtml(address)}</p>
+      <p style="font-size:14px;margin:0;font-weight:700;">${escapeHtml(shippingName || customerName)} 様</p>
+      <p style="font-size:14px;margin:4px 0 0;">${escapeHtml(address)}</p>
       <div style="background:#FFFBEB;border-left:4px solid #ECC94B;padding:14px;margin:28px 0;"><p style="margin:0;font-size:13px;">受注生産のため、ご注文確定後<strong>10日以内</strong>に発送いたします。</p></div>
       <div style="background:#F0F7FF;border-left:4px solid #3182CE;padding:14px;margin:0 0 28px;"><p style="margin:0;font-size:13px;"><strong>領収書</strong></p>${receiptUrl ? '<p style="margin:8px 0 0;font-size:13px;"><a href="' + receiptUrl + '" style="color:#3182CE;text-decoration:underline;">領収書をダウンロード</a></p>' : '<p style="margin:8px 0 0;font-size:13px;">領収書が必要な場合は support@wonder-drill.com までご連絡ください。</p>'}</div>
       <hr style="border:none;border-top:1px solid #E8E8E8;margin:0 0 20px;">
@@ -241,6 +246,7 @@ async function registerNotion(context, data) {
       'Stripe Session ID': { rich_text: [{ text: { content: data.sessionId || '' } }] },
       'Payment Intent ID': { rich_text: [{ text: { content: data.paymentIntentId || '' } }] },
       '顧客名': { rich_text: [{ text: { content: data.customerName || '' } }] },
+      '配送先名': { rich_text: [{ text: { content: data.shippingName || data.customerName || '' } }] },
       'メールアドレス': { email: data.customerEmail },
       '電話番号': { phone_number: data.customerPhone || '' },
       '郵便番号': { rich_text: [{ text: { content: data.postalCode } }] },
