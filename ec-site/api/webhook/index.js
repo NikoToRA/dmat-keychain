@@ -6,15 +6,12 @@ function escapeHtml(str) {
   return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// 二重処理防止（インメモリ。本番はRedis等推奨）
+// Module-level Notion client（idempotency check + registerNotion で共用）
+const notion = new Client({ auth: process.env.NOTION_TOKEN });
+
+// インメモリキャッシュ（Notion問い合わせを減らす高速パス）
 const processedSessions = new Map();
 const MAX_CACHE = 1000;
-function markProcessed(id) {
-  if (processedSessions.size >= MAX_CACHE) {
-    processedSessions.delete(processedSessions.keys().next().value);
-  }
-  processedSessions.set(id, Date.now());
-}
 
 module.exports = async function (context, req) {
   // Stripe webhookイベントからセッションIDを取得
@@ -57,6 +54,26 @@ module.exports = async function (context, req) {
   if (session.metadata?.service !== 'dmat-store') {
     context.res = { status: 200, body: 'Not DMAT STORE' };
     return;
+  }
+
+  // 永続的な二重処理防止: Notion DBに同じPayment Intent IDが既にあるか確認
+  try {
+    const existingOrders = await notion.databases.query({
+      database_id: process.env.NOTION_DATABASE_ID,
+      filter: {
+        property: '注文番号',
+        title: { equals: session.payment_intent },
+      },
+    });
+    if (existingOrders.results.length > 0) {
+      context.log.info('Order already exists in Notion:', session.payment_intent);
+      processedSessions.set(sessionId, Date.now());
+      context.res = { status: 200, body: 'Already registered' };
+      return;
+    }
+  } catch (queryErr) {
+    context.log.warn('Notion query failed, proceeding:', queryErr.message);
+    // クエリ失敗時は処理を続行（二重登録のリスクより処理欠落のリスクを避ける）
   }
 
   try {
@@ -113,18 +130,17 @@ module.exports = async function (context, req) {
     if (notionResult.status === 'fulfilled') context.log.info('Notion OK:', orderId);
     else context.log.error('Notion FAIL:', orderId, notionResult.reason?.message);
 
-    // If both failed, return 500 to trigger Stripe retry
-    if (emailResult.status === 'rejected' && notionResult.status === 'rejected') {
-      context.res = { status: 500, body: 'Both email and Notion failed' };
+    // Any failure → 500 (Stripe will retry, and Notion dedup prevents double processing)
+    if (emailResult.status === 'rejected' || notionResult.status === 'rejected') {
+      context.res = { status: 500, body: 'Partial failure' };
       return;
     }
 
-    // If only one failed, mark as processed but log warning
-    if (emailResult.status === 'rejected' || notionResult.status === 'rejected') {
-      context.log.warn('Partial failure for:', orderId);
+    // All success → mark in memory cache and return 200
+    if (processedSessions.size >= MAX_CACHE) {
+      processedSessions.delete(processedSessions.keys().next().value);
     }
-
-    markProcessed(sessionId);
+    processedSessions.set(sessionId, Date.now());
     context.res = { status: 200, body: 'OK' };
   } catch (err) {
     context.log.error('Webhook error:', err.message);
@@ -163,16 +179,20 @@ async function sendEmail(context, data) {
     </div></div>`;
 
   const emailClient = new EmailClient(process.env.ACS_CONNECTION_STRING);
-  await emailClient.beginSend({
+  const poller = await emailClient.beginSend({
     senderAddress: process.env.ACS_SENDER_ADDRESS,
     content: { subject: `【DMAT STORE】ご注文確認 ${orderId}`, html },
     recipients: { to: [{ address: customerEmail, displayName: customerName }] },
   });
+  // Poll with timeout (8 seconds max to stay within SWA limits)
+  const timeout = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('Email send timeout')), 8000)
+  );
+  await Promise.race([poller.pollUntilDone(), timeout]);
 }
 
 // Notion 登録（顧客管理 + 商品管理）
 async function registerNotion(context, data) {
-  const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
   // 顧客管理DB
   const orderPage = await notion.pages.create({
