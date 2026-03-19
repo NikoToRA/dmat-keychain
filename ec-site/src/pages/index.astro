@@ -30,7 +30,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <span class="text-xs font-medium tracking-widest uppercase" style="color: var(--color-text-tertiary);">Recommended</span>
         <h2 class="font-bold mt-1" style="font-size: var(--text-3xl); color: var(--color-primary);">おすすめ商品</h2>
       </div>
-      <div id="recommended-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 stagger-children"></div>
+      <div id="recommended-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 stagger-children"></div>
       <div class="text-center mt-12 animate-on-scroll">
         <a href="/product?custom=true" class="btn-outline">自分のキーホルダーを作る</a>
       </div>
@@ -38,7 +38,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </section>
 
   <!-- 使い方・動画 -->
-  <section class="section-white" style="padding: 6rem 0;">
+  <section id="how-to-use" class="section-white" style="padding: 6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-12 animate-on-scroll">
         <span class="text-xs font-medium tracking-widest uppercase" style="color: var(--color-text-tertiary);">How to Use</span>
@@ -90,7 +90,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </section>
 
   <!-- カテゴリー別 -->
-  <section class="section-alt" style="padding: 6rem 0;">
+  <section id="categories" class="section-alt" style="padding: 6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-12 animate-on-scroll">
         <span class="text-xs font-medium tracking-widest uppercase" style="color: var(--color-text-tertiary);">Categories</span>
@@ -249,8 +249,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     { id: 'basic', name: 'ベーシック', description: 'スタンダードレッド', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
     { id: 'premium-red', name: 'プレミアレッド', description: 'プレミアレッド', color: 'premium-red', accessories: ['ball-chain'], badge: '', category: 'dmat-member' },
     { id: 'black', name: 'ブラック', description: 'ブラック', color: 'black', accessories: ['ball-chain'], badge: '', category: 'dmat-member' },
-    { id: 'carabiner', name: 'カラビナ付き', description: 'カラビナ', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'dmat-member' },
-    { id: 'glow', name: '蓄光バンド付き', description: '蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'dmat-member' }
+    { id: 'carabiner', name: 'ベーシック・カラビナ付き', description: 'カラビナ', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'dmat-member' },
+    { id: 'glow', name: 'ベーシック・蓄光バンド付き', description: '蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'dmat-member' }
   ];
   var CATEGORY_PRICE = { 'dmat-member': 0, 'hospital': 300 };
 

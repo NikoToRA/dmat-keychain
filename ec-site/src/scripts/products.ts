@@ -99,7 +99,7 @@ export const RECOMMENDED_SETS: RecommendedSet[] = [
   },
   {
     id: 'carabiner',
-    name: 'カラビナ付き',
+    name: 'ベーシック・カラビナ付き',
     description: 'カラビナ',
     color: 'standard-red',
     accessories: ['ball-chain', 'carabiner'],
@@ -108,7 +108,7 @@ export const RECOMMENDED_SETS: RecommendedSet[] = [
   },
   {
     id: 'glow',
-    name: '蓄光バンド付き',
+    name: 'ベーシック・蓄光バンド付き',
     description: '蓄光バンド',
     color: 'standard-red',
     accessories: ['ball-chain', 'glow-band'],

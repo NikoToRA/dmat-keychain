@@ -9,8 +9,17 @@
       DMAT STORE
     </a>
 
+    <!-- Mobile hamburger -->
+    <button id="menu-toggle" class="sm:hidden p-1" aria-label="メニューを開く">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
     <!-- Navigation -->
-    <nav class="flex items-center gap-6" aria-label="メインナビゲーション">
+    <nav class="hidden sm:flex items-center gap-6" aria-label="メインナビゲーション">
       <a
         href="/#recommended"
         class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
@@ -45,6 +54,31 @@
   </div>
 </header>
 
+<!-- Mobile menu overlay -->
+<div id="mobile-menu" class="fixed inset-0 z-50 bg-white hidden">
+  <div class="flex items-center justify-between px-6" style="height: 64px;">
+    <span class="font-bold" style="color: var(--color-primary); letter-spacing: 0.06em;">DMAT STORE</span>
+    <button onclick="closeMobileMenu()" class="p-1" aria-label="メニューを閉じる">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+  <nav class="px-6 py-4 space-y-5">
+    <a href="/#recommended" class="block text-base font-medium" style="color: var(--color-text-primary);" onclick="closeMobileMenu()">おすすめ商品</a>
+    <a href="/#how-to-use" class="block text-base font-medium" style="color: var(--color-text-primary);" onclick="closeMobileMenu()">キーホルダーの使い方</a>
+    <a href="/#categories" class="block text-base font-medium" style="color: var(--color-text-primary);" onclick="closeMobileMenu()">カテゴリーから探す</a>
+    <a href="/product?custom=true" class="block text-base font-medium" style="color: var(--color-text-primary);" onclick="closeMobileMenu()">自分のキーホルダーを作る</a>
+    <a href="/cart" class="block text-base font-medium" style="color: var(--color-text-primary);" onclick="closeMobileMenu()">カート</a>
+    <div class="border-t pt-5 mt-2 space-y-3">
+      <a href="/legal/tokushoho" class="block text-sm" style="color: var(--color-text-tertiary);" onclick="closeMobileMenu()">特定商取引法に基づく表記</a>
+      <a href="/legal/privacy" class="block text-sm" style="color: var(--color-text-tertiary);" onclick="closeMobileMenu()">プライバシーポリシー</a>
+      <a href="/legal/protection" class="block text-sm" style="color: var(--color-text-tertiary);" onclick="closeMobileMenu()">個人情報保護方針</a>
+    </div>
+  </nav>
+</div>
+
 <!-- Spacer to offset fixed header -->
 <div style="height: 64px;"></div>
 
@@ -78,5 +112,19 @@
     updateCartBadge();
     window.addEventListener('storage', updateCartBadge);
     window.addEventListener('cart-updated', updateCartBadge);
+
+    // Mobile menu
+    var menuToggle = document.getElementById('menu-toggle');
+    if (menuToggle) {
+      menuToggle.addEventListener('click', function () {
+        document.getElementById('mobile-menu').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    window.closeMobileMenu = function () {
+      document.getElementById('mobile-menu').classList.add('hidden');
+      document.body.style.overflow = '';
+    };
   })();
 </script>
