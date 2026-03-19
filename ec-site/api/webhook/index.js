@@ -56,26 +56,6 @@ module.exports = async function (context, req) {
     return;
   }
 
-  // 永続的な二重処理防止: Notion DBに同じPayment Intent IDが既にあるか確認
-  try {
-    const existingOrders = await notion.databases.query({
-      database_id: process.env.NOTION_DATABASE_ID,
-      filter: {
-        property: '注文番号',
-        title: { equals: session.payment_intent },
-      },
-    });
-    if (existingOrders.results.length > 0) {
-      context.log.info('Order already exists in Notion:', session.payment_intent);
-      processedSessions.set(sessionId, Date.now());
-      context.res = { status: 200, body: 'Already registered' };
-      return;
-    }
-  } catch (queryErr) {
-    context.log.warn('Notion query failed, proceeding:', queryErr.message);
-    // クエリ失敗時は処理を続行（二重登録のリスクより処理欠落のリスクを避ける）
-  }
-
   try {
     // Stripe から商品明細を取得
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, { limit: 100 });
@@ -84,7 +64,6 @@ module.exports = async function (context, req) {
     const customerName = session.customer_details?.name;
     const customerPhone = session.customer_details?.phone;
 
-    // 注文番号 = Stripe Payment Intent ID（Stripe側と自動的に一致）
     const orderId = session.payment_intent;
 
     const productItems = lineItems.data.filter(item => !item.description.includes('送料'));
@@ -104,39 +83,79 @@ module.exports = async function (context, req) {
       ? `〒${shipping.address.postal_code || ''} ${shipping.address.state || ''}${shipping.address.city || ''}${shipping.address.line1 || ''}${shipping.address.line2 || ''}`
       : '';
 
-    // メール送信 + Notion登録を並列実行
-    const results = await Promise.allSettled([
-      sendEmail(context, {
-        orderId, customerEmail, customerName, productItems,
-        totalAmount: session.amount_total, address,
-        shippingCost: shippingItem ? shippingItem.amount_total : 0,
-        shippingLabel: shippingItem ? shippingItem.description : '',
-      }),
-      registerNotion(context, {
-        orderId, sessionId, paymentIntentId: session.payment_intent,
-        customerName, customerEmail, customerPhone,
-        address, postalCode: shipping?.address?.postal_code || '',
-        productNames, productItems, totalQuantity, shippingMethod,
-      }),
-    ]);
+    const emailData = {
+      orderId, customerEmail, customerName, productItems,
+      totalAmount: session.amount_total, address,
+      shippingCost: shippingItem ? shippingItem.amount_total : 0,
+      shippingLabel: shippingItem ? shippingItem.description : '',
+    };
 
-    const emailResult = results[0];
-    const notionResult = results[1];
+    const notionData = {
+      orderId, sessionId, paymentIntentId: session.payment_intent,
+      customerName, customerEmail, customerPhone,
+      address, postalCode: shipping?.address?.postal_code || '',
+      productNames, productItems, totalQuantity, shippingMethod,
+    };
 
-    // Log individual results
-    if (emailResult.status === 'fulfilled') context.log.info('Email OK:', orderId);
-    else context.log.error('Email FAIL:', orderId, emailResult.reason?.message);
+    // ---- 永続的冪等性: Notion DBで注文の存在と状態を確認 ----
+    let notionDone = false;
+    let emailDone = false;
 
-    if (notionResult.status === 'fulfilled') context.log.info('Notion OK:', orderId);
-    else context.log.error('Notion FAIL:', orderId, notionResult.reason?.message);
-
-    // Any failure → 500 (Stripe will retry, and Notion dedup prevents double processing)
-    if (emailResult.status === 'rejected' || notionResult.status === 'rejected') {
-      context.res = { status: 500, body: 'Partial failure' };
-      return;
+    try {
+      const existing = await notion.databases.query({
+        database_id: process.env.NOTION_DATABASE_ID,
+        filter: { property: '注文番号', title: { equals: orderId } },
+      });
+      if (existing.results.length > 0) {
+        notionDone = true;
+        // メモ欄に「メール送信済み」があるか確認
+        const memo = existing.results[0].properties['メモ']?.rich_text?.[0]?.plain_text || '';
+        if (memo.includes('EMAIL_SENT')) {
+          emailDone = true;
+        }
+        context.log.info('Order exists in Notion. notionDone=true, emailDone=' + emailDone);
+      }
+    } catch (queryErr) {
+      context.log.warn('Notion dedup query failed:', queryErr.message);
+      // クエリ失敗 → 安全側に倒す（処理続行。最悪重複するが欠落しない）
     }
 
-    // All success → mark in memory cache and return 200
+    // ---- Step 1: Notion登録（未済の場合のみ） ----
+    let notionPageId = null;
+    if (!notionDone) {
+      await registerNotion(context, notionData);
+      context.log.info('Notion OK:', orderId);
+      // 登録したページIDを取得（メモ更新用）
+      const pages = await notion.databases.query({
+        database_id: process.env.NOTION_DATABASE_ID,
+        filter: { property: '注文番号', title: { equals: orderId } },
+      });
+      notionPageId = pages.results[0]?.id;
+    } else {
+      notionPageId = (await notion.databases.query({
+        database_id: process.env.NOTION_DATABASE_ID,
+        filter: { property: '注文番号', title: { equals: orderId } },
+      })).results[0]?.id;
+    }
+
+    // ---- Step 2: メール送信（未済の場合のみ） ----
+    if (!emailDone) {
+      await sendEmail(context, emailData);
+      context.log.info('Email OK:', orderId);
+      // メモ欄にEMAIL_SENTフラグを書き込み（リトライ時にメール再送を防ぐ）
+      if (notionPageId) {
+        await notion.pages.update({
+          page_id: notionPageId,
+          properties: {
+            'メモ': { rich_text: [{ text: { content: 'EMAIL_SENT:' + new Date().toISOString() } }] },
+          },
+        }).catch(err => context.log.warn('Memo update failed:', err.message));
+      }
+    } else {
+      context.log.info('Email already sent, skipping:', orderId);
+    }
+
+    // 全成功 → 200
     if (processedSessions.size >= MAX_CACHE) {
       processedSessions.delete(processedSessions.keys().next().value);
     }
