@@ -12,3 +12,6 @@ api/local.settings.json
 *.pfx
 .DS_Store
 Thumbs.db
+.astro/
+test-results/
+src-old/
