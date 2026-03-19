@@ -71,13 +71,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     { id: 'basic', name: 'ベーシック', description: 'スタンダードレッド', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
     { id: 'premium-red', name: 'プレミアレッド', description: '', color: 'premium-red', accessories: ['ball-chain'], badge: '', category: 'dmat-member' },
     { id: 'black', name: 'ブラック', description: '', color: 'black', accessories: ['ball-chain'], badge: '', category: 'dmat-member' },
-    { id: 'carabiner', name: 'ベーシック・カラビナ付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'dmat-member' },
+    { id: 'carabiner', name: 'ベーシック・カラビナ付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'dmat-member', image: '/images/keychain-carabiner.webp' },
     { id: 'glow', name: 'ベーシック・蓄光バンド付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'dmat-member' },
     // 病院用
     { id: 'h-basic', name: 'ベーシック', description: 'スタンダードレッド', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'hospital' },
     { id: 'h-premium-red', name: 'プレミアレッド', description: '', color: 'premium-red', accessories: ['ball-chain'], badge: '', category: 'hospital' },
     { id: 'h-black', name: 'ブラック', description: '', color: 'black', accessories: ['ball-chain'], badge: '', category: 'hospital' },
-    { id: 'h-carabiner', name: 'ベーシック・カラビナ付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'hospital' },
+    { id: 'h-carabiner', name: 'ベーシック・カラビナ付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'hospital', image: '/images/keychain-carabiner.webp' },
     { id: 'h-glow', name: 'ベーシック・蓄光バンド付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'hospital' }
   ];
 
@@ -184,7 +184,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       return '<div class="product-card animate-on-scroll" data-set-id="' + set.id + '">' +
         '<a href="/product?set=' + set.id + '" class="block">' +
           '<div class="product-image-wrapper bg-gray-50" style="aspect-ratio: 4/3;">' +
-            '<img src="' + (colorVar ? colorVar.image : BASE_PRODUCT.image) + '" alt="' + set.name + '" class="w-full h-full object-contain p-6" onerror="this.style.display=\'none\'" />' +
+            '<img src="' + (set.image || (colorVar ? colorVar.image : BASE_PRODUCT.image)) + '" alt="' + set.name + '" class="w-full h-full object-contain p-6" onerror="this.style.display=\'none\'" />' +
           '</div>' +
         '</a>' +
         '<div class="p-4">' +
