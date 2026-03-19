@@ -101,13 +101,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     { id: 'basic', name: 'ベーシック', description: 'スタンダードレッド', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'dmat-member' },
     { id: 'premium-red', name: 'プレミアレッド', description: 'プレミアレッド', color: 'premium-red', accessories: ['ball-chain'], badge: '', category: 'dmat-member' },
     { id: 'black', name: 'ブラック', description: 'ブラック', color: 'black', accessories: ['ball-chain'], badge: '', category: 'dmat-member' },
-    { id: 'carabiner', name: 'ベーシック・カラビナ付き', description: 'カラビナ', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'dmat-member' },
-    { id: 'glow', name: 'ベーシック・蓄光バンド付き', description: '蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'dmat-member' },
+    { id: 'carabiner', name: 'ベーシック・カラビナ付き', description: 'カラビナ', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'dmat-member', image: '/images/keychain-carabiner.webp' },
+    { id: 'glow', name: 'ベーシック・蓄光バンド付き', description: '蓄光バンド', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'dmat-member', image: '/images/keychain-glow.webp' },
     { id: 'h-basic', name: 'ベーシック', description: 'スタンダードレッド', color: 'standard-red', accessories: ['ball-chain'], badge: '定番', category: 'hospital' },
     { id: 'h-premium-red', name: 'プレミアレッド', description: '', color: 'premium-red', accessories: ['ball-chain'], badge: '', category: 'hospital' },
     { id: 'h-black', name: 'ブラック', description: '', color: 'black', accessories: ['ball-chain'], badge: '', category: 'hospital' },
-    { id: 'h-carabiner', name: 'ベーシック・カラビナ付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'hospital' },
-    { id: 'h-glow', name: 'ベーシック・蓄光バンド付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'hospital' }
+    { id: 'h-carabiner', name: 'ベーシック・カラビナ付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'carabiner'], badge: '', category: 'hospital', image: '/images/keychain-carabiner.webp' },
+    { id: 'h-glow', name: 'ベーシック・蓄光バンド付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'hospital', image: '/images/keychain-glow.webp' }
   ];
 
   var CATEGORY_PRICE = { 'dmat-member': 0, 'hospital': 400 };
@@ -216,7 +216,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     content.innerHTML =
       '<div class="grid grid-cols-1 md:grid-cols-2 gap-8">' +
         '<div class="bg-gray-50 rounded-xl flex items-center justify-center p-8" style="aspect-ratio: 1/1;">' +
-          '<img src="' + (colorVar ? colorVar.image : BASE_PRODUCT.image) + '" alt="' + set.name + '" class="max-w-full max-h-full object-contain" onerror="this.style.display=\'none\'" />' +
+          '<img src="' + (set.image || (colorVar ? colorVar.image : BASE_PRODUCT.image)) + '" alt="' + set.name + '" class="max-w-full max-h-full object-contain" onerror="this.style.display=\'none\'" />' +
         '</div>' +
         '<div>' +
           '<span class="badge-pill badge-pill-red">' + set.badge + '</span>' +
@@ -472,7 +472,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var price = calcSetPrice(set);
       return '<a href="/product?set=' + set.id + '" class="product-card block">' +
         '<div class="product-image-wrapper bg-gray-50" style="aspect-ratio: 1/1;">' +
-          '<img src="' + (colorVar ? colorVar.image : BASE_PRODUCT.image) + '" alt="' + set.name + '" class="w-full h-full object-contain p-3" onerror="this.style.display=\'none\'" />' +
+          '<img src="' + (set.image || (colorVar ? colorVar.image : BASE_PRODUCT.image)) + '" alt="' + set.name + '" class="w-full h-full object-contain p-3" onerror="this.style.display=\'none\'" />' +
         '</div>' +
         '<div class="p-3">' +
           '<span class="badge-pill badge-pill-gray text-xs">' + set.badge + '</span>' +
