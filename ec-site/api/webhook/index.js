@@ -116,8 +116,10 @@ module.exports = async function (context, req) {
         context.log.info('Order exists in Notion. notionDone=true, emailDone=' + emailDone);
       }
     } catch (queryErr) {
-      context.log.warn('Notion dedup query failed:', queryErr.message);
-      // クエリ失敗 → 安全側に倒す（処理続行。最悪重複するが欠落しない）
+      context.log.error('Notion dedup query failed:', queryErr.message);
+      // クエリ失敗 → 500で止めてStripeに再送させる（重複防止を優先）
+      context.res = { status: 500, body: 'Dedup query failed' };
+      return;
     }
 
     // ---- Step 1: Notion登録（未済の場合のみ） ----
@@ -140,17 +142,10 @@ module.exports = async function (context, req) {
 
     // ---- Step 2: メール送信（未済の場合のみ） ----
     if (!emailDone) {
-      await sendEmail(context, emailData);
+      // beginSendでACSにキュー投入 → この時点でメールは送られる
+      // フラグを先に書いてからpoll → タイムアウトしても二重送信しない
+      await sendEmailAndFlag(context, emailData, notionPageId);
       context.log.info('Email OK:', orderId);
-      // メモ欄にEMAIL_SENTフラグを書き込み（リトライ時にメール再送を防ぐ）
-      if (notionPageId) {
-        await notion.pages.update({
-          page_id: notionPageId,
-          properties: {
-            'メモ': { rich_text: [{ text: { content: 'EMAIL_SENT:' + new Date().toISOString() } }] },
-          },
-        }).catch(err => context.log.warn('Memo update failed:', err.message));
-      }
     } else {
       context.log.info('Email already sent, skipping:', orderId);
     }
@@ -198,16 +193,27 @@ async function sendEmail(context, data) {
     </div></div>`;
 
   const emailClient = new EmailClient(process.env.ACS_CONNECTION_STRING);
-  const poller = await emailClient.beginSend({
+  await emailClient.beginSend({
     senderAddress: process.env.ACS_SENDER_ADDRESS,
     content: { subject: `【DMAT STORE】ご注文確認 ${orderId}`, html },
     recipients: { to: [{ address: customerEmail, displayName: customerName }] },
   });
-  // Poll with timeout (8 seconds max to stay within SWA limits)
-  const timeout = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error('Email send timeout')), 8000)
-  );
-  await Promise.race([poller.pollUntilDone(), timeout]);
+  // beginSend成功 = ACSにキュー投入済み = メールは送られる
+  // pollUntilDoneは待たない（タイムアウトで二重送信を引き起こすため）
+}
+
+// メール送信 + フラグ書き込み（二重送信防止）
+async function sendEmailAndFlag(context, emailData, notionPageId) {
+  await sendEmail(context, emailData);
+  // beginSend成功した時点でフラグを書く（pollの結果に関係なく）
+  if (notionPageId) {
+    await notion.pages.update({
+      page_id: notionPageId,
+      properties: {
+        'メモ': { rich_text: [{ text: { content: 'EMAIL_SENT:' + new Date().toISOString() } }] },
+      },
+    }).catch(err => context.log.warn('Email flag update failed:', err.message));
+  }
 }
 
 // Notion 登録（顧客管理 + 商品管理）
