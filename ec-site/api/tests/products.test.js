@@ -6,16 +6,16 @@ const {
 } = require('../shared/products');
 
 describe('calculateItemPrice', () => {
-  test('standard-red + ball-chain = 680', () => {
-    expect(calculateItemPrice('standard-red', ['ball-chain'])).toBe(680);
+  test('standard-red + ball-chain = 880', () => {
+    expect(calculateItemPrice('standard-red', ['ball-chain'])).toBe(880);
   });
 
   test('不正な colorId は null を返す', () => {
     expect(calculateItemPrice('invalid-color', ['ball-chain'])).toBeNull();
   });
 
-  test('hospital カテゴリは +300 円になる', () => {
-    expect(calculateItemPrice('standard-red', ['ball-chain'], 'hospital')).toBe(980);
+  test('hospital カテゴリは +400 円になる', () => {
+    expect(calculateItemPrice('standard-red', ['ball-chain'], 'hospital')).toBe(1280);
   });
 });
 
@@ -64,6 +64,6 @@ describe('getItemDescription', () => {
 describe('CATEGORY_PRICE', () => {
   test('カテゴリごとの価格差分が定義されている', () => {
     expect(CATEGORY_PRICE['dmat-member']).toBe(0);
-    expect(CATEGORY_PRICE.hospital).toBe(300);
+    expect(CATEGORY_PRICE.hospital).toBe(400);
   });
 });

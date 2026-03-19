@@ -43,7 +43,7 @@ export const BASE_PRODUCT: BaseProduct = {
   id: 'dmat-keychain',
   name: 'DMAT キーホルダー',
   description: 'NFC内蔵で、かざすだけで災害情報にすぐアクセス。',
-  basePrice: 680,
+  basePrice: 880,
   image: 'images/keychain-standard.webp',
 };
 
@@ -55,7 +55,7 @@ export const COLOR_VARIANTS: ColorVariant[] = [
 
 export const ACCESSORIES: Accessory[] = [
   { id: 'ball-chain', name: 'ボールチェーン', price: 0, isDefault: true, image: 'images/ball-chain.webp' },
-  { id: 'carabiner', name: 'カラビナ', price: 300, isDefault: false, image: 'images/carabiner.webp' },
+  { id: 'carabiner', name: 'カラビナ', price: 400, isDefault: false, image: 'images/carabiner.webp' },
   { id: 'glow-band', name: '蓄光バンド', price: 400, isDefault: false, image: 'images/glow-band.webp' },
 ];
 
@@ -66,7 +66,7 @@ export const CATEGORIES: Category[] = [
 
 export const CATEGORY_PRICE: Record<string, number> = {
   'dmat-member': 0,
-  'hospital': 300,
+  'hospital': 400,
 };
 
 export const RECOMMENDED_SETS: RecommendedSet[] = [

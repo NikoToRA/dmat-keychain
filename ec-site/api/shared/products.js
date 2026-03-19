@@ -2,7 +2,7 @@
 const BASE_PRODUCT = {
   id: 'dmat-keychain',
   name: 'DMAT キーホルダー',
-  basePrice: 680,
+  basePrice: 880,
 };
 
 const COLOR_VARIANTS = [
@@ -13,13 +13,13 @@ const COLOR_VARIANTS = [
 
 const ACCESSORIES = [
   { id: 'ball-chain', name: 'ボールチェーン', price: 0 },
-  { id: 'carabiner', name: 'カラビナ', price: 300 },
+  { id: 'carabiner', name: 'カラビナ', price: 400 },
   { id: 'glow-band', name: '蓄光バンド', price: 400 },
 ];
 
 const CATEGORY_PRICE = {
   'dmat-member': 0,
-  'hospital': 300,
+  'hospital': 400,
 };
 
 function calculateItemPrice(colorId, accessoryIds, category) {

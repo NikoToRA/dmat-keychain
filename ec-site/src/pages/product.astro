@@ -86,7 +86,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 (function () {
   'use strict';
 
-  var BASE_PRODUCT = { id: 'dmat-keychain', name: 'DMAT キーホルダー', description: 'NFC内蔵で、かざすだけで災害情報にすぐアクセス。', basePrice: 680, image: '/images/keychain-standard.webp' };
+  var BASE_PRODUCT = { id: 'dmat-keychain', name: 'DMAT キーホルダー', description: 'NFC内蔵で、かざすだけで災害情報にすぐアクセス。', basePrice: 880, image: '/images/keychain-standard.webp' };
   var COLOR_VARIANTS = [
     { id: 'standard-red', name: 'スタンダードレッド', priceDiff: 0, image: '/images/keychain-standard.webp' },
     { id: 'premium-red', name: 'プレミアレッド', priceDiff: 0, image: '/images/keychain-premium.webp' },
@@ -94,7 +94,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   ];
   var ACCESSORIES = [
     { id: 'ball-chain', name: 'ボールチェーン', price: 0, isDefault: true, image: '/images/ball-chain.webp' },
-    { id: 'carabiner', name: 'カラビナ', price: 300, isDefault: false, image: '/images/carabiner.webp' },
+    { id: 'carabiner', name: 'カラビナ', price: 400, isDefault: false, image: '/images/carabiner.webp' },
     { id: 'glow-band', name: '蓄光バンド', price: 400, isDefault: false, image: '/images/glow-band.webp' }
   ];
   var RECOMMENDED_SETS = [
@@ -110,7 +110,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     { id: 'h-glow', name: 'ベーシック・蓄光バンド付き', description: '', color: 'standard-red', accessories: ['ball-chain', 'glow-band'], badge: '', category: 'hospital' }
   ];
 
-  var CATEGORY_PRICE = { 'dmat-member': 0, 'hospital': 300 };
+  var CATEGORY_PRICE = { 'dmat-member': 0, 'hospital': 400 };
 
   function calculateShipping(qty) {
     if (qty <= 0) return { method: null, price: 0 };

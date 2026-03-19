@@ -21,7 +21,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 (function () {
   'use strict';
 
-  var BASE_PRODUCT = { id: 'dmat-keychain', name: 'DMAT キーホルダー', basePrice: 680, image: '/images/keychain-standard.webp' };
+  var BASE_PRODUCT = { id: 'dmat-keychain', name: 'DMAT キーホルダー', basePrice: 880, image: '/images/keychain-standard.webp' };
   var COLOR_VARIANTS = [
     { id: 'standard-red', name: 'スタンダードレッド', priceDiff: 0, image: '/images/keychain-standard.webp' },
     { id: 'premium-red', name: 'プレミアレッド', priceDiff: 0, image: '/images/keychain-premium.webp' },
@@ -29,7 +29,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   ];
   var ACCESSORIES = [
     { id: 'ball-chain', name: 'ボールチェーン', price: 0, isDefault: true, image: '/images/ball-chain.webp' },
-    { id: 'carabiner', name: 'カラビナ', price: 300, isDefault: false, image: '/images/carabiner.webp' },
+    { id: 'carabiner', name: 'カラビナ', price: 400, isDefault: false, image: '/images/carabiner.webp' },
     { id: 'glow-band', name: '蓄光バンド', price: 400, isDefault: false, image: '/images/glow-band.webp' }
   ];
 
@@ -84,7 +84,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           '<img src="' + getColorImage(item.colorId) + '" alt="" class="w-full h-full object-contain p-2" onerror="this.style.display=\'none\'" />' +
         '</div>' +
         '<div class="flex-1 min-w-0">' +
-          '<h3 class="text-sm font-bold text-dmat-navy truncate">' + (item.description || BASE_PRODUCT.name) + (item.category === 'hospital' ? ' <span class="text-xs font-normal text-amber-600">[病院用 +&yen;300]</span>' : '') + '</h3>' +
+          '<h3 class="text-sm font-bold text-dmat-navy truncate">' + (item.description || BASE_PRODUCT.name) + (item.category === 'hospital' ? ' <span class="text-xs font-normal text-amber-600">[病院用 +&yen;400]</span>' : '') + '</h3>' +
           '<p class="text-xs text-gray-400 mt-0.5">&yen;' + item.unitPrice.toLocaleString() + ' / 個</p>' +
           '<div class="flex items-center justify-between mt-3">' +
             '<div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">' +

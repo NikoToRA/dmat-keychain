@@ -74,9 +74,9 @@ const { set } = Astro.props;
 <script is:inline>
   (function () {
     // Product data (matches products.js)
-    var BASE_PRICE = 680;
+    var BASE_PRICE = 880;
     var COLOR_PRICES = { 'standard-red': 0, 'premium-red': 0 };
-    var ACCESSORY_PRICES = { 'ball-chain': 0, 'carabiner': 300, 'glow-band': 400 };
+    var ACCESSORY_PRICES = { 'ball-chain': 0, 'carabiner': 400, 'glow-band': 400 };
 
     function calcPrice(colorId, accessoryIds) {
       var colorDiff = COLOR_PRICES[colorId] || 0;

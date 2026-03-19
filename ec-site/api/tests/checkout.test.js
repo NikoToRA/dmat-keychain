@@ -116,8 +116,8 @@ describe('checkout API', () => {
     expect(stripeInstance.checkout.sessions.create).toHaveBeenCalledTimes(1);
 
     const callArgs = stripeInstance.checkout.sessions.create.mock.calls[0][0];
-    // サーバー側で価格を再計算していることを確認（unit_amount = 680）
-    expect(callArgs.line_items[0].price_data.unit_amount).toBe(680);
+    // サーバー側で価格を再計算していることを確認（unit_amount = 880）
+    expect(callArgs.line_items[0].price_data.unit_amount).toBe(880);
     expect(callArgs.line_items[0].quantity).toBe(2);
     // 送料line_itemが含まれている
     expect(callArgs.line_items[1].price_data.unit_amount).toBe(185);
