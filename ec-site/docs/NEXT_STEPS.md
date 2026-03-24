@@ -48,7 +48,7 @@
 
 ### 2-2. Webhook設定
 - [ ] 「開発者」→「Webhooks」→「エンドポイントを追加」
-- [ ] URL: `https://thankful-sand-00abb1300.4.azurestaticapps.net/api/webhook`
+- [ ] URL: `https://shop.wonder-drill.com/api/webhook`
 - [ ] イベント: `checkout.session.completed` のみ選択
 - [ ] 署名シークレット取得: `STRIPE_WEBHOOK_SECRET`（`whsec_...`）
 

@@ -16,6 +16,12 @@ const { title, description = 'DMATキーホルダー・DMATグッズの通販。
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- 旧Azure URLからカスタムドメインへ301相当リダイレクト -->
+  <script is:inline>
+    if (location.hostname === 'thankful-sand-00abb1300.4.azurestaticapps.net') {
+      location.replace('https://shop.wonder-drill.com' + location.pathname + location.search);
+    }
+  </script>
   <title>{title}</title>
   <meta name="description" content={description} />
   <meta property="og:title" content={title} />

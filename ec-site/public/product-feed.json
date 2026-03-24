@@ -1,0 +1,92 @@
+[
+  {
+    "id": "dmat-keychain-basic",
+    "title": "DMATキーホルダー ベーシック（スタンダードレッド）",
+    "description": "NFC内蔵DMATキーホルダー。かざすだけでEMISへ即アクセス。3Dプリント製、ボールチェーン付属。DMAT隊員向けグッズ。",
+    "link": "https://shop.wonder-drill.com/product?set=basic",
+    "image_link": "https://shop.wonder-drill.com/images/keychain-standard.webp",
+    "availability": "in_stock",
+    "price": "880 JPY",
+    "brand": "DMAT STORE",
+    "condition": "new",
+    "google_product_category": "Apparel & Accessories > Jewelry > Charms & Pendants",
+    "product_type": "DMAT隊員用グッズ > キーホルダー",
+    "shipping": {
+      "country": "JP",
+      "price": "185 JPY",
+      "service": "クリックポスト"
+    }
+  },
+  {
+    "id": "dmat-keychain-premium-red",
+    "title": "DMATキーホルダー プレミアレッド",
+    "description": "NFC内蔵DMATキーホルダー。プレミアレッドカラー。かざすだけでEMISへ即アクセス。3Dプリント製。",
+    "link": "https://shop.wonder-drill.com/product?set=premium-red",
+    "image_link": "https://shop.wonder-drill.com/images/keychain-premium.webp",
+    "availability": "in_stock",
+    "price": "880 JPY",
+    "brand": "DMAT STORE",
+    "condition": "new",
+    "google_product_category": "Apparel & Accessories > Jewelry > Charms & Pendants",
+    "product_type": "DMAT隊員用グッズ > キーホルダー",
+    "shipping": {
+      "country": "JP",
+      "price": "185 JPY",
+      "service": "クリックポスト"
+    }
+  },
+  {
+    "id": "dmat-keychain-black",
+    "title": "DMATキーホルダー ブラック",
+    "description": "NFC内蔵DMATキーホルダー。ブラックカラー。かざすだけでEMISへ即アクセス。3Dプリント製。",
+    "link": "https://shop.wonder-drill.com/product?set=black",
+    "image_link": "https://shop.wonder-drill.com/images/keychain-black.webp",
+    "availability": "in_stock",
+    "price": "880 JPY",
+    "brand": "DMAT STORE",
+    "condition": "new",
+    "google_product_category": "Apparel & Accessories > Jewelry > Charms & Pendants",
+    "product_type": "DMAT隊員用グッズ > キーホルダー",
+    "shipping": {
+      "country": "JP",
+      "price": "185 JPY",
+      "service": "クリックポスト"
+    }
+  },
+  {
+    "id": "dmat-keychain-carabiner",
+    "title": "DMATキーホルダー カラビナ付き",
+    "description": "NFC内蔵DMATキーホルダー。カラビナアクセサリ付属。かざすだけでEMISへ即アクセス。3Dプリント製。",
+    "link": "https://shop.wonder-drill.com/product?set=carabiner",
+    "image_link": "https://shop.wonder-drill.com/images/keychain-carabiner.webp",
+    "availability": "in_stock",
+    "price": "1280 JPY",
+    "brand": "DMAT STORE",
+    "condition": "new",
+    "google_product_category": "Apparel & Accessories > Jewelry > Charms & Pendants",
+    "product_type": "DMAT隊員用グッズ > キーホルダー",
+    "shipping": {
+      "country": "JP",
+      "price": "185 JPY",
+      "service": "クリックポスト"
+    }
+  },
+  {
+    "id": "dmat-keychain-glow",
+    "title": "DMATキーホルダー 蓄光バンド付き",
+    "description": "NFC内蔵DMATキーホルダー。暗闘で光る蓄光バンド付属。かざすだけでEMISへ即アクセス。3Dプリント製。",
+    "link": "https://shop.wonder-drill.com/product?set=glow",
+    "image_link": "https://shop.wonder-drill.com/images/keychain-glow.webp",
+    "availability": "in_stock",
+    "price": "1280 JPY",
+    "brand": "DMAT STORE",
+    "condition": "new",
+    "google_product_category": "Apparel & Accessories > Jewelry > Charms & Pendants",
+    "product_type": "DMAT隊員用グッズ > キーホルダー",
+    "shipping": {
+      "country": "JP",
+      "price": "185 JPY",
+      "service": "クリックポスト"
+    }
+  }
+]

@@ -11,7 +11,7 @@ export default defineConfig({
     ['list'],
   ],
   use: {
-    baseURL: 'https://thankful-sand-00abb1300.4.azurestaticapps.net',
+    baseURL: 'https://shop.wonder-drill.com',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
