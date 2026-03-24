@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="商品詳細 - DMAT STORE">
+<BaseLayout title="DMATキーホルダー 商品詳細 | DMAT STORE" description="NFC内蔵DMATキーホルダーの商品詳細。3Dプリント製、カラー・アクセサリを自由にカスタム。DMAT隊員・病院向けグッズを受注生産で全国配送。">
   <div class="max-w-6xl mx-auto px-6 py-8">
     <!-- Breadcrumb -->
     <nav class="text-xs text-gray-400 mb-6">
@@ -80,6 +80,38 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div id="related-sets" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
     </div>
   </div>
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "DMAT キーホルダー",
+  "description": "NFC内蔵DMATキーホルダー。かざすだけで災害情報にすぐアクセス。3Dプリント製、受注生産。DMAT隊員・災害拠点病院向けグッズ。",
+  "brand": {"@type": "Brand", "name": "DMAT STORE"},
+  "manufacturer": {"@type": "Organization", "name": "Wonder Drill株式会社"},
+  "category": "DMATグッズ",
+  "material": "PLA樹脂（3Dプリント）",
+  "image": "https://shop.wonder-drill.com/images/keychain-standard.webp",
+  "offers": {
+    "@type": "AggregateOffer",
+    "lowPrice": "880",
+    "highPrice": "1680",
+    "priceCurrency": "JPY",
+    "availability": "https://schema.org/InStock",
+    "offerCount": "10",
+    "deliveryLeadTime": {"@type": "QuantitativeValue", "value": "10", "unitCode": "DAY"},
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "JP"},
+      "shippingRate": {"@type": "MonetaryAmount", "value": "185", "currency": "JPY"}
+    }
+  },
+  "additionalProperty": [
+    {"@type": "PropertyValue", "name": "NFC", "value": "NTAG215内蔵"},
+    {"@type": "PropertyValue", "name": "サイズ", "value": "約45mm x 25mm x 7mm"},
+    {"@type": "PropertyValue", "name": "重量", "value": "約15g"}
+  ]
+}
+</script>
 </BaseLayout>
 
 <script is:inline>

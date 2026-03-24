@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/</loc><priority>1.0</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=basic</loc><priority>0.8</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=premium-red</loc><priority>0.8</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=black</loc><priority>0.8</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=carabiner</loc><priority>0.8</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/product?set=glow</loc><priority>0.8</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/product?custom=true</loc><priority>0.7</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/category?cat=dmat-member</loc><priority>0.7</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/category?cat=hospital</loc><priority>0.7</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/legal/tokushoho</loc><priority>0.3</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/legal/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/legal/returns</loc><priority>0.3</priority></url>
-  <url><loc>https://thankful-sand-00abb1300.4.azurestaticapps.net/legal/protection</loc><priority>0.3</priority></url>
+  <url><loc>https://shop.wonder-drill.com/</loc><lastmod>2026-03-24</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://shop.wonder-drill.com/product?set=basic</loc><lastmod>2026-03-24</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shop.wonder-drill.com/product?set=premium-red</loc><lastmod>2026-03-24</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shop.wonder-drill.com/product?set=black</loc><lastmod>2026-03-24</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shop.wonder-drill.com/product?set=carabiner</loc><lastmod>2026-03-24</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shop.wonder-drill.com/product?set=glow</loc><lastmod>2026-03-24</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shop.wonder-drill.com/product?custom=true</loc><lastmod>2026-03-24</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shop.wonder-drill.com/category?cat=dmat-member</loc><lastmod>2026-03-24</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shop.wonder-drill.com/category?cat=hospital</loc><lastmod>2026-03-24</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shop.wonder-drill.com/legal/tokushoho</loc><lastmod>2026-03-24</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://shop.wonder-drill.com/legal/privacy</loc><lastmod>2026-03-24</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://shop.wonder-drill.com/legal/returns</loc><lastmod>2026-03-24</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://shop.wonder-drill.com/legal/protection</loc><lastmod>2026-03-24</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
 </urlset>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://thankful-sand-00abb1300.4.azurestaticapps.net/sitemap.xml
+Sitemap: https://shop.wonder-drill.com/sitemap.xml
